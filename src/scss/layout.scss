@@ -1,0 +1,48 @@
+* {
+    box-sizing: border-box;
+}
+
+input {
+    color: black;
+}
+
+.icon {
+    text-align: center;
+
+    &:before {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        left: 0;
+        margin-top: -0.5em;
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+}
+
+.padded-inner {
+    position: absolute;
+    top: $borderPadding;
+    left: $borderPadding;
+    width: 100%;
+    height: $playerBarHeight - $borderPadding - $borderPadding;
+}
+
+.content-window {
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    right: 0;
+    width: calc( 100% - #{$sidebarWidth} );
+    height: calc( 100% - #{$playerBarHeight} );
+    overflow: auto;
+}
+
+.page {
+    position: absolute;
+    width: 100%;
+    min-height: 100%;
+}

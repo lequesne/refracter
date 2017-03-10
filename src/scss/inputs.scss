@@ -1,0 +1,25 @@
+
+.input-range {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 100%;
+
+    .input-range__track {
+        top: 0;
+        margin: 0;
+        height: 100%;
+        border: none;
+        border-radius: 0;
+        background: $lightBackground;
+    }
+
+    .input-range__track--active {
+        background: $primaryColor;
+    }
+
+    .input-range__slider {
+        display: none;
+    }
+}

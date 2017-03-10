@@ -3,8 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "normalize.css": "^5.0.0",
     "react": "15.4.2",
-    "react-dom": "15.4.2"
+    "react-bootstrap": "^0.30.8",
+    "react-bootstrap-table": "^3.1.0",
+    "react-dom": "15.4.2",
+    "react-input-range": "^1.0.2",
+    "react-router": "^3.0.2",
+    "react-youtube": "^7.3.0",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
     "node-sass": "^4.5.0",
@@ -12,7 +19,7 @@
     "react-scripts": "0.9.4"
   },
   "scripts": {
-    "build-css": "node-sass src/ -o src/",
+    "build-css": "node-sass src/index.scss -o src/",
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",

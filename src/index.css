@@ -1,4 +1,259 @@
+@import url("https://fonts.googleapis.com/css?family=Titillium+Web");
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
+@import url("http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css");
+@import url("https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css");
+@import url("https://npmcdn.com/react-bootstrap-table/dist/react-bootstrap-table-all.min.css");
+* {
+  box-sizing: border-box; }
+
+input {
+  color: black; }
+
+.icon {
+  text-align: center; }
+
+.icon:before {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 0;
+  margin-top: -0.5em; }
+
+.container {
+  width: 100%;
+  max-width: 900px; }
+
+.padded-inner {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 100%;
+  height: 50px; }
+
+.content-window {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  width: calc( 100% - 350px);
+  height: calc( 100% - 60px);
+  overflow: auto; }
+
+.page {
+  position: absolute;
+  width: 100%;
+  min-height: 100%; }
+
 body {
+  color: #efefef; }
+
+h1 {
+  color: #efefef; }
+
+.input-range {
+  display: inline-block;
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100%; }
+
+.input-range .input-range__track {
+  top: 0;
   margin: 0;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  background: #dcdcdc; }
+
+.input-range .input-range__track--active {
+  background: #ff9168; }
+
+.input-range .input-range__slider {
+  display: none; }
+
+/*
+================================================================================
+SPINNERS
+================================================================================
+A Sass mixin to generate a pure CSS3 loading/busy indicator.
+https://github.com/franzheidl/spinners
+Franz Heidl 2014
+MIT License
+--------------------------------------------------------------------------------
+USAGE
+
+Default:
+
+.my-spinner {
+ @include spinner();
+}
+
+
+Custom:
+
+.my-spinner {
+ @include spinner(1.25em, 3px solid #555, .7s, background rgba(0, 0, 0, .2);
+}
+
+All arguments are optional.
+
+Acceppts any valid CSS dimensional declaration, e.g px, em, rem as an argument for size.
+
+Use either shorthand border declarations or individual 'border-[property] [value]' (no colon!) pairs for the style.
+
+Pass any number of seconds referring to the duration of one full rotation for animation speed.
+
+--------------------------------------------------------------------------------
+*/
+@-webkit-keyframes spinner-animation {
+  0% {
+    -webkit-transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg); } }
+
+@-moz-keyframes spinner-animation {
+  0% {
+    -moz-transform: rotate(0deg); }
+  100% {
+    -moz-transform: rotate(360deg); } }
+
+@-ms-keyframes spinner-animation {
+  0% {
+    -ms-transform: rotate(0deg); }
+  100% {
+    -ms-transform: rotate(360deg); } }
+
+@-o-keyframes spinner-animation {
+  0% {
+    -o-transform: rotate(0deg); }
+  100% {
+    -o-transform: rotate(100deg); } }
+
+@keyframes spinner-animation {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
+.spinner {
+  background-color: transparent;
+  border: 3px solid #1277c2;
+  border-radius: 50%;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-animation: spinner-animation 0.65s infinite linear;
+  -moz-animation: spinner-animation 0.65s infinite linear;
+  -o-animation: spinner-animation 0.65s infinite linear;
+  -ms-animation: spinner-animation 0.65s infinite linear;
+  animation: spinner-animation 0.65s infinite linear; }
+
+.sidebar {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: 350px;
+  height: calc( 100% - 60px);
+  border: solid transparent 5px;
+  border-bottom: 0; }
+
+.sidebar .padded-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #dcdcdc; }
+
+.PlayerBar {
+  position: fixed;
+  z-index: 40;
+  bottom: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  border: solid transparent 5px;
+  color: #efefef;
+  padding: 0 110px 0 345px; }
+
+#yt-container {
+  position: absolute;
+  bottom: calc( 100% + 5px);
+  right: 0; }
+
+.player-btn {
+  display: inline-block;
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 50px;
+  background: #ff9168;
+  font-size: 25px;
+  cursor: pointer; }
+
+.player-btn.player-play-pause {
+  font-size: 35px;
+  margin: 0 5px; }
+
+.player-btn .icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%; }
+
+.volume-mute {
+  display: inline-block;
+  height: 100%;
+  margin-left: 5px; }
+
+.volume-mute .player-btn {
+  font-size: 35px; }
+
+.volume-mute .input-range {
+  width: 125px; }
+
+.player-controls-lhs {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 340px; }
+
+.progress-bar {
+  display: inline-block;
+  height: 100%;
+  width: 100%; }
+
+.player-controls-rhs {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  width: 110px;
+  text-align: right; }
+
+.player-controls-rhs .loop-track {
+  margin: 0 5px; }
+
+.Tile {
+  display: inline-block; }
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   padding: 0;
-  font-family: sans-serif; }
+  margin: 0;
+  font-family: "Titillium Web", sans-serif;
+  background: #222; }

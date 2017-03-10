@@ -1,0 +1,19 @@
+.sidebar {
+    position: fixed;
+    z-index: 50;
+    top: 0;
+    left: 0;
+    width: $sidebarWidth;
+    height: calc( 100% - #{$playerBarHeight} );
+    border: solid transparent $borderPadding;
+    border-bottom: 0;
+
+    .padded-inner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: $lightBackground;
+    }
+}

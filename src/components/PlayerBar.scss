@@ -1,0 +1,83 @@
+.PlayerBar {
+    position: fixed;
+    z-index: 40;
+    bottom: 0;
+    left: 0;
+    height: $playerBarHeight;
+    width: 100%;
+    border: solid transparent $borderPadding;
+    color: $white;
+    padding: 0 110px 0 #{$sidebarWidth - $borderPadding};
+}
+
+#yt-container {
+    position: absolute;
+    bottom: calc( 100% + #{$borderPadding} );
+    right: 0;
+}
+
+.player-btn {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: $playerBarHeight - $borderPadding - $borderPadding;
+    background: $primaryColor;
+    font-size: 25px;
+    cursor: pointer;
+
+    &.player-play-pause {
+        font-size: 35px;
+        margin: 0 $borderPadding;
+    }
+
+    .icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.volume-mute {
+    display: inline-block;
+    height: 100%;
+    margin-left: $borderPadding;
+
+    .player-btn {
+        font-size: 35px;
+    }
+
+    .input-range {
+        width: 125px;
+    }
+}
+
+.player-controls-lhs {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: $sidebarWidth - $borderPadding - $borderPadding;
+}
+
+.progress-bar {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+}
+
+.player-controls-rhs {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 110px;
+    text-align: right;
+
+    .loop-track {
+        margin: 0 $borderPadding;
+    }
+}
