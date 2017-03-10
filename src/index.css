@@ -28,7 +28,7 @@ input {
   top: 5px;
   left: 5px;
   width: 100%;
-  height: 50px; }
+  height: 60px; }
 
 .content-window {
   position: fixed;
@@ -36,7 +36,7 @@ input {
   top: 0;
   right: 0;
   width: calc( 100% - 350px);
-  height: calc( 100% - 60px);
+  height: calc( 100% - 70px);
   overflow: auto; }
 
 .page {
@@ -66,7 +66,7 @@ h1 {
   background: #dcdcdc; }
 
 .input-range .input-range__track--active {
-  background: #ff9168; }
+  background: #EDA564; }
 
 .input-range .input-range__slider {
   display: none; }
@@ -162,7 +162,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
   top: 0;
   left: 0;
   width: 350px;
-  height: calc( 100% - 60px);
+  height: calc( 100% - 70px);
   border: solid transparent 5px;
   border-bottom: 0; }
 
@@ -179,11 +179,11 @@ Pass any number of seconds referring to the duration of one full rotation for an
   z-index: 40;
   bottom: 0;
   left: 0;
-  height: 60px;
+  height: 70px;
   width: 100%;
   border: solid transparent 5px;
-  color: #efefef;
-  padding: 0 110px 0 345px; }
+  color: #232323;
+  padding: 0 130px 0 345px; }
 
 #yt-container {
   position: absolute;
@@ -196,13 +196,17 @@ Pass any number of seconds referring to the duration of one full rotation for an
   top: 0;
   left: 0;
   height: 100%;
-  width: 50px;
-  background: #ff9168;
-  font-size: 25px;
-  cursor: pointer; }
+  width: 60px;
+  background: #EDA564;
+  font-size: 1.5em;
+  cursor: pointer;
+  transition: .1s; }
+
+.player-btn:hover {
+  opacity: 0.7; }
 
 .player-btn.player-play-pause {
-  font-size: 35px;
+  font-size: 2em;
   margin: 0 5px; }
 
 .player-btn .icon {
@@ -215,13 +219,11 @@ Pass any number of seconds referring to the duration of one full rotation for an
 .volume-mute {
   display: inline-block;
   height: 100%;
-  margin-left: 5px; }
-
-.volume-mute .player-btn {
-  font-size: 35px; }
+  margin-left: 5px;
+  font-size: 1.2em; }
 
 .volume-mute .input-range {
-  width: 125px; }
+  width: 85px; }
 
 .player-controls-lhs {
   position: absolute;
@@ -230,17 +232,36 @@ Pass any number of seconds referring to the duration of one full rotation for an
   height: 100%;
   width: 340px; }
 
-.progress-bar {
+.progress-bar-container {
+  position: relative;
   display: inline-block;
   height: 100%;
   width: 100%; }
+
+.track-details {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  pointer-events: none;
+  font-size: 1.1em;
+  line-height: 1.6em;
+  padding: .45em .75em; }
+
+.track-details .track-title {
+  font-size: 1.3em; }
+
+.track-details .track-progress {
+  float: right; }
 
 .player-controls-rhs {
   position: absolute;
   bottom: 0;
   right: 0;
   height: 100%;
-  width: 110px;
+  width: 130px;
   text-align: right; }
 
 .player-controls-rhs .loop-track {
@@ -256,4 +277,4 @@ body, html {
   padding: 0;
   margin: 0;
   font-family: "Titillium Web", sans-serif;
-  background: #222; }
+  background: #232323; }

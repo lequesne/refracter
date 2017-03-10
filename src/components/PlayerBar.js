@@ -107,6 +107,9 @@ class PlayerBar extends Component {
     }
 
     setVolume(value) {
+
+        value = value > 90 ? 100 : value;
+
         this.setState({setVolume: value});
         this.youTubePlayer.setVolume(value);
     }
@@ -212,7 +215,7 @@ class PlayerBar extends Component {
 
                 </div>
 
-                <div className="progress-bar">
+                <div className="progress-bar-container">
                     <InputRange
                         formatLabel={value => ``}
                         maxValue={100}
@@ -220,7 +223,17 @@ class PlayerBar extends Component {
                         value={this.state.setProgress}
                         onChange={this.setProgress.bind(this)}
                     />
-                    <div className="progress-duration">0:00 / 0:00</div>
+                    <div className="track-details">
+                        <div className="track-title">
+                            {this.props.track.title}
+                        </div>
+                        {this.props.track.artist} - {this.props.track.album}
+                        <div className="track-progress">
+                            { this.state.trackProgress
+                                ? `${this.props.secondsToMinutes(this.state.trackProgress)} / ${this.props.secondsToMinutes(this.state.trackDuration)}`
+                                : null }
+                        </div>
+                    </div>
                 </div>
 
                 <div className="player-controls-rhs">

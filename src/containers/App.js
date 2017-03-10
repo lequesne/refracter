@@ -52,11 +52,45 @@ class App extends Component {
             }
         }
 
+        this.secondsToMinutes = this.secondsToMinutes.bind(this);
+
+    }
+
+    secondsToMinutes( seconds ){
+
+        //only show hours if they exist
+        if ( Math.floor(((seconds/86400)%1)*24) !== 0 ) {
+            var hours = Math.floor(((seconds/86400)%1)*24)+':';
+        } else {
+            var hours = '';
+        }
+
+        //show 2 digits for seconds less than double digits
+        var sec = Math.round(((seconds/60)%1)*60);
+        if ( sec < 10 ) {
+            sec = '0' + sec
+        }
+
+        return(
+            hours +
+            Math.floor(((seconds/3600)%1)*60)+':'+
+            sec
+        );
+
     }
 
 
-
     render() {
+
+        //example track object
+        const track = {
+            id: 1,
+            title: 'Idioteque',
+            artist: 'Radiohead',
+            album: 'Kid A',
+            duration: '2:30'
+        }
+
         return (
             <div className="Refracter-app">
 
@@ -66,7 +100,11 @@ class App extends Component {
 
                 <Sidebar/>
 
-                <PlayerBar playing={this.state.player.playing}/>
+                <PlayerBar
+                    secondsToMinutes={this.secondsToMinutes}
+                    playing={this.state.player.playing}
+                    track={track}
+                />
 
             </div>
         );
