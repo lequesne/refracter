@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
+import * as refracter from '../refracter';
+import TopBar from '../components/TopBar';
 import Sidebar from '../components/Sidebar';
 import PlayerBar from '../components/PlayerBar';
 
 class App extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         //set initial app state
@@ -23,28 +25,8 @@ class App extends Component {
                 ]
             },
             //active queue is list of tracks that the app is currently playing in queue
-            queue: {
-                currentTrack: {
-                    id: 1,
-                    name: '',
-                    artist: '',
-                    album: ''
-                },
-                allTracks: [
-                    {
-                        id: 1,
-                        name: '',
-                        artist: '',
-                        album: ''
-                    },
-                    {
-                        id: 1,
-                        name: '',
-                        artist: '',
-                        album: ''
-                    }
-                ]
-            },
+            activeTrack: null,
+            queue: [],
             player: {
                 playing: false,
                 trackLength: 0,
@@ -52,63 +34,79 @@ class App extends Component {
             }
         }
 
-        this.secondsToMinutes = this.secondsToMinutes.bind(this);
+        this.onTrackClicked = this.onTrackClicked.bind(this);
+        this.playNextTrackInQueue = this.playNextTrackInQueue.bind(this);
+        this.playPreviousTrackInQueue = this.playPreviousTrackInQueue.bind(this);
+
+    }
+    getChildContext() {
+        return {parentState: this};
+    }
+
+    onTrackClicked(track, trackList) {
+
+        if ( !this.state.activeTrack || this.state.activeTrack.trackID !== track.trackID) {
+
+            this.setState({
+                queue: trackList,
+                activeTrack: track
+            });
+
+        }
 
     }
 
-    secondsToMinutes( seconds ){
-
-        //only show hours if they exist
-        if ( Math.floor(((seconds/86400)%1)*24) !== 0 ) {
-            var hours = Math.floor(((seconds/86400)%1)*24)+':';
-        } else {
-            var hours = '';
+    playNextTrackInQueue(){
+        for (let [i,track] of this.state.queue.entries()) {
+            if ( track.trackID === this.state.activeTrack.trackID ) {
+                this.setState({
+                    activeTrack: this.state.queue[i+1]
+                });
+                return;
+            }
         }
-
-        //show 2 digits for seconds less than double digits
-        var sec = Math.round(((seconds/60)%1)*60);
-        if ( sec < 10 ) {
-            sec = '0' + sec
-        }
-
-        return(
-            hours +
-            Math.floor(((seconds/3600)%1)*60)+':'+
-            sec
-        );
-
     }
 
+    playPreviousTrackInQueue(){
+        for (let [i,track] of this.state.queue.entries()) {
+            if ( track.trackID === this.state.activeTrack.trackID ) {
+                this.setState({
+                    activeTrack: this.state.queue[i-1]
+                });
+                return;
+            }
+        }
+    }
 
     render() {
-
-        //example track object
-        const track = {
-            id: 1,
-            title: 'Idioteque',
-            artist: 'Radiohead',
-            album: 'Kid A',
-            duration: '2:30'
-        }
 
         return (
             <div className="Refracter-app">
 
-                <div className="content-window">
-                    {this.props.children}
-                </div>
+                <TopBar/>
 
-                <Sidebar/>
+                <Sidebar
+                    activeTrack={this.state.activeTrack}
+                />
 
                 <PlayerBar
-                    secondsToMinutes={this.secondsToMinutes}
-                    playing={this.state.player.playing}
-                    track={track}
+                    track={this.state.activeTrack}
+                    onNextTrack={this.playNextTrackInQueue}
+                    onPrevTrack={this.playPreviousTrackInQueue}
                 />
+
+                <div className="content-window">
+                    {/* {this.props.children} */}
+                    {React.cloneElement(this.props.children, { activeTrack: this.state.activeTrack })}
+                </div>
 
             </div>
         );
     }
 }
+
+App.childContextTypes = {
+    parentState: React.PropTypes.object
+};
 
 export default App;

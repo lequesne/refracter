@@ -12,6 +12,7 @@ $mainFont: 'Titillium Web', sans-serif;
 //$mainFont: 'Source Sans Pro', sans-serif;
 
 //dimensions
+$topBarHeight: 70px;
 $sidebarWidth: 350px;
 $playerBarHeight: 70px;
 $borderPadding: 5px;
@@ -20,8 +21,9 @@ $borderPadding: 5px;
 $primaryColor: #EDA564;
 $white: #efefef;
 $lightBackground: #dcdcdc;
-$medBackground: #333;
-$darkBackground: #232323;
+$medLightBackground: #555;
+$medBackground: #434343;
+$darkBackground: #323232;
 
 //global imports
 @import 'scss/layout';
@@ -30,16 +32,8 @@ $darkBackground: #232323;
 @import 'scss/spinners';
 
 //component imports
+@import 'components/TopBar';
 @import 'components/Sidebar';
 @import 'components/PlayerBar';
+@import 'components/TrackList';
 @import 'components/Tile';
-
-body, html {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    padding: 0;
-    margin: 0;
-    font-family: $mainFont;
-    background: $darkBackground;
-}

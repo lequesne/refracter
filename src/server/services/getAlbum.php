@@ -20,11 +20,11 @@ include("headers.php");
             array_push($trackArr ,$trackField);
 
         } while ($trackField = mysql_fetch_array( $trackQueryResult , MYSQL_ASSOC ));
-        
+
         echo json_encode($trackArr);
 
     } else {
-        
+
         echo json_encode(false);
     }
 

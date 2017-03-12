@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import * as refracter from '../refracter';
 import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css';
 import YouTube from 'react-youtube';
@@ -36,7 +37,22 @@ class PlayerBar extends Component {
 
     }
 
-    componentWillMount() {}
+    componentWillReceiveProps(nextProps) {
+        if ( nextProps.track ) {
+            //if ( !this.props.track || this.props.track.youTubeId !== nextProps.track.youTubeId) {
+                //when track is loaded by new props
+                //this.pauseTrack();
+
+                refracter.getTrackSource(nextProps.track).then(youTubeId => {
+
+                    this.youTubePlayer.loadVideoById(youTubeId);
+
+                }).catch(err => {
+                    console.log('ERROR RETURNED: ',err );
+                });
+            }
+        //}
+    }
 
     playTrack() {
         //play youtube
@@ -65,10 +81,6 @@ class PlayerBar extends Component {
     }
 
     setProgress(value) {
-        //set progress in state as percent (1-100)
-        //this.setState({setProgress: value}); //this could possible be set on youtube progress check interval
-
-        //translate percent progress to
         let progressInSeconds = this.youTubePlayer.getDuration() / 100 * value;
         this.youTubePlayer.seekTo(progressInSeconds);
     }
@@ -127,6 +139,7 @@ class PlayerBar extends Component {
         switch (event.data) {
             case 0: //ended
                 //
+                this.props.onNextTrack();
                 break;
             case 1: //started
                 this.setState({playing: true});
@@ -138,6 +151,9 @@ class PlayerBar extends Component {
                 //
                 break;
             case 5: //cued
+                //
+                break;
+            default:
                 //
                 break;
         }
@@ -184,11 +200,11 @@ class PlayerBar extends Component {
         return (
             <div className="PlayerBar">
 
-                <YouTube id="yt-container" videoId="XisOVzJ32_g" opts={youTubeOpts} onReady={this.youTubeReady} onStateChange={this.youTubeStateChange} onError={this.youTubeError}/>
+                <YouTube id="yt-container" opts={youTubeOpts} onReady={this.youTubeReady} onStateChange={this.youTubeStateChange} onError={this.youTubeError}/>
 
                 <div className="player-controls-lhs">
 
-                    <div onClick={this.playPrevious.bind(this)} title="Previous track" className="prev-track player-btn">
+                    <div onClick={this.props.onPrevTrack} title="Previous track" className="prev-track player-btn">
                         <div className="ion-ios-skipbackward icon"></div>
                     </div>
                     <div onClick={this.togglePlayPause.bind(this)} title="Play / Pause" className="player-play-pause player-btn">
@@ -197,7 +213,7 @@ class PlayerBar extends Component {
                             : <div className="ion-play icon"></div>
                         }
                     </div>
-                    <div onClick={this.playNext.bind(this)} title="Previous track" className="next-track player-btn">
+                    <div onClick={this.props.onNextTrack} title="Previous track" className="next-track player-btn">
                         <div className="ion-ios-skipforward icon"></div>
                     </div>
                     <div className="volume-mute">
@@ -225,12 +241,13 @@ class PlayerBar extends Component {
                     />
                     <div className="track-details">
                         <div className="track-title">
-                            {this.props.track.title}
+                            {this.props.track ? this.props.track.title : null}
                         </div>
-                        {this.props.track.artist} - {this.props.track.album}
+                        {this.props.track  ? `${this.props.track.artist} - ` : null}
+                        {this.props.track  ? this.props.track.album : null}
                         <div className="track-progress">
                             { this.state.trackProgress
-                                ? `${this.props.secondsToMinutes(this.state.trackProgress)} / ${this.props.secondsToMinutes(this.state.trackDuration)}`
+                                ? `${refracter.secondsToMinutes(this.state.trackProgress)} / ${refracter.secondsToMinutes(this.state.trackDuration)}`
                                 : null }
                         </div>
                     </div>

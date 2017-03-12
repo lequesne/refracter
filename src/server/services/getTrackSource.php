@@ -2,7 +2,7 @@
 
 include("headers.php");
 
-    $rid = $_GET['rid'];
+    $rid = $_GET['id'];
 
     if ( $user ) {
 

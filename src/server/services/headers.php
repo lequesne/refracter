@@ -1,5 +1,7 @@
 <?php
 
+	header('Content-Type: application/json');
+
 	//live db
 	/*
 	$user_name = "root";
@@ -7,13 +9,13 @@
 	$database = "refracterApp";
 	$server = "localhost";
 	*/
-	
+
 	//local db
 	$user_name = "root";
 	$password = "mysql";
-	$database = "refracterApp";
+	$database = "refracter";
 	$server = "localhost";
-	
+
 
 	//STARTS THE SESSION
 	session_start();

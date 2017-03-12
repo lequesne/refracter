@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Col} from 'react-bootstrap';
+import {Col, Row} from 'react-bootstrap';
 import 'whatwg-fetch';
 import Spinner from '../components/Spinner';
 import Tile from '../components/Tile';
+import * as refracter from '../refracter';
 
 class Search extends Component {
 
@@ -58,7 +59,7 @@ class Search extends Component {
             });
 
             //fetch artist matches for search
-            fetch(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${searchQuery}&api_key=482ff3a9fdfa984bca6a93a8bce32642&format=json`).then(response => {
+            fetch(`${refracter.lastFmEndpoint}?method=artist.search&artist=${searchQuery}&api_key=${refracter.lastFmApiKey()}&format=json`).then(response => {
                 return response.json();
             }).then(json => {
 
@@ -75,7 +76,7 @@ class Search extends Component {
             });
 
             //fetch album matches for search
-            fetch(`http://ws.audioscrobbler.com/2.0/?method=album.search&album=${searchQuery}&api_key=482ff3a9fdfa984bca6a93a8bce32642&format=json`).then(response => {
+            fetch(`${refracter.lastFmEndpoint}?method=album.search&album=${searchQuery}&api_key=${refracter.lastFmApiKey()}&format=json`).then(response => {
                 return response.json();
             }).then(json => {
 
@@ -92,7 +93,7 @@ class Search extends Component {
             });
 
             //fetch track matches for search
-            fetch(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${searchQuery}&api_key=482ff3a9fdfa984bca6a93a8bce32642&format=json`).then(response => {
+            fetch(`${refracter.lastFmEndpoint}?method=track.search&track=${searchQuery}&api_key=${refracter.lastFmApiKey()}&format=json`).then(response => {
                 return response.json();
             }).then(json => {
 
@@ -113,59 +114,88 @@ class Search extends Component {
 
     render() {
 
-        //set results list
-        let artistResults = this.state.artists.results.map((artist, index) => {
-            if ( index < 10 ) return ( <Col xs={2} key={index} > <Tile mainTitle={artist.name} image={artist.image[0]['#text']} /> </Col> )
-        });
-        artistResults = this.state.artists.results.length > 0 ? artistResults : 'No matching artists found.';
+        let artistResults;
+        let albumResults;
+        let trackResults;
 
-        let albumResults = this.state.albums.results.map((album, index) => {
-            if ( index < 10 ) return ( <Col xs={2} key={index} > <Tile mainTitle={album.name} secondaryTitle={album.artist} image={album.image[0]['#text']} /> </Col> )
-        });
-        albumResults = this.state.albums.results.length > 0 ? albumResults : 'No matching albums found.';
+        //set artist results list
+        if (this.state.artists.results.length > 0) {
+            artistResults = this.state.artists.results.map((artist, index) => {
+                return index < 10
+                    ? <Col xs={2} key={index}>
+                            <Tile mainTitle={artist.name} image={artist.image[0]['#text']}/>
+                        </Col>
+                    : null;
+            });
+        } else {
+            artistResults = 'No matching artists found.'
+        }
 
-        let trackResults = this.state.tracks.results.map((track, index) => {
-            if ( index < 10 ) return ( <Col xs={2} key={index} > <Tile mainTitle={track.name} secondaryTitle={track.artist} image={track.image[0]['#text']} /> </Col> )
-        });
-        trackResults = this.state.tracks.results.length > 0 ? trackResults : 'No matching tracks found.';
+        //set albums results list
+        if (this.state.albums.results.length > 0) {
+            albumResults = this.state.albums.results.map((album, index) => {
+                return index < 10
+                    ? <Col xs={2} key={index}>
+                            <Tile link={`/album/${encodeURIComponent(album.artist)}/${encodeURIComponent(album.name)}`} mainTitle={album.name} secondaryTitle={album.artist} image={album.image[0]['#text']}/>
+                        </Col>
+                    : null;
+            });
+        } else {
+            albumResults = 'No matching albums found.'
+        }
+
+        //set tracks results list
+        //link need to bind to a get track info request to find the album name, then can link to albim/artist/track
+        if (this.state.tracks.results.length > 0) {
+            trackResults = this.state.tracks.results.map((track, index) => {
+                return index < 10
+                    ? <Col xs={2} key={index}>
+                            <Tile mainTitle={track.name} secondaryTitle={track.artist} image={track.image[0]['#text']}/>
+                        </Col>
+                    : null;
+            });
+        } else {
+            trackResults = 'No matching tracks found.'
+        }
 
         return (
             <div className="search page">
 
                 <div className="container">
 
-                    <div className="results-section">
-                        <Col xs={12}>
-                            <h1>
-                                Artists <Spinner hideWhen={this.state.artists.loaded}/>
-                            </h1>
-                        </Col>
-                        <div>
-                            { artistResults }
-                        </div>
-                    </div>
+                    <Col xs={10} xsPush={1}>
 
-                    <div className="results-section">
-                        <Col xs={12}>
+                        <div className="results-section">
                             <h1>
-                                Albums <Spinner hideWhen={this.state.albums.loaded}/>
+                                Artists
+                                <Spinner hideWhen={this.state.artists.loaded}/>
                             </h1>
-                        </Col>
-                        <div>
-                            { albumResults }
+                            <Row>
+                                {artistResults}
+                            </Row>
                         </div>
-                    </div>
 
-                    <div className="results-section">
-                        <Col xs={12}>
+                        <div className="results-section">
                             <h1>
-                                Tracks <Spinner hideWhen={this.state.tracks.loaded}/>
+                                Albums
+                                <Spinner hideWhen={this.state.albums.loaded}/>
                             </h1>
-                        </Col>
-                        <div>
-                            { trackResults }
+                            <Row>
+                                {albumResults}
+                            </Row>
                         </div>
-                    </div>
+
+                        <div className="results-section">
+                            <h1>
+                                Tracks
+                                <Spinner hideWhen={this.state.tracks.loaded}/>
+                            </h1>
+                            <Row>
+                                {trackResults}
+                            </Row>
+                        </div>
+
+                    </Col>
 
                 </div>
 
@@ -174,5 +204,9 @@ class Search extends Component {
     }
 
 }
+
+Search.contextTypes = {
+    parentState: React.PropTypes.object
+};
 
 export default Search;

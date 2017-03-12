@@ -6,22 +6,31 @@
 * {
   box-sizing: border-box; }
 
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  font-family: "Titillium Web", sans-serif;
+  background: #323232; }
+
 input {
   color: black; }
 
 .icon {
-  text-align: center; }
-
-.icon:before {
-  position: absolute;
-  width: 100%;
-  top: 50%;
-  left: 0;
-  margin-top: -0.5em; }
+  text-align: center;
+  user-select: none; }
+  .icon:before {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    margin-top: -0.5em; }
 
 .container {
   width: 100%;
-  max-width: 900px; }
+  max-width: 1440px; }
 
 .padded-inner {
   position: absolute;
@@ -33,10 +42,10 @@ input {
 .content-window {
   position: fixed;
   z-index: 20;
-  top: 0;
+  top: 70px;
   right: 0;
   width: calc( 100% - 350px);
-  height: calc( 100% - 70px);
+  height: calc( 100% - 70px - 70px);
   overflow: auto; }
 
 .page {
@@ -50,26 +59,26 @@ body {
 h1 {
   color: #efefef; }
 
+input:focus, textarea:focus {
+  outline: none; }
+
 .input-range {
   display: inline-block;
   position: relative;
   top: 0;
   left: 0;
   height: 100%; }
-
-.input-range .input-range__track {
-  top: 0;
-  margin: 0;
-  height: 100%;
-  border: none;
-  border-radius: 0;
-  background: #dcdcdc; }
-
-.input-range .input-range__track--active {
-  background: #EDA564; }
-
-.input-range .input-range__slider {
-  display: none; }
+  .input-range .input-range__track {
+    top: 0;
+    margin: 0;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    background: #dcdcdc; }
+  .input-range .input-range__track--active {
+    background: #EDA564; }
+  .input-range .input-range__slider {
+    display: none; }
 
 /*
 ================================================================================
@@ -156,23 +165,95 @@ Pass any number of seconds referring to the duration of one full rotation for an
   -ms-animation: spinner-animation 0.65s infinite linear;
   animation: spinner-animation 0.65s infinite linear; }
 
-.sidebar {
+.topbar {
   position: fixed;
   z-index: 50;
   top: 0;
   left: 0;
-  width: 350px;
-  height: calc( 100% - 70px);
+  width: 100%;
+  height: 70px;
   border: solid transparent 5px;
   border-bottom: 0; }
+  .topbar .padded-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #dcdcdc;
+    padding: 5px; }
+  .topbar .refracter-logo {
+    position: absolute;
+    left: 20px;
+    top: 25%;
+    height: 50%;
+    opacity: 0.7; }
+  .topbar .seach-input-container {
+    position: relative;
+    display: block;
+    margin: auto;
+    max-width: 600px;
+    height: 100%;
+    color: #efefef; }
+    .topbar .seach-input-container input {
+      display: block;
+      position: absolute;
+      z-index: 50;
+      height: 100%;
+      width: 100%;
+      background: #555;
+      color: #efefef;
+      border: none;
+      font-size: 20px;
+      padding: 20px 20px 20px 75px;
+      transition: all .3s; }
+      .topbar .seach-input-container input:focus {
+        padding-left: 20px;
+        background: #484848;
+        color: #EDA564; }
+        .topbar .seach-input-container input:focus + .icon {
+          left: 100%;
+          right: 0%;
+          transform: translate3d(-100%, 0, 0);
+          color: #EDA564; }
+    .topbar .seach-input-container .icon {
+      position: absolute;
+      z-index: 51;
+      left: 0%;
+      top: 0;
+      height: 100%;
+      width: 70px;
+      font-size: 2em;
+      pointer-events: none;
+      transition: all .3s;
+      transform: translate3d(0, 0, 0); }
 
-.sidebar .padded-inner {
-  position: absolute;
-  top: 0;
+.sidebar {
+  position: fixed;
+  z-index: 50;
+  top: 70px;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: #dcdcdc; }
+  width: 350px;
+  height: calc( 100% - 70px - 70px);
+  border: solid transparent 5px;
+  border-bottom: 0; }
+  .sidebar .padded-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #434343; }
+  .sidebar .album-art {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 340px;
+    background: #dcdcdc;
+    padding: 20px; }
+    .sidebar .album-art img {
+      box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.5); }
 
 .PlayerBar {
   position: fixed;
@@ -182,7 +263,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
   height: 70px;
   width: 100%;
   border: solid transparent 5px;
-  color: #232323;
+  color: gree;
   padding: 0 130px 0 345px; }
 
 #yt-container {
@@ -201,29 +282,25 @@ Pass any number of seconds referring to the duration of one full rotation for an
   font-size: 1.5em;
   cursor: pointer;
   transition: .1s; }
-
-.player-btn:hover {
-  opacity: 0.7; }
-
-.player-btn.player-play-pause {
-  font-size: 2em;
-  margin: 0 5px; }
-
-.player-btn .icon {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%; }
+  .player-btn:hover {
+    opacity: 0.7; }
+  .player-btn.player-play-pause {
+    font-size: 2em;
+    margin: 0 5px; }
+  .player-btn .icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%; }
 
 .volume-mute {
   display: inline-block;
   height: 100%;
   margin-left: 5px;
   font-size: 1.2em; }
-
-.volume-mute .input-range {
-  width: 85px; }
+  .volume-mute .input-range {
+    width: 85px; }
 
 .player-controls-lhs {
   position: absolute;
@@ -247,14 +324,13 @@ Pass any number of seconds referring to the duration of one full rotation for an
   text-align: left;
   pointer-events: none;
   font-size: 1.1em;
+  color: #323232;
   line-height: 1.6em;
   padding: .45em .75em; }
-
-.track-details .track-title {
-  font-size: 1.3em; }
-
-.track-details .track-progress {
-  float: right; }
+  .track-details .track-title {
+    font-size: 1.3em; }
+  .track-details .track-progress {
+    float: right; }
 
 .player-controls-rhs {
   position: absolute;
@@ -263,18 +339,14 @@ Pass any number of seconds referring to the duration of one full rotation for an
   height: 100%;
   width: 130px;
   text-align: right; }
+  .player-controls-rhs .loop-track {
+    margin: 0 5px; }
 
-.player-controls-rhs .loop-track {
-  margin: 0 5px; }
+.track-list .react-bs-table {
+  margin: 0; }
+
+.track-list tr.active-track {
+  background: #555; }
 
 .Tile {
   display: inline-block; }
-
-body, html {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  padding: 0;
-  margin: 0;
-  font-family: "Titillium Web", sans-serif;
-  background: #232323; }

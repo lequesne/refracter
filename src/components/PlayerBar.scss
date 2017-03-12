@@ -6,7 +6,7 @@
     height: $playerBarHeight;
     width: 100%;
     border: solid transparent $borderPadding;
-    color: $darkBackground;
+    color: gree;
     padding: 0 130px 0 #{$sidebarWidth - $borderPadding};
 }
 
@@ -81,6 +81,7 @@
     text-align: left;
     pointer-events: none;
     font-size: 1.1em;
+    color: $darkBackground;
     line-height: 1.6em;
     padding: .45em .75em;
 

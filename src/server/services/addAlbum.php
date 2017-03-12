@@ -2,7 +2,7 @@
 
 include("headers.php");
 
-    $data = $_POST['data'];
+    $data = json_decode(file_get_contents('php://input'), true);
     $arr = array();
 
     //for each loop to insert into database
@@ -32,7 +32,7 @@ include("headers.php");
             "artist" => $d['artist'],
             "duration" => $d['duration'],
             "art" => $d['art'],
-            "type" => $d['type']         
+            "type" => $d['type']
         );
 
         array_push($arr ,$var);

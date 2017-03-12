@@ -1,0 +1,13 @@
+.track-list {
+
+    .react-bs-table {
+        margin: 0;
+    }
+
+    tr {
+        &.active-track {
+            background: $medLightBackground;
+        }
+    }
+
+}
