@@ -1,0 +1,30 @@
+.album {
+
+    h1 {
+        margin-bottom: 0;
+    }
+
+    h2 {
+        font-style: italic;
+    }
+
+    .container {
+        z-index: 5;
+    }
+
+    .background-art {
+        user-select: none;
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        right: 0;
+        max-width: 1200px;
+        width: 75%;
+        padding-bottom: 75%;
+        background-size: cover;
+        box-shadow: inset 150px -150px 300px 10px $darkBackground;
+        border: $borderPadding solid $darkBackground;
+        border-bottom-left-radius: 100%;
+        opacity: 0.2;
+    }
+}

@@ -4,6 +4,8 @@ import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css';
 import YouTube from 'react-youtube';
 
+// NOTE Update progress bar and volume with simple from scratch percent/width functionality
+
 class PlayerBar extends Component {
 
     constructor(props) {
@@ -17,6 +19,7 @@ class PlayerBar extends Component {
             trackProgress: 0
         }
 
+        this.loadTrack = this.loadTrack.bind(this);
         this.playTrack = this.playTrack.bind(this);
         this.pauseTrack = this.pauseTrack.bind(this);
         this.togglePlayPause = this.togglePlayPause.bind(this);
@@ -38,20 +41,21 @@ class PlayerBar extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if ( nextProps.track ) {
-            //if ( !this.props.track || this.props.track.youTubeId !== nextProps.track.youTubeId) {
-                //when track is loaded by new props
-                //this.pauseTrack();
+        if (this.youTubePlayer) {
+            //add check if video is past 5 seconds for example to play clip from start
+            if ( !this.props.track || nextProps.track.trackID !== this.props.track.trackID )
+                this.loadTrack(nextProps.track);
+        }
+    }
 
-                refracter.getTrackSource(nextProps.track).then(youTubeId => {
-
-                    this.youTubePlayer.loadVideoById(youTubeId);
-
-                }).catch(err => {
-                    console.log('ERROR RETURNED: ',err );
-                });
-            }
-        //}
+    loadTrack(track) {
+        if (track) {
+            refracter.getTrackSource(track).then(youTubeId => {
+                this.youTubePlayer.loadVideoById(youTubeId);
+            }).catch(err => {
+                console.log('ERROR RETURNED: ', err);
+            });
+        }
     }
 
     playTrack() {
@@ -65,37 +69,36 @@ class PlayerBar extends Component {
     }
 
     togglePlayPause() {
-        if ( this.state.playing ) {
+        if (this.state.playing) {
             this.pauseTrack();
         } else {
             this.playTrack();
         }
     }
 
-    playPrevious(){
+    playPrevious() {}
 
-    }
-
-    playNext(){
-
-    }
+    playNext() {}
 
     setProgress(value) {
+        //console.log(this.youTubePlayer.getVideoData());
         let progressInSeconds = this.youTubePlayer.getDuration() / 100 * value;
         this.youTubePlayer.seekTo(progressInSeconds);
     }
 
-    updateProgress(){
+    updateProgress() {
 
         let youTubeDuration = this.youTubePlayer.getDuration();
         let youTubeProgress = this.youTubePlayer.getCurrentTime();
 
-        if ( youTubeDuration && youTubeProgress ) {
+        if (youTubeDuration && youTubeProgress) {
 
             let progressPercent = youTubeProgress / youTubeDuration * 100;
 
             this.setState({
-                setProgress: progressPercent < 100 ? progressPercent : 100, //in percent
+                setProgress: progressPercent < 100
+                    ? progressPercent
+                    : 100, //in percent
                 trackDuration: this.youTubePlayer.getDuration(),
                 trackProgress: this.youTubePlayer.getCurrentTime()
             })
@@ -104,37 +107,52 @@ class PlayerBar extends Component {
     }
 
     toggleMuteBtn() {
-        if ( this.state.setVolume ) {
+        if (this.state.setVolume) {
             //mute
-            this.setState({
-                lastSetVolume: this.state.setVolume,
-                setVolume: 0
-            });
+            this.setState({lastSetVolume: this.state.setVolume, setVolume: 0});
             this.youTubePlayer.setVolume(0);
         } else {
             //unmute
-            this.setState({setVolume: this.state.lastSetVolume ? this.state.lastSetVolume : 60 });
-            this.youTubePlayer.setVolume(this.state.lastSetVolume ? this.state.lastSetVolume : 60);
+            this.setState({
+                setVolume: this.state.lastSetVolume
+                    ? this.state.lastSetVolume
+                    : 60
+            });
+            this.youTubePlayer.setVolume(this.state.lastSetVolume
+                ? this.state.lastSetVolume
+                : 60);
         }
     }
 
     setVolume(value) {
 
-        value = value > 90 ? 100 : value;
+        value = value > 90
+            ? 100
+            : value;
 
         this.setState({setVolume: value});
         this.youTubePlayer.setVolume(value);
     }
 
     youTubeReady(event) {
+        //define youtube player in this
         this.youTubePlayer = event.target;
+        //setup progress tracker function
         setInterval(this.updateProgress, 100);
+        //load active track on first load
+        this.loadTrack(this.props.track);
     }
 
     youTubeStateChange(event) {
         //console.log(event);
 
-        this.setState({playing: false})
+        if ( event.data === 1 ) {
+            this.setState({playing: true});
+            this.props.updateAppPlayState(true);
+        } else {
+            this.setState({playing: false});
+            this.props.updateAppPlayState(false);
+        }
 
         switch (event.data) {
             case 0: //ended
@@ -142,7 +160,6 @@ class PlayerBar extends Component {
                 this.props.onNextTrack();
                 break;
             case 1: //started
-                this.setState({playing: true});
                 break;
             case 2: //paused
                 //
@@ -191,9 +208,9 @@ class PlayerBar extends Component {
 
         //set volume icons based off volume range
         let volumeAmountClass = 'ion-android-volume-off icon';
-        if ( this.state.setVolume > 50 ) {
+        if (this.state.setVolume > 50) {
             volumeAmountClass = 'ion-android-volume-up icon';
-        } else if ( this.state.setVolume > 0 ) {
+        } else if (this.state.setVolume > 0) {
             volumeAmountClass = 'ion-android-volume-down icon';
         }
 
@@ -208,7 +225,7 @@ class PlayerBar extends Component {
                         <div className="ion-ios-skipbackward icon"></div>
                     </div>
                     <div onClick={this.togglePlayPause.bind(this)} title="Play / Pause" className="player-play-pause player-btn">
-                        { this.state.playing
+                        {this.state.playing
                             ? <div className="ion-pause icon"></div>
                             : <div className="ion-play icon"></div>
                         }
@@ -220,35 +237,29 @@ class PlayerBar extends Component {
                         <div onClick={this.toggleMuteBtn.bind(this)} title="Mute / Unmute" className="mute-unmute player-btn">
                             <div className={volumeAmountClass}></div>
                         </div>
-                        <InputRange
-                            formatLabel={value => ``}
-                            maxValue={100}
-                            minValue={0}
-                            value={this.state.setVolume}
-                            onChange={this.setVolume.bind(this)}
-                        />
+                        <InputRange formatLabel={value => ``} maxValue={100} minValue={0} value={this.state.setVolume} onChange={this.setVolume.bind(this)}/>
                     </div>
 
                 </div>
 
                 <div className="progress-bar-container">
-                    <InputRange
-                        formatLabel={value => ``}
-                        maxValue={100}
-                        minValue={0}
-                        value={this.state.setProgress}
-                        onChange={this.setProgress.bind(this)}
-                    />
+                    <InputRange formatLabel={value => ``} maxValue={100} minValue={0} value={this.state.setProgress} onChange={this.setProgress.bind(this)}/>
                     <div className="track-details">
                         <div className="track-title">
-                            {this.props.track ? this.props.track.title : null}
+                            {this.props.track
+                                ? this.props.track.title
+                                : null}
                         </div>
-                        {this.props.track  ? `${this.props.track.artist} - ` : null}
-                        {this.props.track  ? this.props.track.album : null}
+                        {this.props.track
+                            ? `${this.props.track.artist} - `
+                            : null}
+                        {this.props.track
+                            ? this.props.track.album
+                            : null}
                         <div className="track-progress">
-                            { this.state.trackProgress
+                            {this.state.trackProgress
                                 ? `${refracter.secondsToMinutes(this.state.trackProgress)} / ${refracter.secondsToMinutes(this.state.trackDuration)}`
-                                : null }
+                                : null}
                         </div>
                     </div>
                 </div>

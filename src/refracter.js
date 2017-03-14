@@ -3,6 +3,7 @@
 //
 
 //imports
+import { browserHistory } from 'react-router';
 import 'whatwg-fetch';
 
 //define variables
@@ -51,6 +52,24 @@ export const revertSortFunc = (a, b, order) => { // order is desc or asc
     } else {
         return b.number - a.number;
     }
+}
+
+export const getLastFMTrackLink = (trackName, trackArtist) => {
+
+    //first get album info from lastFM
+    fetch(`${lastFmEndpoint}?method=track.getinfo&track=${trackName}&artist=${trackArtist}&api_key=${lastFmApiKey()}&format=json`).then(response => {
+        return response.json();
+    }).then(response => {
+        console.log(response);
+
+        if ( response.track ) {
+            let trackLink = `/album/${encodeURIComponent(trackArtist)}/${encodeURIComponent(response.track.album.title)}/${encodeURIComponent(trackName)}`
+            browserHistory.push(trackLink);
+        }
+
+    }).catch(err => {
+        console.log('LastFM track.getinfo: ', err);
+    });
 }
 
 export const findTracksByAlbum = (artist, album) => {

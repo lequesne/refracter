@@ -57,3 +57,12 @@ input {
     width: 100%;
     min-height: 100%;
 }
+
+//vert cenering for modals
+body.modal-open .modal {
+    display: flex !important;
+    height: 100%;
+}
+body.modal-open .modal .modal-dialog {
+    margin: auto;
+}

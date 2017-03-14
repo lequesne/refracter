@@ -11,6 +11,7 @@ class TrackList extends Component {
         //setup state
 
         //bindings
+        this.trackPlayButtonClicked = this.trackPlayButtonClicked.bind(this);
         this.trackClicked = this.trackClicked.bind(this);
         this.trackDoubleClicked = this.trackDoubleClicked.bind(this);
         this.activeTrackClass = this.activeTrackClass.bind(this);
@@ -23,7 +24,19 @@ class TrackList extends Component {
         //console.log(this);
     }
 
-    trackClicked(track) {}
+    componentWillMount(){
+        this.setState({
+            queueId: this.props.queueId
+        });
+    }
+
+    trackPlayButtonClicked(track){
+        console.log(track);
+    }
+
+    trackClicked(track) {
+        //console.log(track);
+    }
 
     trackDoubleClicked(track) {
         this.props.onTrackDoubleClick(track, this.props.tracks);
@@ -35,10 +48,13 @@ class TrackList extends Component {
     }
 
     activeTrackClass(track) {
+        //come back and test it works correctly with lists that share the same track id (should only be active on original queue)
         if (this.props.activeTrack) {
-            return track.trackID === this.props.activeTrack.trackID
-                ? 'active-track'
-                : '';
+            //if ( this.state.queueId === this.props.queueId ) {
+                return track.trackID === this.props.activeTrack.trackID
+                    ? 'active-track'
+                    : '';
+            //}
         }
     }
 
@@ -52,18 +68,22 @@ class TrackList extends Component {
             onSortChange: this.sortChange
         }
 
+        const playIconClass = this.props.playing ? 'play-icon ion-play equalizer' : 'play-icon ion-play' ;
+
+
         return (
 
             <div className="track-list">
-
+                {/* <div className="equalizer icon"></div><div className="ion-radio-waves icon"></div> */}
                 {this.props.tracks.length > 0
                     ? <BootstrapTable data={this.props.tracks} options={tableOptions} trClassName={this.activeTrackClass}>
                             <TableHeaderColumn dataField="trackID" isKey={true} hidden></TableHeaderColumn>
-                            <TableHeaderColumn dataField="number" dataSort={true} sortFunc={refracter.revertSortFunc}>#</TableHeaderColumn>
+                            <TableHeaderColumn width="40px" columnClassName={playIconClass}></TableHeaderColumn>
+                            <TableHeaderColumn width="60px" dataField="number" dataSort={true} sortFunc={refracter.revertSortFunc}>#</TableHeaderColumn>
                             <TableHeaderColumn dataField="title" dataSort={true}>Name</TableHeaderColumn>
                             <TableHeaderColumn dataField="album">Album</TableHeaderColumn>
                             <TableHeaderColumn dataField="artist">Artist</TableHeaderColumn>
-                            <TableHeaderColumn dataField="duration" dataSort={true} dataFormat={refracter.secondsToMinutes}>Duration</TableHeaderColumn>
+                            <TableHeaderColumn width="80px" dataField="duration" dataSort={true} dataFormat={refracter.secondsToMinutes}>Duration</TableHeaderColumn>
                         </BootstrapTable>
                     : null
                 }

@@ -4,8 +4,8 @@
 @import url('http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css');
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css');
 @import url('https://npmcdn.com/react-bootstrap-table/dist/react-bootstrap-table-all.min.css');
+//@import '/../node_modules/normaliz.css/normalize'
 
-//@import '/../node_modules/normaliz.css/normalize';
 
 //variables
 $mainFont: 'Titillium Web', sans-serif;
@@ -16,6 +16,7 @@ $topBarHeight: 70px;
 $sidebarWidth: 350px;
 $playerBarHeight: 70px;
 $borderPadding: 5px;
+$pageComponentMargin: 50px;
 
 //colors
 $primaryColor: #EDA564;
@@ -23,12 +24,12 @@ $white: #efefef;
 $lightBackground: #dcdcdc;
 $medLightBackground: #555;
 $medBackground: #434343;
-$darkBackground: #323232;
+$darkBackground: #121212;
 
 //global imports
 @import 'scss/layout';
 @import 'scss/typography';
-@import 'scss/inputs';
+@import 'scss/forms';
 @import 'scss/spinners';
 
 //component imports
@@ -37,3 +38,6 @@ $darkBackground: #323232;
 @import 'components/PlayerBar';
 @import 'components/TrackList';
 @import 'components/Tile';
+
+//container imports
+@import 'containers/Album';

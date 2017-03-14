@@ -1,12 +1,74 @@
 .track-list {
 
     .react-bs-table {
-        margin: 0;
+        margin: $pageComponentMargin 0;
+        user-select: none;
+        border: none;
     }
 
-    tr {
-        &.active-track {
-            background: $medLightBackground;
+    table {
+
+        thead {
+            tr {
+                border: none;
+                background: none !important;
+                th {
+                    border: none;
+                }
+            }
+        }
+
+        tr {
+            position: relative;
+            border: none;
+
+            td {
+                user-select: none;
+                cursor: default;
+                border: none;
+                font-size: 1.2em;
+                padding: 0.75em;
+            }
+
+            .play-icon {
+                position: absolute;
+                width: 40px;
+                cursor: pointer;
+
+                &:hover {
+
+                    &:before {
+                        transform: scale(1.3);
+                    }
+                }
+
+                &:before {
+                    content: "\f215";
+                }
+            }
+
+            &:hover{
+                background: lighten( $darkBackground, 10%);
+            }
+
+            &.selected {
+                background: $lightBackground;
+                color: $darkBackground;
+            }
+
+            &.active-track {
+                background: $primaryColor;
+                color: $darkBackground;
+
+                @import '../scss/animEqualizer';
+
+                .play-icon.equalizer {
+                    transform-origin: 0 0;
+                    transform: scale(0.1) rotate(180deg);
+                    margin: 2em;
+                }
+
+            }
         }
     }
 

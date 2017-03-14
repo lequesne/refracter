@@ -49,7 +49,7 @@
  $db['live']['hostname'] = 'localhost';
  $db['live']['username'] = 'root';
  $db['live']['password'] = 'Mickeymouse#1';
- $db['live']['database'] = 'sarahkatemitchell_2016';
+ $db['live']['database'] = 'refracter';
 
  // ** MySQL settings - You can get this info from your web host ** //
  /** The name of the database for WordPress */
@@ -86,6 +86,12 @@ define('AUTH_SALT',        'z%>_,3/x/kWg`SOz}s#j>#ma?u3m.)@RBt&cq_!:KOCdYP|Zj-iR
 define('SECURE_AUTH_SALT', 'E6G Npxq*[htt&=9[r%k@*s{I)e6f55-=Cc8hqvgQvl+GgC$,ZRzH.oG; *Do_-Z');
 define('LOGGED_IN_SALT',   'k|d@gf<.}`j[;?2`^q&<_;#Tz]I;QTHCy/Sk_t$R>1ML IK1QRclGaWz&%s2Dd])');
 define('NONCE_SALT',       'bt&srEg(:}ai3WW8.;=8R7Udq5p>#oV-`jycmQR4ch-<AT$K{*b=xj?>XZk]^dC{');
+
+//dynamic site url
+$serverFileDirectory = $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
+$dynamicWordpressHome = strstr($serverFileDirectory, 'server', true).'server/';
+define('WP_HOME', 'http://'.$dynamicWordpressHome);
+define('WP_SITEURL', 'http://'.$dynamicWordpressHome);
 
 /**#@-*/
 

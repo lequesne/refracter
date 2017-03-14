@@ -13,6 +13,7 @@ ReactDOM.render((
         <Router history={browserHistory}>
             <Route path="/" component={App}>
                 <IndexRoute component={Home}/>
+                {/* <Route path="/signup" component={SignUpForm} /> */}
                 <Route path="/search/:query" component={Search} />
                 <Route path="/album/:artist/:album" component={Album}>
                     <Route path="/album/:artist/:album/:track" component={Album}/>

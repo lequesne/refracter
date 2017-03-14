@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-const Tile = ({link, mainTitle, secondaryTitle, image}) => {
+const Tile = ({onTileClick, link, mainTitle, secondaryTitle, image}) => {
+
+    const linkValue = !onTileClick ? link : null;
+    const onClickValue = onTileClick ? onTileClick : null;
+
     return (
-        <Link to={link} title={`${mainTitle} - ${secondaryTitle}`} className="Tile">
+        <Link to={linkValue} onClick={onClickValue} title={`${mainTitle} - ${secondaryTitle}`} className="Tile">
             <div className="tile-image">
 
                 <img src={image} alt={mainTitle}/>

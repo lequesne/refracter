@@ -34,7 +34,7 @@ class Search extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps) {
+        if (nextProps && nextProps.params.query !== this.props.params.query ) {
             this.performSearch(nextProps.params.query);
         }
     }
@@ -150,7 +150,7 @@ class Search extends Component {
             trackResults = this.state.tracks.results.map((track, index) => {
                 return index < 10
                     ? <Col xs={2} key={index}>
-                            <Tile mainTitle={track.name} secondaryTitle={track.artist} image={track.image[0]['#text']}/>
+                            <Tile onTileClick={()=>refracter.getLastFMTrackLink(track.name,track.artist)} mainTitle={track.name} secondaryTitle={track.artist} image={track.image[0]['#text']}/>
                         </Col>
                     : null;
             });
