@@ -1,12 +1,20 @@
 
-# BEGIN WordPress
 <IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /_code/refracter/src/server/
-RewriteRule ^index\.php$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /_code/refracter/src/server/index.php [L]
+
+    # BEGIN WordPress
+    #RewriteEngine On
+    #RewriteBase /_code/refracter/src/server/
+    #RewriteRule ^index\.php$ - [L]
+    #RewriteCond %{REQUEST_FILENAME} !-f
+    #RewriteCond %{REQUEST_FILENAME} !-d
+    #RewriteRule . /_code/refracter/src/server/index.php [L]
+    # END WordPress
+
 </IfModule>
 
-# END WordPress
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "http://localhost:3000"
+    Header set Access-Control-Allow-Credentials "true"
+    Header set Access-Control-Allow-Methods "GET,HEAD,OPTIONS,POST,PUT"
+    Header set Access-Control-Allow-Headers "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
+</IfModule>

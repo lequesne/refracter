@@ -70,6 +70,11 @@ h1 {
 .tag {
   font-size: 0.9em; }
 
+.modal-content {
+  background: #434343;
+  border-radius: 0;
+  text-align: center; }
+
 label {
   display: block; }
 

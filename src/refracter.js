@@ -8,7 +8,7 @@ import 'whatwg-fetch';
 
 //define variables
 export const lastFmEndpoint = 'http://ws.audioscrobbler.com/2.0/';
-export const refracterEndpoint = 'http://localhost/_code/refracter/src/server/services/';
+export const refracterEndpoint = document.location.hostname === 'localhost' ? 'http://localhost/_code/refracter/src/api/' : 'http://refracter.com/api/';
 let userLoggedIn = false;
 
 //start define functions
@@ -23,6 +23,22 @@ export const youTubeApiKey = () => {
     if (userLoggedIn) {} else {
         return 'AIzaSyBqJN5ztzfbty3nZaosCYkJB3TcsETL344';
     }
+}
+
+export const setCookie = ( c_name, value, exdays ) => {
+    let exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    let c_value = escape(value) + ((exdays == null)
+        ? ""
+        : "; expires=" + exdate.toUTCString());
+    document.cookie = c_name + '=' + c_value + ';path=/';
+}
+
+export const getQueryString = ( name ) => {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    let regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+    results = regex.exec(location.search);
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
 export const secondsToMinutes = (seconds) => {
@@ -87,7 +103,7 @@ export const findTracksByAlbum = (artist, album) => {
             albumData.info = response.album;
 
             //then see if tracks are already in database
-            fetch(`${refracterEndpoint}getAlbum.php?artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}`).then(response => {
+            fetch(`${refracterEndpoint}services/getAlbum.php?artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}`).then(response => {
                 return response.json();
             }).then(response => {
 
@@ -117,7 +133,7 @@ export const findTracksByAlbum = (artist, album) => {
                     }
 
                     //send tracks to add album service
-                    fetch(`${refracterEndpoint}addAlbum.php`, {
+                    fetch(`${refracterEndpoint}services/addAlbum.php`, {
                         method: 'POST',
                         body: JSON.stringify(tracksToAddToDB)
                     }).then(response => {
@@ -152,7 +168,7 @@ export const getTrackSource = (track) => {
 
     return new Promise(function(resolve, reject) {
 
-        fetch(`${refracterEndpoint}getTrackSource.php?id=${track.trackID}`).then(response => {
+        fetch(`${refracterEndpoint}services/getTrackSource.php?id=${track.trackID}`).then(response => {
             return response.json();
         }).then(response => {
 

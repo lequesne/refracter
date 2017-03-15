@@ -4,6 +4,7 @@ import TopBar from '../components/TopBar';
 import Sidebar from '../components/Sidebar';
 import PlayerBar from '../components/PlayerBar';
 import SignUpForm from './SignUpForm';
+import LogInForm from './LogInForm';
 
 class App extends Component {
 
@@ -30,22 +31,81 @@ class App extends Component {
             playing: false,
             queueId: 0,
             queue: [],
-            showSignUpPage: true
+            showSignUpForm: false,
+            showLogInForm: false
         }
 
+        this.checkForUserEmailActivation = this.checkForUserEmailActivation.bind(this);
+        this.successfulLogin = this.successfulLogin.bind(this);
         this.onTrackClicked = this.onTrackClicked.bind(this);
         this.playNextTrackInQueue = this.playNextTrackInQueue.bind(this);
         this.playPreviousTrackInQueue = this.playPreviousTrackInQueue.bind(this);
         this.updateAppPlayState = this.updateAppPlayState.bind(this);
         this.showSignUpForm = this.showSignUpForm.bind(this);
         this.closeSignUpForm = this.closeSignUpForm.bind(this);
+        this.showLogInForm = this.showLogInForm.bind(this);
+        this.closeLogInForm = this.closeLogInForm.bind(this);
 
     }
     getChildContext() {
         return {parentState: this};
     }
 
+    componentWillMount(){
+        //check if query params exist for new user activation
+        this.checkForUserEmailActivation();
+
+        // TODO: Have on load logged in/cookie check. Need to work out if have it all managed in php (cookie is in php on login with central fetch call on load to check logged in service)
+    }
+
     componentDidMount(){
+    }
+
+    checkForUserEmailActivation(){
+        if ( refracter.getQueryString('userID') && refracter.getQueryString('active') ) {
+
+            let userID = refracter.getQueryString('userID');
+            let active = refracter.getQueryString('active');
+
+            fetch(`${refracter.refracterEndpoint}userEmailActivation.php?userID=${userID}&active=${active}`).then(response => {
+                return response.json();
+            }).then(response => {
+
+                if ( response.success ) {
+                    // NOTE: account activated and show login pane and message telling user to login
+
+                } else {
+                    //possibly show activation error here
+                }
+
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
+
+    successfulLogin( user, cookie, cookieName ) {
+
+        if ( user && cookie && cookieName ) {
+
+            user.cookie = cookie;
+
+            this.setState({
+                user: user
+            })
+
+            //login to refracter db
+
+            //set login cookie
+            refracter.setCookie( cookieName, cookie, 14 );
+
+            //display login alert/toast
+            console.log('User logged in: ', this.state.user);
+
+        } else {
+            console.error('User, cookie or cookie name not provided to login.');
+        }
+
     }
 
     onTrackClicked(track, trackList) {
@@ -92,13 +152,25 @@ class App extends Component {
 
     showSignUpForm(){
         this.setState({
-            showSignUpPage: true
+            showSignUpForm: true
         });
     }
 
     closeSignUpForm(){
         this.setState({
-            showSignUpPage: false
+            showSignUpForm: false
+        });
+    }
+
+    showLogInForm(){
+        this.setState({
+            showLogInForm: true
+        });
+    }
+
+    closeLogInForm(){
+        this.setState({
+            showLogInForm: false
         });
     }
 
@@ -113,6 +185,7 @@ class App extends Component {
                     user={this.state.user}
                     activeTrack={this.state.activeTrack}
                     showSignUp={this.showSignUpForm}
+                    showLogIn={this.showLogInForm}
                 />
 
                 <PlayerBar
@@ -129,7 +202,14 @@ class App extends Component {
 
                 <SignUpForm
                     onHide={this.closeSignUpForm}
-                    show={this.state.showSignUpPage}
+                    show={this.state.showSignUpForm}
+                    successfulLogin={this.successfulLogin}
+                />
+
+                <LogInForm
+                    onHide={this.closeLogInForm}
+                    show={this.state.showLogInForm}
+                    successfulLogin={this.successfulLogin}
                 />
 
             </div>

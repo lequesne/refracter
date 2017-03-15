@@ -119,9 +119,8 @@ class Form extends Component {
             }
         }
 
-        if ( formValid ) {
-            console.log('Submit form: ', this.formInputsToFormData());
-        }
+        if ( formValid )
+            this.props.onSubmit( this.formInputsToFormData() );
 
     }
 
@@ -147,8 +146,15 @@ class Form extends Component {
 
         return (
             <form id={this.props.id} onSubmit={this.validate}>
+
                 {inputs}
+
                 <Button type="submit">{this.props.submitBtn}</Button>
+
+                { this.props.serverError
+                    ? <div className="server-error">{this.props.serverError}</div>
+                    : null
+                }
             </form>
         )
     }

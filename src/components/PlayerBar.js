@@ -8,7 +8,7 @@ import YouTube from 'react-youtube';
 
 class PlayerBar extends Component {
 
-    constructor(props) {
+    constructor(props) {-
         super(props);
 
         this.state = {

@@ -18,14 +18,131 @@ class SignUpForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
-        //form is valid and submitted
+    onComponentWillMount(){
+    }
+
+    handleSubmit(formData) {
+
+        //set loading status
+        this.setState({
+            formLoading: true,
+            serverError: null
+        });
+
+        //registration
+        fetch(`${refracter.refracterEndpoint}register.php?username=${formData.username}&password=${formData.password}&passwordConfirm=${formData.passwordConfirm}&email=${formData.email}`).then(response => {
+            return response.json();
+        }).then(response => {
+            // NOTE: Registration successful. Tell user the registration was successful and to check inbox for activaton link
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        });
+
+        //fetch nonce
+        // fetch(`${refracter.refracterEndpoint}api/get_nonce/?controller=user&method=register`).then(response => {
+        //     return response.json();
+        // }).then(response => {
+        //     //nonce fetched
+        //
+        //     //regiter user with form fields
+        //     // TODO: registration does not send confirm email but instead can send set password link (which assumes they own the email) work with noify user_pass and email return
+        //     fetch(`${refracter.refracterEndpoint}api/user/register/?username=${formData.userName}&email=${formData.email}&nonce=${response.nonce}&display_name=${formData.userName}&notify=no&user_pass=${formData.password}&insecure=cool`).then(response => {
+        //         return response.json();
+        //     }).then(response => {
+        //
+        //         if ( response.status === 'ok' ) {
+        //             //registerd
+        //
+        //             // NOTE: Use login function here to get wordpress cookie login instead of get_userinfo
+        //             //
+        //             fetch(`${refracter.refracterEndpoint}api/get_nonce/?controller=user&method=generate_auth_cookie`).then(response => {
+        //                 return response.json();
+        //             }).then(response => {
+        //                 //nonce fetched
+        //
+        //                 //regiter user with form fields
+        //                 fetch(`${refracter.refracterEndpoint}api/user/generate_auth_cookie/?nonce=${response.nonce}&username=${formData.userName}&password=${formData.password}&insecure=cool`).then(response => {
+        //                     return response.json();
+        //                 }).then(response => {
+        //
+        //                     console.log(response);
+        //
+        //                     if ( response.status === 'ok' ) {
+        //                         //logged in
+        //
+        //                         //user logged in and we have user data
+        //                         this.props.successfulLogin( response.user, response.cookie, response.cookie_name );
+        //                         this.setState({formLoading: false});
+        //
+        //                     } else if ( response.status === 'error' ) {
+        //                         this.setState({
+        //                             formLoading: false,
+        //                             serverError: response.error
+        //                         });
+        //                     }
+        //
+        //                 }).catch(error => {
+        //                     this.setState({formLoading: false});
+        //                     console.log('Log in: ', error);
+        //                 });
+        //
+        //
+        //             }).catch(error => {
+        //                 console.log('generate_auth_cookie: ', error);
+        //             });
+        //
+        //             //old post registration get user info request, replaced with new login procedure above
+        //             // fetch(`${refracter.refracterEndpoint}api/user/get_userinfo/?user_id=${response.user_id}&insecure=cool`).then(response => {
+        //             //     return response.json();
+        //             // }).then(response => {
+        //             //
+        //             //     //user logged in and we have user data
+        //             //     this.props.successfulLogin( response, cookie );
+        //             //
+        //             //     this.setState({formLoading: false});
+        //             //
+        //             //     //close form here?
+        //             //
+        //             // }).catch(error => {
+        //             //     this.setState({formLoading: false});
+        //             //     console.log('get_userinfo: ', error);
+        //             // });
+        //
+        //
+        //         } else if ( response.status === 'error' ) {
+        //             this.setState({
+        //                 formLoading: false,
+        //                 serverError: response.error
+        //             });
+        //         }
+        //
+        //     }).catch(error => {
+        //         this.setState({formLoading: false});
+        //         console.log('Register: ', error);
+        //     });
+        //
+        //
+        // }).catch(error => {
+        //     console.log('get_nonce: ', error);
+        // });
+
     }
 
     render() {
 
         const inputs = [
+            {
+                name: 'username',
+                type: 'text',
+                placeholder: 'Username',
+                label: 'Enter Username',
+                validation: {
+                    required: true,
+                    minChar: 5,
+                    maxChar: 25
+                }
+            },
             {
                 name: 'email',
                 type: 'text',
@@ -33,7 +150,8 @@ class SignUpForm extends Component {
                 label: 'Enter Email',
                 validation: {
                     required: true,
-                    email: true
+                    email: true,
+                    maxChar: 250
                 }
             },
             {
@@ -48,7 +166,7 @@ class SignUpForm extends Component {
                 }
             },
             {
-                name: 'password-retype',
+                name: 'passwordConfirm',
                 type: 'password',
                 placeholder: 'Password',
                 label: 'Retype Password',
@@ -67,19 +185,13 @@ class SignUpForm extends Component {
                 </Modal.Header>
                 <Modal.Body>
 
-                    <Form id="sign-up-form" inputs={inputs} submitBtn="Sign Up"/>
-
-                    {/* <Form id="sign-up-form">
-                            <Input name="email" type="text"/>
-                            <Input name="password" type="password"/>
-                            <Button type="submit">Sign Up</Button>
-                        </Form> */}
-
-                    {/* <form onSubmit={this.handleSubmit}>
-                        <input required type="email" name="email" pattern="^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$"/>
-                        <input required type="password" name="password" placeholder="password"/>
-                        <Button type="submit">Sign Up</Button>
-                    </form> */}
+                    <Form
+                        id="sign-up-form"
+                        inputs={inputs}
+                        submitBtn="Sign Up"
+                        onSubmit={this.handleSubmit}
+                        serverError={this.state.serverError}
+                    />
 
                 </Modal.Body>
                 <Modal.Footer>

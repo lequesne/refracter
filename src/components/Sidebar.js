@@ -24,7 +24,7 @@ class Sidebar extends Component {
                         <div className="login-signup">
                             Login or sign up to save tracks and albums to your library and create custom playlists.
 
-                            <Link className="button-standard">Login</Link>
+                            <Link onClick={this.props.showLogIn} className="button-standard">Login</Link>
                             <Link onClick={this.props.showSignUp} className="button-standard">Sign Up</Link>
 
                         </div>
