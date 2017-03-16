@@ -30,7 +30,7 @@ class Album extends Component {
 
             //if track deeplink, play matching track
             if (this.props.params.track) {
-                for (let [i,track]of albumData.tracks.entries()) {
+                for (let track of albumData.tracks ) {
                     if (track.title === this.props.params.track) {
                         this.context.parentState.onTrackClicked(track, albumData.tracks);
                         return;
@@ -53,6 +53,8 @@ class Album extends Component {
                     return (
                         <span className="tag" key={index}> / {tag.name} / </span>
                     )
+                } else {
+                    return null;
                 }
             });
         }

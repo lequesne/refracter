@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { browserHistory } from 'react-router';
+import { Button } from 'react-bootstrap';
 import RefracterLogo from '../assets/refracter-logo.svg';
 
 class TopBar extends Component {
@@ -31,6 +32,10 @@ class TopBar extends Component {
                         <input id="search-input" type="text" placeholder="Search..." defaultValue={this.state.searchValue} onKeyPress={ this.performNewSearch }/>
                         <div className="ion-android-search icon"></div>
                     </label>
+                    { this.props.user
+                        ? <Button onClick={this.props.logOutUser} className="signout-btn">Sign Out</Button>
+                        : null
+                    }
                 </div>
             </div>
         );

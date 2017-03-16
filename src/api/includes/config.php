@@ -1,11 +1,12 @@
 <?php
 
-$thisFileLocation = $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
-$apiEndPoint = 'http://'.strstr($thisFileLocation, 'api', true);
-$cookieName = 'refracted';
-
 ob_start();
 session_start();
+
+$thisFileLocation = $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
+$appUrl = 'http://'.strstr($thisFileLocation, 'api', true);
+$apiEndPoint = $appUrl.'api/';
+$cookieName = 'refracted';
 
 //set timezone
 date_default_timezone_set('Australia/Sydney');
@@ -24,23 +25,21 @@ switch (SITE_TYPE) {
         define('DBUSER','root');
         define('DBPASS','mysql');
         define('DBNAME','refracter');
-        define('DIR', 'http://localhost:3000/');
         break;
     case LIVE_SITE:
         define('DBHOST','localhost');
         define('DBUSER','root');
         define('DBPASS','mysql');
         define('DBNAME','refracter');
-        define('DIR', $apiEndPoint);
         break;
 }
 
 
 //application email address
 define('SITEEMAIL','refracter.app@gmail.com');
+define('DIR', $appUrl);
 
 try {
-
 	//create PDO connection
 	$db = new PDO("mysql:host=".DBHOST.";dbname=".DBNAME, DBUSER, DBPASS);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

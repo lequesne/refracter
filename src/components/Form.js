@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Input from '../components/Inputs';
 import {Button} from 'react-bootstrap';
-import * as refracter from '../refracter';
+//import * as refracter from '../refracter';
 
 class Form extends Component {
 
@@ -25,7 +25,7 @@ class Form extends Component {
 
     formInputsToFormData(){
         let formData = {};
-        for (var [i,input] of this.state.inputs.entries()) {
+        for (let input of this.state.inputs) {
             formData[`${input.name}`] = input.value;
         }
         return formData;
@@ -51,14 +51,14 @@ class Form extends Component {
 
         //email check
         if ( input.value && input.validation.email ){
-            let pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            let pattern = /[^@]+@[^@]+\.[^@]+/;
             if ( !pattern.test(input.value) )
                 input.errors.push(`Please enter a valid email address`);
         }
 
         //match input name check
         if ( input.validation.match ){
-            for (var [i,matchInput]of this.state.inputs.entries()) {
+            for (let matchInput of this.state.inputs) {
                 if ( matchInput.name === input.validation.match ) {
                     //matching input
                     if ( matchInput.value !== input.value )
@@ -108,12 +108,12 @@ class Form extends Component {
         let formValid = true;
 
         //trigger loop validation of all inputs
-        for (var [i,input] of this.state.inputs.entries()) {
+        for (let [i,input] of this.state.inputs.entries()) {
             this.validateInput(input, i, true);
         }
 
         //run another loop to check valid status of each input
-        for (var [i,input] of this.state.inputs.entries()) {
+        for (let input of this.state.inputs) {
             if ( !input.valid ) {
                 formValid = false;
             }
@@ -144,6 +144,16 @@ class Form extends Component {
                 />)
         });
 
+        //iterate over server errors if they exist
+        let serverErrors;
+        if ( this.props.serverError && this.props.serverError.length > 0 ) {
+            serverErrors = this.props.serverError.map((error, index) => {
+                return (
+                    <div className="error" key={index}>{error}</div>
+                )
+            });
+        }
+
         return (
             <form id={this.props.id} onSubmit={this.validate}>
 
@@ -151,8 +161,10 @@ class Form extends Component {
 
                 <Button type="submit">{this.props.submitBtn}</Button>
 
-                { this.props.serverError
-                    ? <div className="server-error">{this.props.serverError}</div>
+                {this.props.children}
+
+                { serverErrors
+                    ? <div className="server-errors">{serverErrors}</div>
                     : null
                 }
             </form>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import * as refracter from '../refracter';
+//import * as refracter from '../refracter';
 
 class Input extends Component {
 
@@ -35,7 +35,10 @@ class Input extends Component {
 
         return (
             <div className={`input-container (showErrors ? 'errors' : '')`}>
-                <label htmlFor={this.props.name}>{this.props.label}</label>
+                { this.props.label
+                    ? <label htmlFor={this.props.name}>{this.props.label}</label>
+                    : null
+                }
                 <input
                     name={this.props.name}
                     type={this.props.type}

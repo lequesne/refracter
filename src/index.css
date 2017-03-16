@@ -210,6 +210,10 @@ Pass any number of seconds referring to the duration of one full rotation for an
     top: 25%;
     height: 50%;
     opacity: 0.7; }
+  .topbar .signout-btn {
+    position: absolute;
+    right: 20px;
+    top: 25%; }
   .topbar .seach-input-container {
     position: relative;
     display: block;

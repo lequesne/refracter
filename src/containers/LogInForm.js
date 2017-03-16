@@ -7,7 +7,6 @@ class LogInForm extends Component {
 
     constructor(props) {
         super(props);
-        console.log(this.props);
 
         //setup state
         this.state = {
@@ -15,10 +14,16 @@ class LogInForm extends Component {
         };
 
         //bindings
+        this.forgotPassword = this.forgotPassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     onComponentWillMount() {}
+
+    forgotPassword(){
+        this.props.onHide();
+        this.props.showForgotPassword();
+    }
 
     handleSubmit(formData) {
 
@@ -33,11 +38,12 @@ class LogInForm extends Component {
 
             if (response.success) {
                 //logged in
+
                 this.props.successfulLogin(response.user);
                 this.setState({formLoading: false});
             } else {
                 //error
-                this.setState({formLoading: false, serverError: response.error});
+                this.setState({formLoading: false, serverError: response.errors});
             }
 
         }).catch(error => {
@@ -114,13 +120,15 @@ class LogInForm extends Component {
                 </Modal.Header>
                 <Modal.Body>
 
-                    <Form
-                        id="log-up-form"
+                    <Form id="sign-in-form"
                         inputs={inputs}
-                        submitBtn="Log In"
+                        submitBtn="Sign In"
                         onSubmit={this.handleSubmit}
-                        serverError={this.state.serverError}
-                    />
+                        serverError={this.state.serverError}>
+
+                        <a onClick={this.forgotPassword}>Forgot password?</a>
+
+                    </Form>
 
                 </Modal.Body>
                 <Modal.Footer>

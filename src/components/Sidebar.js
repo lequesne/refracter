@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
-import {browserHistory, Link} from 'react-router';
+import {Link} from 'react-router';
 
 class Sidebar extends Component {
 
     constructor(props) {
         super(props);
         //setup state
+        this.state = {
+            playlists: []
+        }
     }
 
     render() {
@@ -22,9 +25,9 @@ class Sidebar extends Component {
                         </div>
                         :
                         <div className="login-signup">
-                            Login or sign up to save tracks and albums to your library and create custom playlists.
+                            Log in or sign up to save tracks and albums to your library and create custom playlists.
 
-                            <Link onClick={this.props.showLogIn} className="button-standard">Login</Link>
+                            <Link onClick={this.props.showLogIn} className="button-standard">Sign In</Link>
                             <Link onClick={this.props.showSignUp} className="button-standard">Sign Up</Link>
 
                         </div>

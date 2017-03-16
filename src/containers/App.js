@@ -5,6 +5,8 @@ import Sidebar from '../components/Sidebar';
 import PlayerBar from '../components/PlayerBar';
 import SignUpForm from './SignUpForm';
 import LogInForm from './LogInForm';
+import ForgotPasswordForm from './ForgotPasswordForm';
+import PasswordResetForm from './PasswordResetForm';
 
 class App extends Component {
 
@@ -14,29 +16,18 @@ class App extends Component {
         //set initial app state
         this.state = {
             searchValue: '',
-            // user: {
-            //     loggedIn: false,
-            //     userName: '',
-            //     email: '',
-            //     library: [], //array of all users tracks (playlist and library)
-            //     playlists: [
-            //         {
-            //             id: 1, //id used to fetch users playlist
-            //             name: 'Playlist 1'
-            //         }
-            //     ]
-            // },
             user: null,
             activeTrack: null,
             playing: false,
             queueId: 0,
-            queue: [],
-            showSignUpForm: false,
-            showLogInForm: false
+            queue: []
         }
 
+        this.loadUser = this.loadUser.bind(this);
         this.checkForUserEmailActivation = this.checkForUserEmailActivation.bind(this);
+        this.checkPasswordReset = this.checkPasswordReset.bind(this);
         this.successfulLogin = this.successfulLogin.bind(this);
+        this.logOutUser = this.logOutUser.bind(this);
         this.onTrackClicked = this.onTrackClicked.bind(this);
         this.playNextTrackInQueue = this.playNextTrackInQueue.bind(this);
         this.playPreviousTrackInQueue = this.playPreviousTrackInQueue.bind(this);
@@ -45,6 +36,10 @@ class App extends Component {
         this.closeSignUpForm = this.closeSignUpForm.bind(this);
         this.showLogInForm = this.showLogInForm.bind(this);
         this.closeLogInForm = this.closeLogInForm.bind(this);
+        this.showForgotPasswordForm = this.showForgotPasswordForm.bind(this);
+        this.closeForgotPasswordForm = this.closeForgotPasswordForm.bind(this);
+        this.showPasswordResetForm = this.showPasswordResetForm.bind(this);
+        this.closePasswordResetForm = this.closePasswordResetForm.bind(this);
 
     }
     getChildContext() {
@@ -54,11 +49,45 @@ class App extends Component {
     componentWillMount(){
         //check if query params exist for new user activation
         this.checkForUserEmailActivation();
-
-        // TODO: Have on load logged in/cookie check. Need to work out if have it all managed in php (cookie is in php on login with central fetch call on load to check logged in service)
+        //check if query params exist for user password reset
+        this.checkPasswordReset();
+        //check cookie or php session with api to see if user is logged in, returns user data
+        this.loadUser();
     }
 
     componentDidMount(){
+        console.log(refracter.getQueryString('test'));
+    }
+
+    loadUser(){
+        // TODO: PRELOADER FOR APP BEFORE LOAD USER RESPONSE
+
+        //set login cookie
+        let cookie = refracter.getCookie( refracter.loginCookieName );
+        //let cookieValue = cookie && cookie.split('/')[0] ? cookie.split('/')[0] : '';
+        //let userName = cookie && cookie.split('/')[1] ? cookie.split('/')[1] : '';
+
+        fetch(`${refracter.refracterEndpoint}loadUser.php?&cookie=${cookie}`).then(response => {
+            return response.json();
+        }).then(response => {
+
+            console.log('User logged in: ',response);
+
+            if ( response.success && response.user ) {
+                // NOTE: account activated and show login pane and message telling user to login
+
+                //set userKey to use to authenticate with the api to load this users data
+                refracter.userKey = response.user.cookie;
+
+                //set user data from db in state
+                this.setState({
+                    user: response.user
+                });
+            }
+
+        }).catch(error => {
+            console.log(error);
+        })
     }
 
     checkForUserEmailActivation(){
@@ -72,7 +101,7 @@ class App extends Component {
             }).then(response => {
 
                 if ( response.success ) {
-                    // NOTE: account activated and show login pane and message telling user to login
+                    // NOTE: account activated and show login pane and message telling user to login, possible auto log in
 
                 } else {
                     //possibly show activation error here
@@ -80,31 +109,56 @@ class App extends Component {
 
             }).catch(error => {
                 console.log(error);
-            })
+            });
         }
     }
 
-    successfulLogin( user, cookie, cookieName ) {
+    checkPasswordReset(){
+        if ( refracter.getQueryString('pwReset') ) {
+            //show password reset formData
+            this.showPasswordResetForm();
+        }
+    }
 
-        if ( user && cookie && cookieName ) {
+    successfulLogin( user ) {
 
-            user.cookie = cookie;
+        if ( user && user.cookie ) {
 
+            //set user data in state
             this.setState({
                 user: user
             })
 
-            //login to refracter db
+            //stitch on username to unique cookie to be used for quick lookup on loadUser()
+            //cookie = `${cookie}/${user.username}`;
 
             //set login cookie
-            refracter.setCookie( cookieName, cookie, 14 );
+            refracter.setCookie( refracter.loginCookieName, user.cookie, 14 );
 
             //display login alert/toast
             console.log('User logged in: ', this.state.user);
 
         } else {
-            console.error('User, cookie or cookie name not provided to login.');
+            console.error('User data object and cookie name required for login.');
         }
+
+    }
+
+    logOutUser(){
+        //log out user procedure
+
+        //delete login cookie
+        refracter.deleteCookie( refracter.loginCookieName );
+
+        //request session destroy on api and on response perform an app reload
+        fetch(`${refracter.refracterEndpoint}logout.php`).then(response => {
+            return response.json();
+        }).then(response => {
+            //reload app
+            document.location.href = '/';
+        }).catch(error => {
+            console.log(error);
+        });
 
     }
 
@@ -174,12 +228,39 @@ class App extends Component {
         });
     }
 
+    showForgotPasswordForm(){
+        this.setState({
+            showForgotPasswordForm: true
+        });
+    }
+
+    closeForgotPasswordForm(){
+        this.setState({
+            showForgotPasswordForm: false
+        });
+    }
+
+    showPasswordResetForm(){
+        this.setState({
+            showPasswordResetForm: true
+        });
+    }
+
+    closePasswordResetForm(){
+        this.setState({
+            showPasswordResetForm: false
+        });
+    }
+
     render() {
 
         return (
             <div className="Refracter-app">
 
-                <TopBar/>
+                <TopBar
+                    user={this.state.user}
+                    logOutUser={this.logOutUser}
+                />
 
                 <Sidebar
                     user={this.state.user}
@@ -203,13 +284,23 @@ class App extends Component {
                 <SignUpForm
                     onHide={this.closeSignUpForm}
                     show={this.state.showSignUpForm}
-                    successfulLogin={this.successfulLogin}
                 />
 
                 <LogInForm
                     onHide={this.closeLogInForm}
                     show={this.state.showLogInForm}
+                    showForgotPassword={this.showForgotPasswordForm}
                     successfulLogin={this.successfulLogin}
+                />
+
+                <ForgotPasswordForm
+                    onHide={this.closeForgotPasswordForm}
+                    show={this.state.showForgotPasswordForm}
+                />
+
+                <PasswordResetForm
+                    onHide={this.closePasswordResetForm}
+                    show={this.state.showPasswordResetForm}
                 />
 
             </div>

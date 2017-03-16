@@ -6,10 +6,12 @@
 import { browserHistory } from 'react-router';
 import 'whatwg-fetch';
 
-//define variables
+//define some global variables
+export const loginCookieName = 'refracter_login';
 export const lastFmEndpoint = 'http://ws.audioscrobbler.com/2.0/';
-export const refracterEndpoint = document.location.hostname === 'localhost' ? 'http://localhost/_code/refracter/src/api/' : 'http://refracter.com/api/';
-let userLoggedIn = false;
+export const refracterEndpoint = document.location.hostname === 'localhost' ? 'http://localhost/_code/refracter/src/api/' : '/api/';
+export let userLoggedIn; //not used at the moment
+export let userKey = ''; //only set after user logins, then used to authenticate with api
 
 //start define functions
 
@@ -34,8 +36,23 @@ export const setCookie = ( c_name, value, exdays ) => {
     document.cookie = c_name + '=' + c_value + ';path=/';
 }
 
+export const getCookie = ( name ) => {
+	let nameEQ = name + "=";
+    let ca = document.cookie.split(';');
+    for(let i=0;i < ca.length;i++) {
+        let c = ca[i];
+        while (c.charAt(0)===' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+export const deleteCookie = ( c_name ) => {
+    document.cookie = c_name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;';
+}
+
 export const getQueryString = ( name ) => {
-    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    //name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
     let regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
     results = regex.exec(location.search);
     return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
@@ -103,13 +120,13 @@ export const findTracksByAlbum = (artist, album) => {
             albumData.info = response.album;
 
             //then see if tracks are already in database
-            fetch(`${refracterEndpoint}services/getAlbum.php?artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}`).then(response => {
+            fetch(`${refracterEndpoint}getAlbum.php?artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}`).then(response => {
                 return response.json();
             }).then(response => {
 
-                if (response) {
+                if ( response.success && response.tracks ) {
                     //tracks already in the refracter db
-                    albumData.tracks = response
+                    albumData.tracks = response.tracks;
                     return resolve(albumData);
                 } else {
                     //tracks not in database so add
@@ -117,8 +134,7 @@ export const findTracksByAlbum = (artist, album) => {
                     let tracksToAddToDB = [];
 
                     //transform tracks from lastfm to new refracter album track format
-                    for (let [i,
-                        track]of albumData.info.tracks.track.entries()) {
+                    for (let [i,track]of albumData.info.tracks.track.entries()) {
 
                         let newTrack = {
                             number: i + 1,
@@ -126,28 +142,31 @@ export const findTracksByAlbum = (artist, album) => {
                             album: albumData.info.name,
                             artist: albumData.info.artist,
                             duration: track.duration,
-                            art: albumData.info.image[3]['#text']
+                            art: albumData.info.image[3]['#text'],
+                            type: ''
                         };
 
                         tracksToAddToDB.push(newTrack);
                     }
 
                     //send tracks to add album service
-                    fetch(`${refracterEndpoint}services/addAlbum.php`, {
+                    fetch(`${refracterEndpoint}addAlbum.php`, {
                         method: 'POST',
                         body: JSON.stringify(tracksToAddToDB)
                     }).then(response => {
                         return response.json();
                     }).then(response => {
 
-                        //add newly added tracks to resolve object
-                        albumData.tracks = response
-                        return resolve(albumData);
+                        if ( response.success && response.tracks ) {
+                            //add newly added tracks to resolve object
+                            albumData.tracks = response.tracks;
+                            return resolve(albumData);
+                        } else {
+                            console.log('Refracter addAlbum: ', 'No tracks returned from adding album');
+                        }
 
                     }).catch(err => {
-
                         console.log('Refracter addAlbum: ', err);
-
                     });
 
                 }
@@ -164,11 +183,11 @@ export const findTracksByAlbum = (artist, album) => {
 
 }
 
-export const getTrackSource = (track) => {
+export const getTrackSource = (track, key) => {
 
     return new Promise(function(resolve, reject) {
 
-        fetch(`${refracterEndpoint}services/getTrackSource.php?id=${track.trackID}`).then(response => {
+        fetch(`${refracterEndpoint}getTrackSource.php?key=${key}&trackID=${track.trackID}`).then(response => {
             return response.json();
         }).then(response => {
 

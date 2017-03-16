@@ -24,8 +24,6 @@ if(is_numeric($userID) && !empty($active)){
 	if($stmt->rowCount() == 1){
 		//success
 		$responseObject['success'] = true;
-		echo json_encode($responseObject);
-		exit;
 
 	} else {
 		$error[] = 'There was an issue activating your account. Please try registering again.';
@@ -33,8 +31,8 @@ if(is_numeric($userID) && !empty($active)){
 		if(isset($error)){
 			$responseObject['errors'] = $error;
 		}
-		echo json_encode($responseObject);
 	}
 
 }
+echo json_encode($responseObject);
 ?>

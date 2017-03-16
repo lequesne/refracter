@@ -7,7 +7,6 @@ class SignUpForm extends Component {
 
     constructor(props) {
         super(props);
-        console.log(this.props);
 
         //setup state
         this.state = {
@@ -33,8 +32,16 @@ class SignUpForm extends Component {
         fetch(`${refracter.refracterEndpoint}register.php?username=${formData.username}&password=${formData.password}&passwordConfirm=${formData.passwordConfirm}&email=${formData.email}`).then(response => {
             return response.json();
         }).then(response => {
-            // NOTE: Registration successful. Tell user the registration was successful and to check inbox for activaton link
             console.log(response);
+
+            if ( response.success ) {
+                // NOTE: Registration successful. Tell user the registration was successful and to check inbox for activaton link
+            } else {
+                this.setState({
+                    formLoading: false,
+                    serverError: response.errors
+                });
+            }
         }).catch(error => {
             console.log(error);
         });
@@ -145,7 +152,7 @@ class SignUpForm extends Component {
             },
             {
                 name: 'email',
-                type: 'text',
+                type: 'email',
                 placeholder: 'Email',
                 label: 'Enter Email',
                 validation: {

@@ -1,9 +1,7 @@
 <?php require('includes/config.php');
 
 //logout
-$user->logout(); 
+$user->logout();
+echo json_encode(true);
 
-//logged in return to index page
-header('Location: index.php');
-exit;
 ?>

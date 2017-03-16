@@ -8,7 +8,7 @@ import YouTube from 'react-youtube';
 
 class PlayerBar extends Component {
 
-    constructor(props) {-
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -50,7 +50,7 @@ class PlayerBar extends Component {
 
     loadTrack(track) {
         if (track) {
-            refracter.getTrackSource(track).then(youTubeId => {
+            refracter.getTrackSource(track, refracter.userKey).then(youTubeId => {
                 this.youTubePlayer.loadVideoById(youTubeId);
             }).catch(err => {
                 console.log('ERROR RETURNED: ', err);

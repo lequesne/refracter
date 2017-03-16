@@ -80,25 +80,19 @@ if(!isset($error)){
 		$mail->body($body);
 		$mail->send();
 
-		//redirect to index page
-		//header('Location: index.php?action=joined');
+		//registration success
 		$responseObject['success'] = true;
-		echo json_encode($responseObject);
-		exit;
 
 	//else catch the exception and show the error.
 	} catch(PDOException $e) {
 	    $error[] = $e->getMessage();
-		$responseObject['success'] = false;
 		$responseObject['errors'] = $error;
-		echo json_encode($responseObject);
 	}
 
 } else {
-	$responseObject['success'] = false;
 	$responseObject['errors'] = $error;
-	echo json_encode($responseObject);
 }
 
+echo json_encode($responseObject);
 
 ?>
