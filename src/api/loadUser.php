@@ -2,9 +2,6 @@
 
 require('includes/config.php');
 
-// TODO:// Rethink user session issue. Possibly use cookie as api authentication key (login with cookie function on each user request)
-// also remove username from cookie value as no longer needed
-
 // TODO://THEN WORK ON USER ADDING TRACKS TO LIBRARY
 
 // TODO://THEN WORK ON LOADING USER LIBRARY
@@ -24,19 +21,14 @@ if( $user->is_logged_in() ) {
 	$responseObject['user'] = $user->getUserData();
 } else {
     //no session active so check cookie for login
-
     if ( $storedCookieValue ) {
         //cookie values passed so compare with db
-
         if($user->login(null,null,$storedCookieValue)){
             //add user data to reponse object
 			$responseObject['success'] = true;
 			$responseObject['user'] = $user->getUserData();
         }
-
     }
-
 }
 echo json_encode($responseObject);
-
 ?>

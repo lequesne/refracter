@@ -1,4 +1,5 @@
 .track-list {
+    margin: $pageComponentMargin 0;
 
     .react-bs-table {
         margin: $pageComponentMargin 0;
@@ -12,8 +13,30 @@
             tr {
                 border: none;
                 background: none !important;
+                border-bottom: 1px solid $white;
+
+                .play-btn-col {
+                    width: 40px;
+                }
+
+                .number-col {
+                    width: 50px;
+                }
+
+                .duration-col {
+                    width: 70px;
+                }
+
                 th {
                     border: none;
+
+                    &.pointer:hover {
+                        background: rgba($lightBackground,0.2);
+                    }
+
+                    .sort-icon {
+                        margin-right: 0.5em;
+                    }
                 }
             }
         }
@@ -32,7 +55,6 @@
 
             .play-icon {
                 position: absolute;
-                width: 40px;
                 cursor: pointer;
 
                 &:hover {

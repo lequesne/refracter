@@ -46,7 +46,7 @@ class Input extends Component {
                     onChange={this.props.onChange}
                     onBlur={this.props.onBlur}
                 />
-                { showErrors
+                { showErrors && !this.props.hideErrors
                     ? <div className="input-errors">{errors}</div>
                     : null
                 }

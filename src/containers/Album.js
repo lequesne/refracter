@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 //import {Link} from 'react-router';
-import {Col} from 'react-bootstrap';
+import {Col, Button} from 'react-bootstrap';
 import * as refracter from '../refracter';
 import TrackList from '../components/TrackList';
 
@@ -11,20 +11,17 @@ class Album extends Component {
 
         //set initial state
         this.state = {
-            album: {},
-            tracks: {}
+            album: {}
         }
     }
 
     componentWillMount() {
 
-        //console.log(this.context.parentState);
+        refracter.findTracksByAlbum(this.props.params.artist, this.props.params.album, refracter.userKey).then(albumData => {
 
-        refracter.findTracksByAlbum(this.props.params.artist, this.props.params.album).then(albumData => {
-
-            this.setState({album: albumData.info, albumArt: albumData.info.image[4]["#text"]
-                    ? albumData.info.image[4]["#text"]
-                    : null,
+            this.setState({
+                albumInLibrary: albumData.albumInLibrary,
+                album: albumData.info, albumArt: albumData.info.image[4]["#text"] ? albumData.info.image[4]["#text"] : null,
                 tracks: albumData.tracks
             });
 
@@ -72,15 +69,24 @@ class Album extends Component {
 
                         <h2>{this.state.album.artist}</h2>
 
-                        {albumTags ? albumTags : null}
+                        {albumTags ? <div className="tags">{albumTags}</div> : null}
 
-                        <TrackList
-                            playing={this.props.playing}
-                            tracks={this.state.tracks}
-                            queueId={this.props.queueId}
-                            activeTrack={this.props.activeTrack}
-                            onTrackDoubleClick={this.context.parentState.onTrackClicked}
-                        />
+                        { this.props.user && !this.state.albumInLibrary
+                            ? <Button className="add-album-btn" onClick={() => this.context.parentState.addUserTracks(this.state.tracks)}>Add album to library</Button>
+                            : null
+                        }
+
+                        { this.state.tracks && this.state.tracks.length > 0 ?
+                            <TrackList
+                                user={this.props.user}
+                                playing={this.props.playing}
+                                tracks={this.state.tracks}
+                                queueId={this.props.queueId}
+                                activeTrack={this.props.activeTrack}
+                                updateQueue={this.context.parentState.updateQueue}
+                            />
+                            : <p>Loading or no tracks in state</p>
+                        }
 
                     </Col>
 

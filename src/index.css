@@ -15,6 +15,9 @@ body, html {
   font-family: "Titillium Web", sans-serif;
   background: #121212; }
 
+.pointer {
+  cursor: pointer; }
+
 input {
   color: black; }
 
@@ -280,6 +283,12 @@ Pass any number of seconds referring to the duration of one full rotation for an
     padding: 20px; }
     .sidebar .album-art img {
       box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.5); }
+  .sidebar .user-playlists {
+    margin: 20px 0; }
+    .sidebar .user-playlists input {
+      display: block;
+      width: 100%;
+      border: none; }
 
 .PlayerBar {
   position: fixed;
@@ -368,67 +377,77 @@ Pass any number of seconds referring to the duration of one full rotation for an
   .player-controls-rhs .loop-track {
     margin: 0 5px; }
 
-.track-list .react-bs-table {
-  margin: 50px 0;
-  user-select: none;
-  border: none; }
-
-.track-list table thead tr {
-  border: none;
-  background: none !important; }
-  .track-list table thead tr th {
-    border: none; }
-
-.track-list table tr {
-  position: relative;
-  border: none; }
-  .track-list table tr td {
+.track-list {
+  margin: 50px 0; }
+  .track-list .react-bs-table {
+    margin: 50px 0;
     user-select: none;
-    cursor: default;
+    border: none; }
+  .track-list table thead tr {
     border: none;
-    font-size: 1.2em;
-    padding: 0.75em; }
-  .track-list table tr .play-icon {
-    position: absolute;
-    width: 40px;
-    cursor: pointer; }
-    .track-list table tr .play-icon:hover:before {
-      transform: scale(1.3); }
-    .track-list table tr .play-icon:before {
-      content: "\f215"; }
-  .track-list table tr:hover {
-    background: #2c2c2c; }
-  .track-list table tr.selected {
-    background: #dcdcdc;
-    color: #121212; }
-  .track-list table tr.active-track {
-    background: #EDA564;
-    color: #121212; }
-    .track-list table tr.active-track .equalizer {
+    background: none !important;
+    border-bottom: 1px solid #efefef; }
+    .track-list table thead tr .play-btn-col {
+      width: 40px; }
+    .track-list table thead tr .number-col {
+      width: 50px; }
+    .track-list table thead tr .duration-col {
+      width: 70px; }
+    .track-list table thead tr th {
+      border: none; }
+      .track-list table thead tr th.pointer:hover {
+        background: rgba(220, 220, 220, 0.2); }
+      .track-list table thead tr th .sort-icon {
+        margin-right: 0.5em; }
+  .track-list table tr {
+    position: relative;
+    border: none; }
+    .track-list table tr td {
+      user-select: none;
+      cursor: default;
+      border: none;
+      font-size: 1.2em;
+      padding: 0.75em; }
+    .track-list table tr .play-icon {
       position: absolute;
-      display: block;
-      width: 5.0vmin;
-      background-color: #121212;
-      height: 2.5vmin;
-      overflow: visible; }
-    .track-list table tr.active-track .equalizer,
-    .track-list table tr.active-track .equalizer::before,
-    .track-list table tr.active-track .equalizer::after {
-      animation: equalize 1.25s steps(25, end) 0s infinite; }
-    .track-list table tr.active-track .equalizer::before,
-    .track-list table tr.active-track .equalizer::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 6.25vmin;
-      height: 17.5vmin;
-      width: 5.0vmin;
-      background-color: #121212; }
-    .track-list table tr.active-track .equalizer::before {
-      animation-name: equalize2; }
-    .track-list table tr.active-track .equalizer::after {
-      left: 12.5vmin;
-      animation-name: equalize3; }
+      cursor: pointer; }
+      .track-list table tr .play-icon:hover:before {
+        transform: scale(1.3); }
+      .track-list table tr .play-icon:before {
+        content: "\f215"; }
+    .track-list table tr:hover {
+      background: #2c2c2c; }
+    .track-list table tr.selected {
+      background: #dcdcdc;
+      color: #121212; }
+    .track-list table tr.active-track {
+      background: #EDA564;
+      color: #121212; }
+      .track-list table tr.active-track .equalizer {
+        position: absolute;
+        display: block;
+        width: 5.0vmin;
+        background-color: #121212;
+        height: 2.5vmin;
+        overflow: visible; }
+      .track-list table tr.active-track .equalizer,
+      .track-list table tr.active-track .equalizer::before,
+      .track-list table tr.active-track .equalizer::after {
+        animation: equalize 1.25s steps(25, end) 0s infinite; }
+      .track-list table tr.active-track .equalizer::before,
+      .track-list table tr.active-track .equalizer::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 6.25vmin;
+        height: 17.5vmin;
+        width: 5.0vmin;
+        background-color: #121212; }
+      .track-list table tr.active-track .equalizer::before {
+        animation-name: equalize2; }
+      .track-list table tr.active-track .equalizer::after {
+        left: 12.5vmin;
+        animation-name: equalize3; }
 
 @keyframes equalize {
   0% {
@@ -591,10 +610,10 @@ Pass any number of seconds referring to the duration of one full rotation for an
     height: 12.5vmin; }
   100% {
     height: 11.25vmin; } }
-    .track-list table tr.active-track .play-icon.equalizer {
-      transform-origin: 0 0;
-      transform: scale(0.1) rotate(180deg);
-      margin: 2em; }
+      .track-list table tr.active-track .play-icon.equalizer {
+        transform-origin: 0 0;
+        transform: scale(0.1) rotate(180deg);
+        margin: 2em; }
 
 .Tile {
   display: inline-block; }
@@ -622,3 +641,6 @@ Pass any number of seconds referring to the duration of one full rotation for an
   border: 5px solid #121212;
   border-bottom-left-radius: 100%;
   opacity: 0.2; }
+
+.album .add-album-btn {
+  margin: 1em 0; }

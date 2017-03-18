@@ -130,16 +130,18 @@ class Form extends Component {
         const inputs = this.state.inputs.map((input, index) => {
             return (
                 <Input
+                    ref={input.ref}
                     name={input.name}
                     type={input.type}
                     placeholder={input.placeholder}
                     label={input.label}
                     value={input.value}
                     onChange={this.updateInputValue}
-                    onBlur={this.onInputBlur}
+                    onBlur={input.onBlur?input.onBlur:this.onInputBlur}
                     valid={input.valid}
                     errors={input.errors}
                     showErrors={input.showErrors}
+                    hideErrors={this.props.hideErrors}
                     key={index}
                 />)
         });
@@ -159,7 +161,7 @@ class Form extends Component {
 
                 {inputs}
 
-                <Button type="submit">{this.props.submitBtn}</Button>
+                <Button type="submit" className={this.props.submitBtn?null:'hidden'}>{this.props.submitBtn}</Button>
 
                 {this.props.children}
 

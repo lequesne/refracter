@@ -5,7 +5,7 @@ $responseObject['success'] = false;
 $trackID = $_GET['trackID'];
 $storedCookieValue = $_GET['key'];
 
-//if user logged in
+//if user authenticated
 if($user->login(null,null,$storedCookieValue)){
 
     //check to see if there is a user saved source first
@@ -20,46 +20,42 @@ if($user->login(null,null,$storedCookieValue)){
         //user has a saved source
         $responseObject['success'] = true;
         $responseObject['source'] = $track['source'];
-
     } else {
         //no saved source so use existing sources from other users
-        doSourceVote();
+        $responseObject['success'] = true;
+        $responseObject['source'] = doSourceVote($db, $trackID);
     }
 
 } else {
-    //use existing sources from other users
-    doSourceVote();
+    //not logged in so use existing sources from other users
+    $responseObject['success'] = true;
+    $responseObject['source'] = doSourceVote($db, $trackID);
 }
 
-function doSourceVote() {
+function doSourceVote($db, $trackID) {
     //do count of most used sources for a track
+    $stmt = $db->prepare('SELECT * FROM userTracks WHERE trackID = :trackID');
+    $stmt->execute(array(
+        ':trackID' => $trackID
+    ));
+    $tracks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // TODO: UPDATE QUERY AND SOURCE VOTE FUNCTION BELOW 
-
-    $trackArr = array();
-    $trackQuery = mysql_query("SELECT * FROM userTracks WHERE trackID='$trackID' ");
-    $trackField = mysql_fetch_assoc($trackQuery);
-
-    if ( $trackField['source'] ) {
-
-        do {
-
-            if ( $trackField['source'] )
-                array_push( $trackArr , $trackField['source'] );
-
-        } while ( $trackField = mysql_fetch_assoc($trackQuery) );
-
-        //echo back highest rated source for track id
-        $countedArray = array_count_values( $trackArr );
-        echo json_encode( array_search(max($countedArray), $countedArray) );
-
+    if ( $tracks ) {
+        $trackSources = array();
+        foreach ( $tracks as $track ) {
+            if ( $track['source'] )
+                array_push( $trackSources , $track['source'] );
+        }
+        if ( !empty($trackSources) ) {
+            $countedArray = array_count_values( $trackSources );
+            $mostUsedSource = array_search(max($countedArray), $countedArray);
+            return $mostUsedSource;
+        } else {
+            return null;
+        }
     } else {
-        //no sources for the track exist
-
-        echo json_encode( false );
-
+        return null;
     }
-
 }
 
 echo json_encode($responseObject);

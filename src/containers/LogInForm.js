@@ -40,7 +40,9 @@ class LogInForm extends Component {
                 //logged in
 
                 this.props.successfulLogin(response.user);
+
                 this.setState({formLoading: false});
+                
             } else {
                 //error
                 this.setState({formLoading: false, serverError: response.errors});

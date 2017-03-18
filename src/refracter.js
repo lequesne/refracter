@@ -105,7 +105,7 @@ export const getLastFMTrackLink = (trackName, trackArtist) => {
     });
 }
 
-export const findTracksByAlbum = (artist, album) => {
+export const findTracksByAlbum = (artist, album, key) => {
 
     return new Promise(function(resolve, reject) {
 
@@ -120,13 +120,18 @@ export const findTracksByAlbum = (artist, album) => {
             albumData.info = response.album;
 
             //then see if tracks are already in database
-            fetch(`${refracterEndpoint}getAlbum.php?artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}`).then(response => {
+            fetch(`${refracterEndpoint}getAlbum.php?artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}&key=${key}`).then(response => {
                 return response.json();
             }).then(response => {
 
                 if ( response.success && response.tracks ) {
                     //tracks already in the refracter db
                     albumData.tracks = response.tracks;
+
+                    if ( response.albumInLibrary ) {
+                        albumData.albumInLibrary = true;
+                    }
+
                     return resolve(albumData);
                 } else {
                     //tracks not in database so add
@@ -191,12 +196,11 @@ export const getTrackSource = (track, key) => {
             return response.json();
         }).then(response => {
 
-            if (response) {
+            if (response.success && response.source ) {
                 //youtube id found in refracter db
-                resolve(response);
+                resolve(response.source);
             } else {
                 //no matches found for track in refracter db
-
                 let query = `${track.artist} ${track.title}`;
 
                 //youtube search
@@ -216,6 +220,44 @@ export const getTrackSource = (track, key) => {
 
         }).catch(err => {
             console.log('Refracter getTrackSource: ', err);
+        });
+
+    });
+
+}
+
+export const addUserTracksToDb = (key, tracks, playlistID) => {
+
+    //clean track array to only track ids
+    let trackIDs = [];
+    for (let track of tracks ) {
+        trackIDs.push( track.trackID );
+    }
+
+    //create post object to be sent to api
+    let postObject = {
+        key: key,
+        tracks: trackIDs,
+        playlistID: playlistID
+    }
+
+    return new Promise(function(resolve, reject) {
+
+        fetch(`${refracterEndpoint}addUserTracks.php`, {
+            method: 'POST',
+            body: JSON.stringify(postObject)
+        }).then(response => {
+            return response.json();
+        }).then(response => {
+
+            console.log(response);
+            if ( response.success ) {
+
+            } else {
+            }
+
+        }).catch(err => {
+            console.log('addUserTracks: ', err);
         });
 
     });

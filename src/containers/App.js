@@ -15,20 +15,20 @@ class App extends Component {
 
         //set initial app state
         this.state = {
+            user: props.route.user ? props.route.user : null, //if user props passed on load set in state
             searchValue: '',
-            user: null,
             activeTrack: null,
             playing: false,
             queueId: 0,
             queue: []
         }
 
-        this.loadUser = this.loadUser.bind(this);
+        //this.loadUser = this.loadUser.bind(this);
         this.checkForUserEmailActivation = this.checkForUserEmailActivation.bind(this);
         this.checkPasswordReset = this.checkPasswordReset.bind(this);
         this.successfulLogin = this.successfulLogin.bind(this);
         this.logOutUser = this.logOutUser.bind(this);
-        this.onTrackClicked = this.onTrackClicked.bind(this);
+        this.updateQueue = this.updateQueue.bind(this);
         this.playNextTrackInQueue = this.playNextTrackInQueue.bind(this);
         this.playPreviousTrackInQueue = this.playPreviousTrackInQueue.bind(this);
         this.updateAppPlayState = this.updateAppPlayState.bind(this);
@@ -40,6 +40,7 @@ class App extends Component {
         this.closeForgotPasswordForm = this.closeForgotPasswordForm.bind(this);
         this.showPasswordResetForm = this.showPasswordResetForm.bind(this);
         this.closePasswordResetForm = this.closePasswordResetForm.bind(this);
+        this.addUserTracks = this.addUserTracks.bind(this);
 
     }
     getChildContext() {
@@ -47,47 +48,18 @@ class App extends Component {
     }
 
     componentWillMount(){
+
         //check if query params exist for new user activation
         this.checkForUserEmailActivation();
         //check if query params exist for user password reset
         this.checkPasswordReset();
+
         //check cookie or php session with api to see if user is logged in, returns user data
-        this.loadUser();
+        //this.loadUser(); // -- moved to index.js before app init
     }
 
     componentDidMount(){
         console.log(refracter.getQueryString('test'));
-    }
-
-    loadUser(){
-        // TODO: PRELOADER FOR APP BEFORE LOAD USER RESPONSE
-
-        //set login cookie
-        let cookie = refracter.getCookie( refracter.loginCookieName );
-        //let cookieValue = cookie && cookie.split('/')[0] ? cookie.split('/')[0] : '';
-        //let userName = cookie && cookie.split('/')[1] ? cookie.split('/')[1] : '';
-
-        fetch(`${refracter.refracterEndpoint}loadUser.php?&cookie=${cookie}`).then(response => {
-            return response.json();
-        }).then(response => {
-
-            console.log('User logged in: ',response);
-
-            if ( response.success && response.user ) {
-                // NOTE: account activated and show login pane and message telling user to login
-
-                //set userKey to use to authenticate with the api to load this users data
-                refracter.userKey = response.user.cookie;
-
-                //set user data from db in state
-                this.setState({
-                    user: response.user
-                });
-            }
-
-        }).catch(error => {
-            console.log(error);
-        })
     }
 
     checkForUserEmailActivation(){
@@ -124,13 +96,13 @@ class App extends Component {
 
         if ( user && user.cookie ) {
 
+            //set returned cookie as userKey
+            refracter.userKey = user.cookie;
+
             //set user data in state
             this.setState({
                 user: user
             })
-
-            //stitch on username to unique cookie to be used for quick lookup on loadUser()
-            //cookie = `${cookie}/${user.username}`;
 
             //set login cookie
             refracter.setCookie( refracter.loginCookieName, user.cookie, 14 );
@@ -162,16 +134,19 @@ class App extends Component {
 
     }
 
-    onTrackClicked(track, trackList) {
+    updateQueue(track, trackList) {
 
-        if ( !this.state.activeTrack || this.state.activeTrack.trackID !== track.trackID) {
-
+        if ( !track && trackList ) {
+            //only update queue
+            this.setState({
+                queue: trackList,
+            });
+        } else if ( !this.state.activeTrack || this.state.activeTrack.trackID !== track.trackID) {
             this.setState({
                 queueId: this.state.queueId++,
                 queue: trackList,
                 activeTrack: track
             });
-
         }
 
     }
@@ -252,6 +227,28 @@ class App extends Component {
         });
     }
 
+    addUserTracks(tracks, playlistID){
+        //requires tracks and user to be logged in
+        //playlistID is optional and will add the tracks to a matching playlist if given
+
+        if ( tracks && refracter.userKey ) {
+
+            let playlistID = playlistID ? playlistID : null;
+
+            refracter.addUserTracksToDb(refracter.userKey, tracks, playlistID).then(youTubeId => {
+
+                this.youTubePlayer.loadVideoById(youTubeId);
+
+            }).catch(err => {
+                console.log('ERROR RETURNED: ', err);
+            });
+
+        } else {
+            console.error('addUserTracksToDb requires userKey and tracks arguements.');
+        }
+
+    }
+
     render() {
 
         return (
@@ -278,7 +275,12 @@ class App extends Component {
                 />
 
                 <div className="content-window">
-                    {React.cloneElement(this.props.children, { activeTrack: this.state.activeTrack, playing: this.state.playing })}
+                    {React.cloneElement( this.props.children, {
+                        //appState: this.state
+                        user: this.state.user,
+                        playing: this.state.playing,
+                        activeTrack: this.state.activeTrack
+                    })}
                 </div>
 
                 <SignUpForm
