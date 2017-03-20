@@ -8,6 +8,7 @@ import Search from './containers/Search';
 import Album from './containers/Album';
 import Artist from './containers/Artist';
 import Library from './containers/Library';
+import Playlist from './containers/Playlist';
 import './index.css';
 
 const initApp = (user) => {
@@ -21,14 +22,9 @@ const initApp = (user) => {
                     <Route path="/album/:artist/:album" component={Album}>
                         <Route path="/album/:artist/:album/:track" component={Album}/>
                     </Route>
-                    <Route path="/artist" component={Artist}>
-                        {/* add some nested routes where we want the UI to nest */}
-                        {/* render the stats page when at `/inbox` */}
-                        {/* <IndexRoute component={InboxStats}/> */}
-                            {/* render the message component at /inbox/messages/123 */}
-                        {/* <Route path="messages/:id" component={Message}/> */}
-                    </Route>
-                    <Route path="/library" component={Library} />
+                    <Route path="/artist" component={Artist}/>
+                    <Route path="/library" component={Library}/>
+                    <Route path="/playlist/:id" component={Playlist}/>
                 </Route>
             </Router>
         </div>

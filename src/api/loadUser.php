@@ -2,14 +2,6 @@
 
 require('includes/config.php');
 
-// TODO://THEN WORK ON USER ADDING TRACKS TO LIBRARY
-
-// TODO://THEN WORK ON LOADING USER LIBRARY
-
-// TODO://THEN WORK ON USER CREATED PLAYLISTS (CREATING, ADDING, LOADING)
-
-// TODO://THEN WORK ON YOUTUBE SOURCE SELECTION FOR TRACKS WHEN LOGGED IN
-
 //$storedCookieUsername = $_GET['username'];
 $storedCookieValue = $_GET['cookie'];
 $responseObject = Array();

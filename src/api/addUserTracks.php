@@ -6,25 +6,32 @@ $postData = json_decode(file_get_contents('php://input'), true);
 $storedCookieValue = $postData['key'];
 $trackIDs = $postData['tracks'];
 $playlistID = $postData['playlistID'];
+$playlistName = $postData['playlistName'];
 
 //if user authenticated
 if($user->login(null,null,$storedCookieValue)){
 
-    if ( $playlistID ) {
-        //playlist id so add to playlist as well
+    if ( $playlistID && $playlistName ) {
+        //playlist id and name so add to playlist
 
-        // TODO add playlist tracks to db
+        foreach ( $trackIDs as $trackID ) {
 
-        //for each loop to insert into database
-        // foreach( $data as $d ){
-        //
-        //     $trackID = mysql_real_escape_string($d['trackID']);
-        //
-        //     mysql_query("INSERT INTO `playlistTracks` (`id`,`playlistID`,`userID`,`trackID`,`name`) VALUES (null ,'$pid','$userID','$trackID','$name')");
-        //
-        // }
+            $stmt = $db->prepare('INSERT INTO playlistTracks (id,playlistID,userID,trackID,name) VALUES (null,:playlistID,:userID,:trackID,:name)');
+            $stmt->execute(array(
+                ':playlistID' => $playlistID,
+                ':userID' => $_SESSION['userID'],
+                ':trackID' => $trackID,
+                ':name' => $playlistName
+            ));
+
+        }
+
+        $responseObject['playlistID'] = $playlistID;
+        $responseObject['playlistName'] = $playlistName;
+        $responseObject['success'] = true;
 
     } else {
+        //no playlist info so assume adding to library
 
         foreach ( $trackIDs as $trackID ) {
 
@@ -58,52 +65,5 @@ if($user->login(null,null,$storedCookieValue)){
 }
 
 echo json_encode($responseObject);
-
-
-    //$data = $_POST['data'];
-    //$pid = mysql_real_escape_string($_POST['pid']);
-    //$name = mysql_real_escape_string($_POST['name']);
-
-    // if ( $pid ) {
-    //     //add to playlist
-    //
-    //     //for each loop to insert into database
-    //     foreach( $data as $d ){
-    //
-    //         $trackID = mysql_real_escape_string($d['trackID']);
-    //
-    //         mysql_query("INSERT INTO `playlistTracks` (`id`,`playlistID`,`userID`,`trackID`,`name`) VALUES (null ,'$pid','$userID','$trackID','$name')");
-    //
-    //     }
-    //
-    //     echo json_encode('tracks added to '.$name);
-    //
-    // } else {
-    //     //add to library
-    //
-    //     //for each loop to insert into database
-    //     foreach( $data as $d ){
-    //
-    //         $trackID = mysql_real_escape_string($d['trackID']);
-    //
-    //         $q = mysql_query("SELECT * FROM `userTracks` WHERE `trackID`='$trackID' AND `userID`='$userID'");
-    //
-    //         $rowNum = mysql_num_rows($q);
-    //
-    //         //if matches found then add to tracks to an array
-    //         if ( $rowNum === 0 ) {
-    //
-    //             $SQL = "INSERT INTO `userTracks` (`userTrackID`, `userID`, `trackID`) VALUES (NULL,'$userID','$trackID')";
-    //
-    //             //insert query
-    //             mysql_query($SQL);
-    //
-    //         }
-    //
-    //     }
-    //
-    //     echo json_encode('tracks added');
-    //
-    // }
 
 ?>

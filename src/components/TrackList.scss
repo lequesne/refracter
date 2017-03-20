@@ -73,7 +73,7 @@
                 background: lighten( $darkBackground, 10%);
             }
 
-            &.selected {
+            &.selected-track {
                 background: $lightBackground;
                 color: $darkBackground;
             }

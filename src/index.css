@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web");
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
 @import url("http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css");
@@ -62,6 +63,72 @@ body.modal-open .modal {
 
 body.modal-open .modal .modal-dialog {
   margin: auto; }
+
+.react-contextmenu {
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 16px;
+  color: #373a3c;
+  text-align: left;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: .25rem;
+  outline: none;
+  opacity: 0;
+  pointer-events: none; }
+
+.react-contextmenu.react-contextmenu--visible {
+  opacity: 1;
+  pointer-events: auto; }
+
+.react-contextmenu-item {
+  width: 200px;
+  padding: 3px 20px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #373a3c;
+  text-align: inherit;
+  background: 0 0;
+  border: 0;
+  cursor: pointer; }
+
+.react-contextmenu-item.react-contextmenu-item--active,
+.react-contextmenu-item:hover {
+  color: #fff;
+  background-color: #0275d8;
+  border-color: #0275d8;
+  text-decoration: none; }
+
+.react-contextmenu-item.react-contextmenu-item--disabled,
+.react-contextmenu-item.react-contextmenu-item--disabled:hover {
+  color: #878a8c;
+  background-color: transparent;
+  border-color: rgba(0, 0, 0, 0.15); }
+
+.react-contextmenu-item--divider {
+  margin-bottom: 3px;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  cursor: inherit; }
+
+.react-contextmenu-item--divider:hover {
+  background-color: transparent;
+  border-color: rgba(0, 0, 0, 0.15); }
+
+.react-contextmenu-item.react-contextmenu-submenu {
+  padding: 0; }
+
+.react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item:after {
+  content: "▶";
+  display: inline-block;
+  position: absolute;
+  right: 7px; }
+
+.example-multiple-targets::after {
+  content: attr(data-count);
+  display: block; }
 
 body {
   color: #efefef; }
@@ -285,10 +352,12 @@ Pass any number of seconds referring to the duration of one full rotation for an
       box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.5); }
   .sidebar .user-playlists {
     margin: 20px 0; }
-    .sidebar .user-playlists input {
+    .sidebar .user-playlists .playlist-link {
       display: block;
       width: 100%;
-      border: none; }
+      border: none;
+      padding: 0.5em;
+      border-bottom: 1px solid #121212; }
 
 .PlayerBar {
   position: fixed;
@@ -417,7 +486,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
         content: "\f215"; }
     .track-list table tr:hover {
       background: #2c2c2c; }
-    .track-list table tr.selected {
+    .track-list table tr.selected-track {
       background: #dcdcdc;
       color: #121212; }
     .track-list table tr.active-track {

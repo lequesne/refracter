@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import * as refracter from '../refracter';
 import TopBar from '../components/TopBar';
-import Sidebar from '../components/Sidebar';
+import Sidebar from './Sidebar';
 import PlayerBar from '../components/PlayerBar';
 import SignUpForm from './SignUpForm';
 import LogInForm from './LogInForm';
@@ -23,7 +23,6 @@ class App extends Component {
             queue: []
         }
 
-        //this.loadUser = this.loadUser.bind(this);
         this.checkForUserEmailActivation = this.checkForUserEmailActivation.bind(this);
         this.checkPasswordReset = this.checkPasswordReset.bind(this);
         this.successfulLogin = this.successfulLogin.bind(this);
@@ -40,7 +39,6 @@ class App extends Component {
         this.closeForgotPasswordForm = this.closeForgotPasswordForm.bind(this);
         this.showPasswordResetForm = this.showPasswordResetForm.bind(this);
         this.closePasswordResetForm = this.closePasswordResetForm.bind(this);
-        this.addUserTracks = this.addUserTracks.bind(this);
 
     }
     getChildContext() {
@@ -48,18 +46,13 @@ class App extends Component {
     }
 
     componentWillMount(){
-
         //check if query params exist for new user activation
         this.checkForUserEmailActivation();
         //check if query params exist for user password reset
         this.checkPasswordReset();
-
-        //check cookie or php session with api to see if user is logged in, returns user data
-        //this.loadUser(); // -- moved to index.js before app init
     }
 
     componentDidMount(){
-        console.log(refracter.getQueryString('test'));
     }
 
     checkForUserEmailActivation(){
@@ -179,6 +172,8 @@ class App extends Component {
         });
     }
 
+    //TODO replace show/close forms with a function that takes the state key to show or hide (showSignUpForm or showLogInForm)
+
     showSignUpForm(){
         this.setState({
             showSignUpForm: true
@@ -227,26 +222,13 @@ class App extends Component {
         });
     }
 
-    addUserTracks(tracks, playlistID){
-        //requires tracks and user to be logged in
-        //playlistID is optional and will add the tracks to a matching playlist if given
-
-        if ( tracks && refracter.userKey ) {
-
-            let playlistID = playlistID ? playlistID : null;
-
-            refracter.addUserTracksToDb(refracter.userKey, tracks, playlistID).then(youTubeId => {
-
-                this.youTubePlayer.loadVideoById(youTubeId);
-
-            }).catch(err => {
-                console.log('ERROR RETURNED: ', err);
-            });
-
-        } else {
-            console.error('addUserTracksToDb requires userKey and tracks arguements.');
-        }
-
+    updateUserPlaylists(newPlayListArray){
+        //updates the user object with new or removed playlists
+        let user = this.state.user;
+        user.playlists = newPlayListArray;
+        this.setState({
+            user: user
+        });
     }
 
     render() {

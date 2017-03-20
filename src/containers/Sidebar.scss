@@ -38,10 +38,12 @@
     .user-playlists {
         margin: 20px 0;
 
-        input {
+        .playlist-link {
             display: block;
             width: 100%;
             border: none;
+            padding: 0.5em;
+            border-bottom: 1px solid $darkBackground;
         }
 
     }

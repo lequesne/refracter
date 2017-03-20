@@ -130,6 +130,8 @@ export const findTracksByAlbum = (artist, album, key) => {
 
                     if ( response.albumInLibrary ) {
                         albumData.albumInLibrary = true;
+                    } else {
+                        albumData.albumInLibrary = false;
                     }
 
                     return resolve(albumData);
@@ -226,7 +228,7 @@ export const getTrackSource = (track, key) => {
 
 }
 
-export const addUserTracksToDb = (key, tracks, playlistID) => {
+export const addUserTracks = (key, tracks, playlistID, playlistName) => {
 
     //clean track array to only track ids
     let trackIDs = [];
@@ -238,7 +240,8 @@ export const addUserTracksToDb = (key, tracks, playlistID) => {
     let postObject = {
         key: key,
         tracks: trackIDs,
-        playlistID: playlistID
+        playlistID: playlistID ? playlistID : '',
+        playlistName: playlistName ? playlistName : ''
     }
 
     return new Promise(function(resolve, reject) {
@@ -250,14 +253,119 @@ export const addUserTracksToDb = (key, tracks, playlistID) => {
             return response.json();
         }).then(response => {
 
-            console.log(response);
             if ( response.success ) {
-
+                return resolve(response);
             } else {
+                return reject(response.errors);
+            }
+
+        }).catch(error => {
+            return reject(error);
+        });
+
+    });
+
+}
+
+export const removeUserTracks = (key, tracks, playlistID) => {
+
+    //clean track array to only track ids
+    let trackIDs = [];
+    for (let track of tracks ) {
+        trackIDs.push( track.trackID );
+    }
+
+    //create post object to be sent to api
+    let postObject = {
+        key: key,
+        tracks: trackIDs,
+        playlistID: playlistID ? playlistID : ''
+    }
+
+    return new Promise(function(resolve, reject) {
+
+        fetch(`${refracterEndpoint}removeUserTracks.php`, {
+            method: 'POST',
+            body: JSON.stringify(postObject)
+        }).then(response => {
+            return response.json();
+        }).then(response => {
+
+            if ( response.success ) {
+                return resolve(response);
+            } else {
+                return reject(response.errors);
+            }
+
+        }).catch(error => {
+            return reject(error);
+        });
+
+    });
+
+}
+
+export const editUserPlaylist = (key, playlistName, playlistID) => {
+    //playlist id is optional and provided when editing an existing playlist
+
+    return new Promise(function(resolve, reject) {
+
+        fetch(`${refracterEndpoint}editPlaylists.php?key=${key}&name=${playlistName}&playlistID=${playlistID}`).then(response => {
+            return response.json();
+        }).then(response => {
+
+            if ( response.success ) {
+                return resolve(response);
+            } else {
+                return reject(response.errors);
             }
 
         }).catch(err => {
-            console.log('addUserTracks: ', err);
+            return reject(err);
+        });
+
+    });
+
+}
+
+export const removeUserPlaylist = (key, playlistID) => {
+
+    return new Promise(function(resolve, reject) {
+
+        fetch(`${refracterEndpoint}removePlaylist.php?key=${key}&playlistID=${playlistID}`).then(response => {
+            return response.json();
+        }).then(response => {
+
+            if ( response.success ) {
+                return resolve(response);
+            } else {
+                return reject(response.errors);
+            }
+
+        }).catch(err => {
+            return reject(err);
+        });
+
+    });
+
+}
+
+export const getPlaylist = (playlistID) => {
+
+    return new Promise(function(resolve, reject) {
+
+        fetch(`${refracterEndpoint}getPlaylist.php?playlistID=${playlistID}`).then(response => {
+            return response.json();
+        }).then(response => {
+
+            if ( response.success ) {
+                return resolve(response);
+            } else {
+                return reject(response.errors);
+            }
+
+        }).catch(err => {
+            return reject(err);
         });
 
     });

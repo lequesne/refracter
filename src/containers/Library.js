@@ -4,6 +4,9 @@ import { browserHistory } from 'react-router';
 import {Col} from 'react-bootstrap';
 import TrackList from '../components/TrackList';
 
+//TODO library quick type filter (possibly update queue with only filtered tracks)
+//TODO add library song, artist, album sorting
+
 class Library extends Component {
 
     constructor(props) {
@@ -39,8 +42,6 @@ class Library extends Component {
     }
     render() {
 
-        //TODO library quick type filter (possibly update queue with only filtered tracks)
-
         return (
             <div className="library page">
 
@@ -54,7 +55,8 @@ class Library extends Component {
                             <TrackList
                                 defaultSortName="artist"
                                 defaultSortOrder="desc"
-                                librarySort={true}
+                                isLibrary={true}
+                                user={this.props.user}
                                 playing={this.props.playing}
                                 tracks={this.state.tracks}
                                 queueId={this.props.queueId}

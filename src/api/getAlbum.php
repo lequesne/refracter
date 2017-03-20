@@ -19,26 +19,26 @@ if ( $album && $artist ) {
     //check if album is already saved
     if($user->login(null,null,$storedCookieValue)){
 
-        //check if first track is in album
-        $stmt = $db->prepare('SELECT * FROM userTracks WHERE userID = :userID AND trackID = :trackID');
-        $stmt->execute(array(
-            ':userID' => $_SESSION['userID'],
-            ':trackID' => $albumTracks[0]['trackID']
-        ));
-        $userAlbumFirstTrack = $stmt->fetch(PDO::FETCH_ASSOC);
+        $userHasAlbumInLibrary = true;
 
-        //check if last track is in album
-        $stmt = $db->prepare('SELECT * FROM userTracks WHERE userID = :userID AND trackID = :trackID');
-        $stmt->execute(array(
-            ':userID' => $_SESSION['userID'],
-            ':trackID' => array_values(array_slice($albumTracks, -1))[0]['trackID']
-        ));
-        $userAlbumLastTrack = $stmt->fetch(PDO::FETCH_ASSOC);
+        foreach ( $albumTracks as $track ) {
 
-        //first and last track in library so assume in library
-        if ( $userAlbumFirstTrack && $userAlbumLastTrack ) {
-            $responseObject['albumInLibrary'] = true;
+            $stmt = $db->prepare('SELECT * FROM userTracks WHERE userID = :userID AND trackID = :trackID');
+            $stmt->execute(array(
+                ':userID' => $_SESSION['userID'],
+                ':trackID' => $track['trackID']
+            ));
+            $userHasTrack = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ( !$userHasTrack ) {
+                $userHasAlbumInLibrary = false;
+                break;
+            }
+
         }
+
+        //return albumInLibrary based off if user has all the tracks in the album in their library
+        $responseObject['albumInLibrary'] = $userHasAlbumInLibrary;
     }
 
     if ( $albumTracks ) {
