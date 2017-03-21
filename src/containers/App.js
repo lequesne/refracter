@@ -1,5 +1,7 @@
-import React, {Component} from 'react';
 import * as refracter from '../refracter';
+import React, {Component} from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import TopBar from '../components/TopBar';
 import Sidebar from './Sidebar';
 import PlayerBar from '../components/PlayerBar';
@@ -31,14 +33,8 @@ class App extends Component {
         this.playNextTrackInQueue = this.playNextTrackInQueue.bind(this);
         this.playPreviousTrackInQueue = this.playPreviousTrackInQueue.bind(this);
         this.updateAppPlayState = this.updateAppPlayState.bind(this);
-        this.showSignUpForm = this.showSignUpForm.bind(this);
-        this.closeSignUpForm = this.closeSignUpForm.bind(this);
-        this.showLogInForm = this.showLogInForm.bind(this);
-        this.closeLogInForm = this.closeLogInForm.bind(this);
-        this.showForgotPasswordForm = this.showForgotPasswordForm.bind(this);
-        this.closeForgotPasswordForm = this.closeForgotPasswordForm.bind(this);
-        this.showPasswordResetForm = this.showPasswordResetForm.bind(this);
-        this.closePasswordResetForm = this.closePasswordResetForm.bind(this);
+        this.showModal = this.showModal.bind(this);
+        this.hideModal = this.hideModal.bind(this);
 
     }
     getChildContext() {
@@ -67,7 +63,8 @@ class App extends Component {
 
                 if ( response.success ) {
                     // NOTE: account activated and show login pane and message telling user to login, possible auto log in
-
+                    this.showModal('showLogInForm');
+                    alert('Activation successful! Please Login.');
                 } else {
                     //possibly show activation error here
                 }
@@ -81,7 +78,7 @@ class App extends Component {
     checkPasswordReset(){
         if ( refracter.getQueryString('pwReset') ) {
             //show password reset formData
-            this.showPasswordResetForm();
+            this.showModal('showPasswordResetForm');
         }
     }
 
@@ -174,30 +171,6 @@ class App extends Component {
 
     //TODO replace show/close forms with a function that takes the state key to show or hide (showSignUpForm or showLogInForm)
 
-    showSignUpForm(){
-        this.setState({
-            showSignUpForm: true
-        });
-    }
-
-    closeSignUpForm(){
-        this.setState({
-            showSignUpForm: false
-        });
-    }
-
-    showLogInForm(){
-        this.setState({
-            showLogInForm: true
-        });
-    }
-
-    closeLogInForm(){
-        this.setState({
-            showLogInForm: false
-        });
-    }
-
     showForgotPasswordForm(){
         this.setState({
             showForgotPasswordForm: true
@@ -219,6 +192,18 @@ class App extends Component {
     closePasswordResetForm(){
         this.setState({
             showPasswordResetForm: false
+        });
+    }
+
+    showModal(modal){
+        this.setState({
+            [modal]: true
+        });
+    }
+
+    hideModal(modal){
+        this.setState({
+            [modal]: false
         });
     }
 
@@ -244,8 +229,6 @@ class App extends Component {
                 <Sidebar
                     user={this.state.user}
                     activeTrack={this.state.activeTrack}
-                    showSignUp={this.showSignUpForm}
-                    showLogIn={this.showLogInForm}
                 />
 
                 <PlayerBar
@@ -266,24 +249,24 @@ class App extends Component {
                 </div>
 
                 <SignUpForm
-                    onHide={this.closeSignUpForm}
+                    onHide={()=>this.hideModal('showSignUpForm')}
                     show={this.state.showSignUpForm}
                 />
 
                 <LogInForm
-                    onHide={this.closeLogInForm}
+                    onHide={()=>this.hideModal('showLogInForm')}
                     show={this.state.showLogInForm}
-                    showForgotPassword={this.showForgotPasswordForm}
+                    showForgotPassword={()=>this.showModal('showForgotPasswordForm')}
                     successfulLogin={this.successfulLogin}
                 />
 
                 <ForgotPasswordForm
-                    onHide={this.closeForgotPasswordForm}
+                    onHide={()=>this.hideModal('showForgotPasswordForm')}
                     show={this.state.showForgotPasswordForm}
                 />
 
                 <PasswordResetForm
-                    onHide={this.closePasswordResetForm}
+                    onHide={()=>this.hideModal('showPasswordResetForm')}
                     show={this.state.showPasswordResetForm}
                 />
 

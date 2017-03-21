@@ -23,7 +23,7 @@ class Sidebar extends Component {
                         ?
                         <div className="logged-in">
 
-                            <Link to={'/library'}>
+                            <Link to={'/library'} data-drag-ndrop-add-tracks={true} className="dragNdrop-droppable">
                                 Library
                             </Link>
 
@@ -35,8 +35,8 @@ class Sidebar extends Component {
 
                             <div className="login-signup">
                                 Log in or sign up to save tracks and albums to your library and create custom playlists.
-                                <Link onClick={this.props.showLogIn} className="button-standard">Sign In</Link>
-                                <Link onClick={this.props.showSignUp} className="button-standard">Sign Up</Link>
+                                <Link onClick={()=>this.context.parentState.showModal('showLogInForm')} className="button-standard">Sign In</Link>
+                                <Link onClick={()=>this.context.parentState.showModal('showSignUpForm')} className="button-standard">Sign Up</Link>
                             </div>
 
                         </div>

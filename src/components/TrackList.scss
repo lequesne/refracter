@@ -1,10 +1,8 @@
 .track-list {
-    margin: $pageComponentMargin 0;
+    //margin: $pageComponentMargin 0;
 
-    .react-bs-table {
-        margin: $pageComponentMargin 0;
+    * {
         user-select: none;
-        border: none;
     }
 
     table {
@@ -46,7 +44,6 @@
             border: none;
 
             td {
-                user-select: none;
                 cursor: default;
                 border: none;
                 font-size: 1.2em;

@@ -123,7 +123,7 @@ class Search extends Component {
             artistResults = this.state.artists.results.map((artist, index) => {
                 return index < 10
                     ? <Col xs={2} key={index}>
-                            <Tile mainTitle={artist.name} image={artist.image[0]['#text']}/>
+                            <Tile link={`/artist/${encodeURIComponent(artist.name)}`} mainTitle={artist.name} image={artist.image[0]['#text']}/>
                         </Col>
                     : null;
             });

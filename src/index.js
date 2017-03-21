@@ -22,7 +22,7 @@ const initApp = (user) => {
                     <Route path="/album/:artist/:album" component={Album}>
                         <Route path="/album/:artist/:album/:track" component={Album}/>
                     </Route>
-                    <Route path="/artist" component={Artist}/>
+                    <Route path="/artist/:artist" component={Artist}/>
                     <Route path="/library" component={Library}/>
                     <Route path="/playlist/:id" component={Playlist}/>
                 </Route>

@@ -1,6 +1,6 @@
 .PlayerBar {
     position: fixed;
-    z-index: 40;
+    z-index: 100;
     bottom: 0;
     left: 0;
     height: $playerBarHeight;
@@ -13,7 +13,9 @@
 #yt-container {
     position: absolute;
     bottom: calc( 100% + #{$borderPadding} );
-    right: 0;
+    left: 0;
+    height: $sidebarWidth - $borderPadding - $borderPadding;
+    width: $sidebarWidth - $borderPadding - $borderPadding;
 }
 
 .player-btn {
@@ -83,7 +85,7 @@
     font-size: 1.1em;
     color: $darkBackground;
     line-height: 1.6em;
-    padding: .45em .75em;
+    padding: .3em .75em;
 
     .track-title {
         font-size: 1.3em;

@@ -13,11 +13,22 @@ body, html {
   overflow: hidden;
   padding: 0;
   margin: 0;
-  font-family: "Titillium Web", sans-serif;
   background: #121212; }
 
 .pointer {
   cursor: pointer; }
+
+html.dragNdrop-isDragging * {
+  user-select: none; }
+
+.dragNdrop-preview {
+  position: fixed;
+  z-index: 2000;
+  width: 200px;
+  padding: 1em;
+  background: #efefef;
+  color: #121212;
+  transform: rotate3d(0, 0, 0); }
 
 input {
   color: black; }
@@ -44,18 +55,27 @@ input {
   height: 60px; }
 
 .content-window {
-  position: fixed;
-  z-index: 20;
+  position: absolute;
+  z-index: 1000;
   top: 70px;
   right: 0;
   width: calc( 100% - 350px);
   height: calc( 100% - 70px - 70px);
-  overflow: auto; }
+  border: solid transparent 5px;
+  border-left: 0;
+  border-bottom: 0;
+  overflow: visible; }
 
 .page {
-  position: absolute;
+  position: relative;
   width: 100%;
-  min-height: 100%; }
+  height: 100%;
+  overflow: auto; }
+
+.card {
+  margin: 50px 0;
+  padding: 50px;
+  background: rgba(220, 220, 220, 0.1); }
 
 body.modal-open .modal {
   display: flex !important;
@@ -131,17 +151,26 @@ body.modal-open .modal .modal-dialog {
   display: block; }
 
 body {
-  color: #efefef; }
+  font-family: "Titillium Web", sans-serif;
+  color: #efefef;
+  font-size: 1.5em;
+  line-height: 1.5em; }
 
 h1 {
+  font-size: 3em;
   margin: 50px 0;
   color: #efefef; }
+
+h2 {
+  font-weight: 800;
+  font-size: 1.5em;
+  letter-spacing: 0.05em; }
 
 .tag {
   font-size: 0.9em; }
 
 .modal-content {
-  background: #434343;
+  background: #333;
   border-radius: 0;
   text-align: center; }
 
@@ -324,44 +353,9 @@ Pass any number of seconds referring to the duration of one full rotation for an
       transition: all .3s;
       transform: translate3d(0, 0, 0); }
 
-.sidebar {
-  position: fixed;
-  z-index: 50;
-  top: 70px;
-  left: 0;
-  width: 350px;
-  height: calc( 100% - 70px - 70px);
-  border: solid transparent 5px;
-  border-bottom: 0; }
-  .sidebar .padded-inner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #434343; }
-  .sidebar .album-art {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 340px;
-    background: #dcdcdc;
-    padding: 20px; }
-    .sidebar .album-art img {
-      box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.5); }
-  .sidebar .user-playlists {
-    margin: 20px 0; }
-    .sidebar .user-playlists .playlist-link {
-      display: block;
-      width: 100%;
-      border: none;
-      padding: 0.5em;
-      border-bottom: 1px solid #121212; }
-
 .PlayerBar {
   position: fixed;
-  z-index: 40;
+  z-index: 100;
   bottom: 0;
   left: 0;
   height: 70px;
@@ -373,7 +367,9 @@ Pass any number of seconds referring to the duration of one full rotation for an
 #yt-container {
   position: absolute;
   bottom: calc( 100% + 5px);
-  right: 0; }
+  left: 0;
+  height: 340px;
+  width: 340px; }
 
 .player-btn {
   display: inline-block;
@@ -430,7 +426,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
   font-size: 1.1em;
   color: #121212;
   line-height: 1.6em;
-  padding: .45em .75em; }
+  padding: .3em .75em; }
   .track-details .track-title {
     font-size: 1.3em; }
   .track-details .track-progress {
@@ -446,77 +442,74 @@ Pass any number of seconds referring to the duration of one full rotation for an
   .player-controls-rhs .loop-track {
     margin: 0 5px; }
 
-.track-list {
-  margin: 50px 0; }
-  .track-list .react-bs-table {
-    margin: 50px 0;
-    user-select: none;
+.track-list * {
+  user-select: none; }
+
+.track-list table thead tr {
+  border: none;
+  background: none !important;
+  border-bottom: 1px solid #efefef; }
+  .track-list table thead tr .play-btn-col {
+    width: 40px; }
+  .track-list table thead tr .number-col {
+    width: 50px; }
+  .track-list table thead tr .duration-col {
+    width: 70px; }
+  .track-list table thead tr th {
     border: none; }
-  .track-list table thead tr {
+    .track-list table thead tr th.pointer:hover {
+      background: rgba(220, 220, 220, 0.2); }
+    .track-list table thead tr th .sort-icon {
+      margin-right: 0.5em; }
+
+.track-list table tr {
+  position: relative;
+  border: none; }
+  .track-list table tr td {
+    cursor: default;
     border: none;
-    background: none !important;
-    border-bottom: 1px solid #efefef; }
-    .track-list table thead tr .play-btn-col {
-      width: 40px; }
-    .track-list table thead tr .number-col {
-      width: 50px; }
-    .track-list table thead tr .duration-col {
-      width: 70px; }
-    .track-list table thead tr th {
-      border: none; }
-      .track-list table thead tr th.pointer:hover {
-        background: rgba(220, 220, 220, 0.2); }
-      .track-list table thead tr th .sort-icon {
-        margin-right: 0.5em; }
-  .track-list table tr {
-    position: relative;
-    border: none; }
-    .track-list table tr td {
-      user-select: none;
-      cursor: default;
-      border: none;
-      font-size: 1.2em;
-      padding: 0.75em; }
-    .track-list table tr .play-icon {
+    font-size: 1.2em;
+    padding: 0.75em; }
+  .track-list table tr .play-icon {
+    position: absolute;
+    cursor: pointer; }
+    .track-list table tr .play-icon:hover:before {
+      transform: scale(1.3); }
+    .track-list table tr .play-icon:before {
+      content: "\f215"; }
+  .track-list table tr:hover {
+    background: #2c2c2c; }
+  .track-list table tr.selected-track {
+    background: #dcdcdc;
+    color: #121212; }
+  .track-list table tr.active-track {
+    background: #EDA564;
+    color: #121212; }
+    .track-list table tr.active-track .equalizer {
       position: absolute;
-      cursor: pointer; }
-      .track-list table tr .play-icon:hover:before {
-        transform: scale(1.3); }
-      .track-list table tr .play-icon:before {
-        content: "\f215"; }
-    .track-list table tr:hover {
-      background: #2c2c2c; }
-    .track-list table tr.selected-track {
-      background: #dcdcdc;
-      color: #121212; }
-    .track-list table tr.active-track {
-      background: #EDA564;
-      color: #121212; }
-      .track-list table tr.active-track .equalizer {
-        position: absolute;
-        display: block;
-        width: 5.0vmin;
-        background-color: #121212;
-        height: 2.5vmin;
-        overflow: visible; }
-      .track-list table tr.active-track .equalizer,
-      .track-list table tr.active-track .equalizer::before,
-      .track-list table tr.active-track .equalizer::after {
-        animation: equalize 1.25s steps(25, end) 0s infinite; }
-      .track-list table tr.active-track .equalizer::before,
-      .track-list table tr.active-track .equalizer::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 6.25vmin;
-        height: 17.5vmin;
-        width: 5.0vmin;
-        background-color: #121212; }
-      .track-list table tr.active-track .equalizer::before {
-        animation-name: equalize2; }
-      .track-list table tr.active-track .equalizer::after {
-        left: 12.5vmin;
-        animation-name: equalize3; }
+      display: block;
+      width: 5.0vmin;
+      background-color: #121212;
+      height: 2.5vmin;
+      overflow: visible; }
+    .track-list table tr.active-track .equalizer,
+    .track-list table tr.active-track .equalizer::before,
+    .track-list table tr.active-track .equalizer::after {
+      animation: equalize 1.25s steps(25, end) 0s infinite; }
+    .track-list table tr.active-track .equalizer::before,
+    .track-list table tr.active-track .equalizer::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 6.25vmin;
+      height: 17.5vmin;
+      width: 5.0vmin;
+      background-color: #121212; }
+    .track-list table tr.active-track .equalizer::before {
+      animation-name: equalize2; }
+    .track-list table tr.active-track .equalizer::after {
+      left: 12.5vmin;
+      animation-name: equalize3; }
 
 @keyframes equalize {
   0% {
@@ -679,19 +672,16 @@ Pass any number of seconds referring to the duration of one full rotation for an
     height: 12.5vmin; }
   100% {
     height: 11.25vmin; } }
-      .track-list table tr.active-track .play-icon.equalizer {
-        transform-origin: 0 0;
-        transform: scale(0.1) rotate(180deg);
-        margin: 2em; }
+    .track-list table tr.active-track .play-icon.equalizer {
+      transform-origin: 0 0;
+      transform: scale(0.1) rotate(180deg);
+      margin: 2em; }
 
 .Tile {
   display: inline-block; }
 
 .album h1 {
-  margin-bottom: 0; }
-
-.album h2 {
-  font-style: italic; }
+  margin: 0; }
 
 .album .container {
   z-index: 5; }
@@ -702,14 +692,97 @@ Pass any number of seconds referring to the duration of one full rotation for an
   z-index: -1;
   top: 0;
   right: 0;
-  max-width: 1200px;
-  width: 75%;
-  padding-bottom: 75%;
+  width: 100%;
+  height: 100%;
+  background-position: center center;
   background-size: cover;
-  box-shadow: inset 150px -150px 300px 10px #121212;
-  border: 5px solid #121212;
-  border-bottom-left-radius: 100%;
-  opacity: 0.2; }
+  opacity: 0.3; }
+  .album .background-art:after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(bottom right, rgba(18, 18, 18, 0), #121212); }
+
+.album .tags {
+  margin: 1em 0; }
+
+.album .album-info {
+  margin: 50px 0; }
+
+.album .album-art {
+  max-width: 100%; }
 
 .album .add-album-btn {
   margin: 1em 0; }
+
+.artist h1 {
+  margin: 75px 0; }
+
+.artist h2 {
+  font-style: italic; }
+
+.artist .container {
+  z-index: 5; }
+
+.artist .artist-intro {
+  text-align: center; }
+
+.artist .background-art {
+  user-select: none;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-size: cover;
+  box-shadow: inset 150px -150px 250px 10px #121212;
+  border-bottom-left-radius: 100%;
+  opacity: 0.3; }
+
+.artist .add-album-btn {
+  margin: 1em 0; }
+
+.sidebar {
+  position: fixed;
+  z-index: 50;
+  top: 70px;
+  left: 0;
+  width: 350px;
+  height: calc( 100% - 70px - 70px);
+  border: solid transparent 5px;
+  border-bottom: 0; }
+  .sidebar .padded-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #333; }
+  .sidebar .album-art {
+    position: absolute;
+    z-index: 101;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 340px;
+    background: #dcdcdc;
+    padding: 5px; }
+    .sidebar .album-art img {
+      width: 100%; }
+  .sidebar .user-playlists {
+    margin: 20px 0; }
+    .sidebar .user-playlists .playlist-link {
+      display: block;
+      width: 100%;
+      border: none;
+      padding: 0.5em;
+      color: #efefef;
+      border-bottom: 1px solid #121212; }
+      .sidebar .user-playlists .playlist-link:hover, .sidebar .user-playlists .playlist-link.dragNdrop-hover {
+        background: #121212; }

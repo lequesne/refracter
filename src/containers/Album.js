@@ -1,7 +1,7 @@
 import * as refracter from '../refracter';
 import React, {Component} from 'react';
 //import {Link} from 'react-router';
-import {Col, Button} from 'react-bootstrap';
+import {Row, Col, Button} from 'react-bootstrap';
 import TrackList from '../components/TrackList';
 
 class Album extends Component {
@@ -11,7 +11,8 @@ class Album extends Component {
 
         //set initial state
         this.state = {
-            album: {}
+            album: {},
+            tracks: []
         }
 
         this.addAlbumToUser = this.addAlbumToUser.bind(this);
@@ -63,7 +64,7 @@ class Album extends Component {
             albumTags = this.state.album.tags.tag.map((tag, index) => {
                 if ( tag.name !== 'albums I own' ) {
                     return (
-                        <span className="tag" key={index}> / {tag.name} / </span>
+                        <span className="tag" key={index}> #{tag.name} </span>
                     )
                 } else {
                     return null;
@@ -78,33 +79,49 @@ class Album extends Component {
 
                 <div className="container">
 
-                    <Col sm={12} smPush={0} md={10} mdPush={1}>
+                    <Row className="album-info">
 
-                        <h1>{this.state.album.name}</h1>
+                        <Col sm={12} smPush={0} md={10} mdPush={1}>
 
-                        <h2>{this.state.album.artist}</h2>
+                            <Row>
+                                <Col sm={3}>
+                                    <img className="album-art" src={this.state.albumArt}/>
+                                </Col>
+                                <Col sm={9}>
+                                    <h1>{this.state.album.name}</h1>
 
-                        {albumTags ? <div className="tags">{albumTags}</div> : null}
+                                    <h2>{this.state.album.artist}</h2>
 
-                        { this.props.user && !this.state.albumInLibrary
-                            ? <Button className="add-album-btn" onClick={()=>this.addAlbumToUser()}>Add album to library</Button>
-                            : null
-                        }
+                                    {albumTags ? <div className="tags">{albumTags}</div> : null}
 
-                        { this.state.tracks && this.state.tracks.length > 0 ?
-                            <TrackList
-                                existsInLibrary={this.state.albumInLibrary}
-                                user={this.props.user}
-                                playing={this.props.playing}
-                                tracks={this.state.tracks}
-                                queueId={this.props.queueId}
-                                activeTrack={this.props.activeTrack}
-                                updateQueue={this.context.parentState.updateQueue}
-                            />
-                            : <p>Loading or no tracks in state</p>
-                        }
+                                    { this.props.user && !this.state.albumInLibrary
+                                        ? <Button className="add-album-btn" onClick={()=>this.addAlbumToUser()}>Add album to library</Button>
+                                        : null
+                                    }
+                                </Col>
+                            </Row>
 
-                    </Col>
+                            <div className="card">
+
+                                { this.state.tracks.length > 0 ?
+                                    <TrackList
+                                        isAlbum={this.state.album.name}
+                                        existsInLibrary={this.state.albumInLibrary}
+                                        user={this.props.user}
+                                        playing={this.props.playing}
+                                        tracks={this.state.tracks}
+                                        queueId={this.props.queueId}
+                                        activeTrack={this.props.activeTrack}
+                                        updateQueue={this.context.parentState.updateQueue}
+                                    />
+                                    : <p>Loading or no tracks in state</p>
+                                }
+
+                            </div>
+
+                        </Col>
+
+                    </Row>
 
                 </div>
             </div>

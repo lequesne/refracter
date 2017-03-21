@@ -105,6 +105,22 @@ export const getLastFMTrackLink = (trackName, trackArtist) => {
     });
 }
 
+export const getArtistInfo = (artist) => {
+
+    return new Promise(function(resolve, reject) {
+
+        //first get album info from lastFM
+        fetch(`${lastFmEndpoint}?method=artist.getinfo&artist=${artist}&api_key=${lastFmApiKey()}&format=json`).then(response => {
+            return response.json();
+        }).then(response => {
+            resolve(response.artist);
+        }).catch(err => {
+            reject(err);
+        });
+
+    });
+}
+
 export const findTracksByAlbum = (artist, album, key) => {
 
     return new Promise(function(resolve, reject) {
@@ -149,7 +165,7 @@ export const findTracksByAlbum = (artist, album, key) => {
                             album: albumData.info.name,
                             artist: albumData.info.artist,
                             duration: track.duration,
-                            art: albumData.info.image[3]['#text'],
+                            art: albumData.info.image[4] ? albumData.info.image[4]['#text'] : albumData.info.image[3]['#text'],
                             type: ''
                         };
 
@@ -369,5 +385,11 @@ export const getPlaylist = (playlistID) => {
         });
 
     });
+
+}
+
+export const dragNdropStart = (event, track, trackIndex) => {
+
+    console.log(event);
 
 }

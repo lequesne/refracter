@@ -1,11 +1,11 @@
 .album {
 
     h1 {
-        margin-bottom: 0;
+        margin: 0;
     }
 
     h2 {
-        font-style: italic;
+        //font-style: italic;
     }
 
     .container {
@@ -18,14 +18,37 @@
         z-index: -1;
         top: 0;
         right: 0;
-        max-width: 1200px;
-        width: 75%;
-        padding-bottom: 75%;
+        width: 100%;
+        height: 100%;
+        background-position: center center;
         background-size: cover;
-        box-shadow: inset 150px -150px 300px 10px $darkBackground;
-        border: $borderPadding solid $darkBackground;
-        border-bottom-left-radius: 100%;
-        opacity: 0.2;
+        //box-shadow: inset 150px -150px 250px 10px $darkBackground;
+        //border-bottom-left-radius: 100%;
+        opacity: 0.3;
+
+        &:after {
+            content: '';
+            position: absolute;
+            z-index: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient( bottom right, rgba($darkBackground,0), $darkBackground);
+        }
+    }
+
+    .tags {
+        margin: 1em 0;
+    }
+
+    .album-info {
+        margin: 50px 0;
+    }
+
+    .album-art {
+        //width: 185px;
+        max-width: 100%;
     }
 
     .add-album-btn {

@@ -14,6 +14,7 @@ class Library extends Component {
 
         //set initial state
         this.state = {
+            tracks: []
         }
     }
 
@@ -51,7 +52,7 @@ class Library extends Component {
 
                         <h1>Library</h1>
 
-                        { this.state.tracks && this.state.tracks.length > 0 ?
+                        { this.state.tracks.length > 0 ?
                             <TrackList
                                 defaultSortName="artist"
                                 defaultSortOrder="desc"

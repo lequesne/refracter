@@ -1,5 +1,6 @@
 import * as refracter from '../refracter';
 import React, {Component} from 'react';
+import { Link } from 'react-router';
 import {Table} from 'react-bootstrap';
 import {ContextMenu, MenuItem, ContextMenuTrigger, SubMenu} from "react-contextmenu";
 
@@ -30,10 +31,23 @@ class TrackList extends Component {
         this.trackContextOpen = this.trackContextOpen.bind(this);
         this.handleContextPlayTrack = this.handleContextPlayTrack.bind(this);
 
+        this.dragNdropInit = this.dragNdropInit.bind(this);
+        this.dragNdropStart = this.dragNdropStart.bind(this);
+        this.dragNdropMove = this.dragNdropMove.bind(this);
+        this.dragNdropEnd = this.dragNdropEnd.bind(this);
+
     }
 
     componentWillMount() {
         this.setState({queueId: this.props.queueId});
+    }
+
+    componentWillReceiveProps(nextProps) {
+        //condition for playlist page where the component does not remount on changing playlists
+        if ( nextProps.playlistID )
+            this.setState({
+                tracks: nextProps.tracks
+            });
     }
 
     componentDidMount() {
@@ -41,27 +55,127 @@ class TrackList extends Component {
         this.onSortChange(this.state.sortName, this.state.sortOrder);
     }
 
+    componentDidUpdate(){
+        this.dragNdropInit();
+    }
+
+    dragNdropInit(){
+        //window bindings for dragNdrop mouse events
+        window.addEventListener('mousemove',this.dragNdropMove);
+        window.addEventListener('mouseup',this.dragNdropEnd);
+    }
+
+    dragNdropStart(event){
+        this.context.rdyForDrag = true;
+        this.context.dragStartX = event.pageX;
+        this.context.dragStartY = event.pageY;
+    }
+
+    dragNdropMove(event){
+        let offsetAmount = 10; //amount of movment needed from origin coord to start the drag
+        let inputX = event.pageX;
+        let inputY = event.pageY;
+
+        //check to start drag
+        if ( this.context.rdyForDrag ) {
+            if ( inputX > this.context.dragStartX + offsetAmount || inputX < this.context.dragStartX - offsetAmount ||
+                 inputY > this.context.dragStartY + offsetAmount || inputY < this.context.dragStartY - offsetAmount ) {
+
+                //set context dragging variable
+                this.context.isDragging = true;
+
+                //apply drag class to html
+                document.getElementsByTagName('html')[0].classList.add('dragNdrop-isDragging');
+
+                //position and show drag preview
+                this.setState({
+                    dragNdrop: true,
+                    dragNdropX: inputX + 5,
+                    dragNdropY: inputY + 5
+                });
+
+                //drop area hover detection
+                [].forEach.call(document.getElementsByClassName('dragNdrop-droppable'), function(el) {
+                    el.classList.remove('dragNdrop-hover');
+                });
+                if (document.elementFromPoint(inputX, inputY).classList.contains('dragNdrop-droppable')) {
+                    document.elementFromPoint(inputX, inputY).classList.add('dragNdrop-hover');
+                }
+
+            }
+        }
+    }
+
+    dragNdropEnd(event){
+
+        //only if items have been dragged
+        if (this.context.rdyForDrag){
+
+            //remove drag class from html
+            document.getElementsByTagName('html')[0].classList.remove('dragNdrop-isDragging');
+            //remove dragHover classes from droppable elements
+            [].forEach.call(document.getElementsByClassName('dragNdrop-droppable'), function(el) {
+                el.classList.remove('dragNdrop-hover');
+            });
+
+            if ( this.context.isDragging ) {
+                let dropElement = document.elementFromPoint(event.pageX, event.pageY);
+
+                //TODO drop area detection
+                if (dropElement.classList.contains('dragNdrop-droppable')) {
+                    if ( dropElement.dataset.dragNdropAddTracks ) {
+                        //dropped onto add tracks, add to tracks
+                        if ( dropElement.dataset.playlistId && dropElement.dataset.playlistName ) {
+                            this.addSelectedTracksToUser(dropElement.dataset.playlistId, dropElement.dataset.playlistName);
+                        } else {
+                            this.addSelectedTracksToUser();
+                        }
+                    }
+                }
+            }
+
+            //reset dragNdrop variables and state
+            this.context.rdyForDrag = false;
+            this.context.isDragging = false;
+            this.context.dragStartX = null;
+            this.context.dragStartY = null;
+
+            this.setState({
+                dragNdrop: false,
+                dragNdropX: null,
+                dragNdropY: null
+            })
+        }
+    }
+
+
+
     playTrack(track) {
         this.props.updateQueue(track, this.state.tracks);
     }
 
     selectTrack(event, selectedTrack, clickedIndex) {
 
+        //set dragNdrop context
+        this.context.rdyForDrag = true;
+        this.context.dragStartX = event.pageX;
+        this.context.dragStartY = event.pageY;
 
         //select tracks based off click, ctrl click, and shift click
-        if ( event.ctrlKey ) {
+        if (event.ctrlKey) {
             //ctrl multiple select
             this.state.tracks[clickedIndex].selected = true;
 
         } else if (!event.ctrlKey && !event.shiftKey) {
 
-            if ( this.context.contextMenuOpened ) {
+            if (this.context.contextMenuOpened) {
                 //track was right clicked
 
-                if ( !this.state.tracks[clickedIndex].selected ) {
+                if (!this.state.tracks[clickedIndex].selected) {
                     //clicked track is not already already selected
-                    for (let [i, track] of this.state.tracks.entries()) {
-                        if ( i === clickedIndex ) {
+                    for (let [i,
+                        track]of this.state.tracks.entries()) {
+                        if (i === clickedIndex) {
                             track.selected = true;
                         } else {
                             track.selected = false;
@@ -71,19 +185,26 @@ class TrackList extends Component {
 
             } else {
                 //track was left clicked
-                for (let [i, track] of this.state.tracks.entries()) {
-                    if ( i === clickedIndex ) {
-                        track.selected = true;
-                    } else {
-                        track.selected = false;
+
+                //if track is not already selected (for dragNdrop purposes)
+                if ( !this.state.tracks[clickedIndex].selected ) {
+
+                    for (let [i,track]of this.state.tracks.entries()) {
+                        if (i === clickedIndex) {
+                            track.selected = true;
+                        } else {
+                            track.selected = false;
+                        }
                     }
                 }
+
             }
 
-        } else if ( event.shiftKey && !event.ctrlKey ){
+        } else if (event.shiftKey && !event.ctrlKey) {
             //shift click
-            if ( clickedIndex > this.state.lastClickedTrackIndex ) {
-                for (let [i, track] of this.state.tracks.entries()) {
+            if (clickedIndex > this.state.lastClickedTrackIndex) {
+                for (let [i,
+                    track]of this.state.tracks.entries()) {
                     if (i >= this.state.lastClickedTrackIndex && i <= clickedIndex) {
                         track.selected = true;
                     } else {
@@ -91,7 +212,8 @@ class TrackList extends Component {
                     }
                 }
             } else if (clickedIndex < this.state.lastClickedTrackIndex) {
-                for (let [i, track] of this.state.tracks.entries()) {
+                for (let [i,
+                    track]of this.state.tracks.entries()) {
                     if (i >= clickedIndex && i <= this.state.lastClickedTrackIndex) {
                         track.selected = true;
                     } else {
@@ -104,35 +226,35 @@ class TrackList extends Component {
         //push selected tracks to a selected tracks array in state
         let selectedTracks = [];
         for (let track of this.state.tracks) {
-            if ( track.selected )
+            if (track.selected)
                 selectedTracks.push(track);
-        }
+            }
 
         //update selected tracks in state
-        this.setState({
-            lastClickedTrackIndex: clickedIndex,
-            tracks: this.state.tracks,
-            selectedTracks: selectedTracks
-        });
+        this.setState({lastClickedTrackIndex: clickedIndex, tracks: this.state.tracks, selectedTracks: selectedTracks});
 
     }
 
-    trackContextOpen(event, data, element){
+    trackContextOpen(event, data, element) {
         this.context.contextMenuOpened = true;
         document.elementFromPoint(event.detail.position.x, event.detail.position.y).click();
         this.context.contextMenuOpened = false;
     }
 
-    addSelectedTracksToUser(playlistID, playlistName){
+    addSelectedTracksToUser(playlistID, playlistName) {
         //pass playlist id and name if adding to playlist
 
-        playlistID = playlistID ? playlistID : '';
-        playlistName = playlistName ? playlistName : '';
+        playlistID = playlistID
+            ? playlistID
+            : '';
+        playlistName = playlistName
+            ? playlistName
+            : '';
 
-        if ( this.state.selectedTracks && this.state.selectedTracks.length > 0 ) {
+        if (this.state.selectedTracks && this.state.selectedTracks.length > 0) {
             refracter.addUserTracks(refracter.userKey, this.state.selectedTracks, playlistID, playlistName).then(response => {
 
-                if ( response.success ) {
+                if (response.success) {
                     //show toast
                     console.log('Tracks added to library or playlist: ', response);
                 }
@@ -144,19 +266,24 @@ class TrackList extends Component {
 
     }
 
-    removeSelectedTracksForUser(playlistID){
+    removeSelectedTracksForUser(playlistID) {
         //pass playlist id if removing from playlist
 
-        playlistID = playlistID ? playlistID : '';
+        playlistID = playlistID
+            ? playlistID
+            : '';
 
-        if ( this.state.selectedTracks && this.state.selectedTracks.length > 0 ) {
+        if (this.state.selectedTracks && this.state.selectedTracks.length > 0) {
             refracter.removeUserTracks(refracter.userKey, this.state.selectedTracks, playlistID).then(response => {
 
-                if ( response.success ) {
+                if (response.success) {
                     //show toast
                     console.log('Tracks removed from library or playlist: ', response);
                     //update state
-                    this.updateTrackListStateAfterDelete();
+                    if ( !this.props.isAlbum ) {
+                        this.updateTrackListStateAfterDelete();
+                    }
+
                 }
 
             }).catch(err => {
@@ -165,15 +292,13 @@ class TrackList extends Component {
         }
     }
 
-    updateTrackListStateAfterDelete(){
-        for ( let i = this.state.tracks.length -1; i >= 0 ; i-- ){
-            if ( this.state.tracks[i].selected ) {
-                this.state.tracks.splice(i,1);
+    updateTrackListStateAfterDelete() {
+        for (let i = this.state.tracks.length - 1; i >= 0; i--) {
+            if (this.state.tracks[i].selected) {
+                this.state.tracks.splice(i, 1);
             }
         }
-        this.setState({
-            tracks: this.state.tracks
-        });
+        this.setState({tracks: this.state.tracks});
     }
 
     onSort(sortName) {
@@ -195,7 +320,7 @@ class TrackList extends Component {
         let sortedByAlbumTrackData = [];
         let sortedTrackList;
 
-        for (let track of tracks ) {
+        for (let track of tracks) {
 
             //sort numbers
             if (sortName === 'number' || sortName === 'duration') {
@@ -293,13 +418,9 @@ class TrackList extends Component {
         }
     }
 
-    handleContextPlayTrack(event, track, element){
-        if ( track )
+    handleContextPlayTrack(event, track, element) {
+        if (track)
             this.playTrack(track);
-    }
-
-    handleContextAddToPlaylist(event, data, element){
-        console.log(data);
     }
 
     render() {
@@ -310,8 +431,30 @@ class TrackList extends Component {
         let sortAscIcon = <span className="sort-icon ion-arrow-up-b"></span>;
         let sortDescIcon = <span className="sort-icon ion-arrow-down-b"></span>;
 
+        let dragNdropPreviewStyle = {
+            display: this.state.dragNdrop ? 'block' : 'none',
+            left: this.state.dragNdropX ? this.state.dragNdropX : '0',
+            top: this.state.dragNdropY ? this.state.dragNdropY : '0'
+        }
+
+        let trackListSource;
+        if ( this.props.playlistName ) {
+            trackListSource = this.props.playlistName;
+        } else if ( this.props.isLibrary ) {
+            trackListSource = 'library';
+        } else if ( this.props.isAlbum ) {
+            trackListSource = this.props.isAlbum;
+        }
+
         return (
             <div className="track-list">
+
+                <div className="dragNdrop-preview" style={dragNdropPreviewStyle}>
+                    { this.state.selectedTracks.length === 1
+                        ? this.state.selectedTracks[0].title
+                        : `${this.state.selectedTracks.length} tracks from ${trackListSource}`
+                    }
+                </div>
 
                 <ContextMenu id="track-context" onShow={this.trackContextOpen}>
                     <MenuItem onClick={this.handleContextPlayTrack}>
@@ -320,35 +463,37 @@ class TrackList extends Component {
                     <MenuItem onClick={this.handleContextChangeSource}>
                         Change source
                     </MenuItem>
-                    <MenuItem divider/>
-                    { this.props.playlistID ?
-                    <MenuItem onClick={()=>this.removeSelectedTracksForUser(this.props.playlistID)}>
-                        Remove
-                        {this.state.selectedTracks.length > 1 ? ` ${this.state.selectedTracks.length} tracks ` : ' '}
-                        from playlist
-                    </MenuItem>
-                    : null
+                    <MenuItem divider/> {this.props.playlistID
+                        ? <MenuItem onClick={() => this.removeSelectedTracksForUser(this.props.playlistID)}>
+                                Remove {this.state.selectedTracks.length > 1
+                                    ? ` ${this.state.selectedTracks.length} tracks `
+                                    : ' '}
+                                from playlist
+                            </MenuItem>
+                        : null
                     }
-                    { this.props.isLibrary || this.props.existsInLibrary ?
-                    <MenuItem onClick={()=>this.removeSelectedTracksForUser()}>
-                        Remove
-                        {this.state.selectedTracks.length > 1 ? ` ${this.state.selectedTracks.length} tracks ` : ' '}
-                        from library
-                    </MenuItem>
-                    :
-                    <MenuItem onClick={()=>this.addSelectedTracksToUser()}>
-                        Add
-                        {this.state.selectedTracks.length > 1 ? ` ${this.state.selectedTracks.length} tracks ` : ' '}
-                        to library
-                    </MenuItem>
+                    {this.props.isLibrary || this.props.existsInLibrary
+                        ? <MenuItem onClick={() => this.removeSelectedTracksForUser()}>
+                                Remove {this.state.selectedTracks.length > 1
+                                    ? ` ${this.state.selectedTracks.length} tracks `
+                                    : ' '}
+                                from library
+                            </MenuItem>
+                        : <MenuItem onClick={() => this.addSelectedTracksToUser()}>
+                            Add {this.state.selectedTracks.length > 1
+                                ? ` ${this.state.selectedTracks.length} tracks `
+                                : ' '}
+                            to library
+                        </MenuItem>
                     }
                     <SubMenu title='Add to playlist'>
                         <MenuItem onClick={this.handleContextNewPlaylist}>
                             New playlist
+                            {/* TODO add new playlist creation trigger and pass tracks to be added  */}
                         </MenuItem>
                         {this.props.user.playlists.map((playlist, playlistIndex) => {
                             return (
-                                <MenuItem key={playlistIndex} onClick={()=>this.addSelectedTracksToUser(playlist.id, playlist.name)}>
+                                <MenuItem key={playlistIndex} onClick={() => this.addSelectedTracksToUser(playlist.id, playlist.name)}>
                                     {playlist.name}
                                 </MenuItem>
                             )
@@ -356,103 +501,128 @@ class TrackList extends Component {
                     </SubMenu>
                 </ContextMenu>
 
-                {this.state.tracks && this.state.tracks.length > 0
-                    ? <Table>
-                            <thead>
-                                <tr>
-                                    <th className="play-btn-col"></th>
-                                    {this.props.isLibrary
-                                        ? <th className="number-col">#</th>
-                                        : <th className="number-col pointer" onClick={() => this.onSort('number')}>
-                                            {this.state.sortName === 'number' && this.state.sortOrder === 'asc'
-                                                ? sortAscIcon
-                                                : null}
-                                            {this.state.sortName === 'number' && this.state.sortOrder === 'desc'
-                                                ? sortDescIcon
-                                                : null}
-                                            #
-                                        </th>
-                                    }
-                                    <th className="name-col pointer" onClick={() => this.onSort('title')}>
-                                        {this.state.sortName === 'title' && this.state.sortOrder === 'asc'
-                                            ? sortAscIcon
-                                            : null}
-                                        {this.state.sortName === 'title' && this.state.sortOrder === 'desc'
-                                            ? sortDescIcon
-                                            : null}
-                                        Name
-                                    </th>
-                                    {!this.props.isLibrary
-                                        ? <th className="album-col">Album</th>
-                                        : <th className="album-col pointer" onClick={() => this.onSort('album')}>
-                                            {this.state.sortName === 'album' && this.state.sortOrder === 'asc'
-                                                ? sortAscIcon
-                                                : null}
-                                            {this.state.sortName === 'album' && this.state.sortOrder === 'desc'
-                                                ? sortDescIcon
-                                                : null}
-                                            Album
-                                        </th>
-                                    }
-                                    {!this.props.isLibrary
-                                        ? <th className="artist-col">Artist</th>
-                                        : <th className="artist-col pointer" onClick={() => this.onSort('artist')}>
-                                            {this.state.sortName === 'artist' && this.state.sortOrder === 'asc'
-                                                ? sortAscIcon
-                                                : null}
-                                            {this.state.sortName === 'artist' && this.state.sortOrder === 'desc'
-                                                ? sortDescIcon
-                                                : null}
-                                            Artist
-                                        </th>
-                                    }
-                                    <th className="duration-col pointer" onClick={() => this.onSort('duration')}>
-                                        {this.state.sortName === 'duration' && this.state.sortOrder === 'asc'
-                                            ? sortAscIcon
-                                            : null}
-                                        {this.state.sortName === 'duration' && this.state.sortOrder === 'desc'
-                                            ? sortDescIcon
-                                            : null}
-                                        Duration
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.tracks.map((track, trackIndex) => {
-                                    let activeClass = this.props.activeTrack && track.trackID === this.props.activeTrack.trackID
-                                        ? 'active-track'
-                                        : '';
-                                    let selectedClass = track.selected
-                                        ? 'selected-track'
-                                        : '';
-                                    let trackClasses = `${activeClass} ${selectedClass}`;
-                                    return (
-                                        <ContextMenuTrigger
-                                            renderTag={'tr'}
-                                            id="track-context"
-                                            key={trackIndex}
-                                            attributes={{
-                                                className: trackClasses,
-                                                onClick: (event) => this.selectTrack(event, track, trackIndex),
-                                                onDoubleClick: () => this.playTrack(track)
-                                            }}
-                                            collect={()=>{
-                                                return track;
-                                            }}
+                <Table>
+                    <thead>
+                        <tr>
+                            <th className="play-btn-col"></th>
+                            {this.props.isLibrary
+                                ? <th className="number-col">#</th>
+                                : <th className="number-col pointer" onClick={() => this.onSort('number')}>
+                                    {this.state.sortName === 'number' && this.state.sortOrder === 'asc'
+                                        ? sortAscIcon
+                                        : null}
+                                    {this.state.sortName === 'number' && this.state.sortOrder === 'desc'
+                                        ? sortDescIcon
+                                        : null}
+                                    #
+                                </th>
+                            }
+                            <th className="name-col pointer" onClick={() => this.onSort('title')}>
+                                {this.state.sortName === 'title' && this.state.sortOrder === 'asc'
+                                    ? sortAscIcon
+                                    : null}
+                                {this.state.sortName === 'title' && this.state.sortOrder === 'desc'
+                                    ? sortDescIcon
+                                    : null}
+                                Name
+                            </th>
+                            { this.props.isLibrary || this.props.isPlaylist
+                                ? <th className="album-col pointer" onClick={() => this.onSort('album')}>
+                                    {this.state.sortName === 'album' && this.state.sortOrder === 'asc'
+                                        ? sortAscIcon
+                                        : null}
+                                    {this.state.sortName === 'album' && this.state.sortOrder === 'desc'
+                                        ? sortDescIcon
+                                        : null}
+                                    Album
+                                </th>
+                                : null
+                            }
+                            {!this.props.isLibrary
+                                ? <th className="artist-col">Artist</th>
+                                : <th className="artist-col pointer" onClick={() => this.onSort('artist')}>
+                                    {this.state.sortName === 'artist' && this.state.sortOrder === 'asc'
+                                        ? sortAscIcon
+                                        : null}
+                                    {this.state.sortName === 'artist' && this.state.sortOrder === 'desc'
+                                        ? sortDescIcon
+                                        : null}
+                                    Artist
+                                </th>
+                            }
+                            <th className="duration-col pointer" onClick={() => this.onSort('duration')}>
+                                {this.state.sortName === 'duration' && this.state.sortOrder === 'asc'
+                                    ? sortAscIcon
+                                    : null}
+                                {this.state.sortName === 'duration' && this.state.sortOrder === 'desc'
+                                    ? sortDescIcon
+                                    : null}
+                                Duration
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.state.tracks.map((track, trackIndex) => {
+                            let activeClass = this.props.activeTrack && track.trackID === this.props.activeTrack.trackID
+                                ? 'active-track'
+                                : '';
+                            let selectedClass = track.selected
+                                ? 'selected-track'
+                                : '';
+                            let trackClasses = `track-row ${activeClass} ${selectedClass}`;
+                            return (
+                                <ContextMenuTrigger renderTag={'tr'} id="track-context" key={trackIndex} attributes={{
+                                    className: trackClasses,
+                                    //onClick: (event) => this.selectTrack(event, track, trackIndex),
+                                    onDoubleClick: () => this.playTrack(track)
+                                }} collect={() => {
+                                    return track;
+                                }}>
+                                    <td
+                                        className={`play-btn-col ${playIconClass}`}
+                                        onClick={() => this.playTrack(track)}
+                                        onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
+                                        >
+                                    </td>
+                                    <td
+                                        className="number-col"
+                                        onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
+                                        >
+                                        {track.number}
+                                    </td>
+                                    <td
+                                        className="name-col"
+                                        onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
+                                        >
+                                        {track.title}
+                                    </td>
+                                    { this.props.isLibrary || this.props.isPlaylist ?
+                                        <td
+                                            className="album-col"
+                                            onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
                                             >
-                                                <td className={`play-btn-col ${playIconClass}`} onClick={() => this.playTrack(track)}></td>
-                                                <td className="number-col">{track.number}</td>
-                                                <td className="name-col">{track.title}</td>
-                                                <td className="album-col">{track.album}</td>
-                                                <td className="artist-col">{track.artist}</td>
-                                                <td className="duration-col">{refracter.secondsToMinutes(track.duration)}</td>
-                                        </ContextMenuTrigger>
-                                    )
-                                })}
-                            </tbody>
-                        </Table>
+                                            {this.props.isAlbum ? track.album : <Link to={`/album/${encodeURIComponent(track.artist)}/${encodeURIComponent(track.album)}`}>{track.album}</Link>}
+                                        </td>
+                                        :null
+                                    }
+                                    <td
+                                        className="artist-col"
+                                        onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
+                                        >
+                                        {this.props.isArtist ? track.artist : <Link to={`/artist/${encodeURIComponent(track.artist)}`}>{track.artist}</Link>}
 
-                    : null}
+                                    </td>
+                                    <td
+                                        className="duration-col"
+                                        onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
+                                        >
+                                        {refracter.secondsToMinutes(track.duration)}
+                                    </td>
+                                </ContextMenuTrigger>
+                            )
+                        })}
+                    </tbody>
+                </Table>
             </div>
 
         );

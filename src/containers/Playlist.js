@@ -11,12 +11,25 @@ class Playlist extends Component {
 
         //set initial state
         this.state = {
-        }
+            tracks: []
+        };
+
+        this.loadPlaylist = this.loadPlaylist.bind(this);
     }
 
     componentWillMount() {
+        this.loadPlaylist(this.props.params.id);
+    }
 
-        refracter.getPlaylist(this.props.params.id).then(playlistData => {
+    componentWillReceiveProps(nextProps) {
+        //only load new playlist if new playlist id
+        if ( nextProps.params.id !== this.props.params.id )
+            this.loadPlaylist(nextProps.params.id);
+    }
+
+    loadPlaylist(playlistID){
+
+        refracter.getPlaylist(playlistID).then(playlistData => {
 
             //format playlist tracks to playlist order from db
             for ( let [i,track] of playlistData.playlistTracks.entries() ) {
@@ -48,7 +61,7 @@ class Playlist extends Component {
 
                         <h1>{this.state.playlistName}</h1>
 
-                        { this.state.tracks && this.state.tracks.length > 0 ?
+                        { this.state.tracks.length > 0 ?
                             <TrackList
                                 playlistID={this.state.playlistID}
                                 playlistName={this.state.playlistName}

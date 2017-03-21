@@ -23,7 +23,7 @@ $primaryColor: #EDA564;
 $white: #efefef;
 $lightBackground: #dcdcdc;
 $medLightBackground: #555;
-$medBackground: #434343;
+$medBackground: #333;
 $darkBackground: #121212;
 
 //global imports
@@ -34,10 +34,11 @@ $darkBackground: #121212;
 
 //component imports
 @import 'components/TopBar';
-@import 'components/Sidebar';
 @import 'components/PlayerBar';
 @import 'components/TrackList';
 @import 'components/Tile';
 
 //container imports
 @import 'containers/Album';
+@import 'containers/Artist';
+@import 'containers/Sidebar';

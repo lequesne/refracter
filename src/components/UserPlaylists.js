@@ -231,7 +231,10 @@ class UserPlaylists extends Component {
                                 id="playlists-context"
                                 key={playlistIndex}
                                 attributes={{
-                                    className: 'playlist-link',
+                                    'data-drag-ndrop-add-tracks': true,
+                                    'data-playlist-Id': playlist.id,
+                                    'data-playlist-name': playlist.name,
+                                    className: 'playlist-link dragNdrop-droppable',
                                     onClick: ()=>this.linkToPlaylist(playlist.id),
                                     //onDoubleClick: () => this.existingPlaylistEdit(playlistIndex)
                                 }}
