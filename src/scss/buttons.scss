@@ -1,0 +1,15 @@
+button.btn, button.btn-default {
+    border-radius: 0;
+    border: none;
+    color: white;
+    background: $medLightBackground;
+    padding: 0.75em 1em;
+    font-weight: 500;
+    font-size: 16px;
+    transition: all $standardHoverTime;
+
+    &:hover {
+        box-shadow: $dropShadowDepth1;
+        background: $white;
+    }
+}

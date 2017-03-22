@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import { Link } from 'react-router';
 import {Table} from 'react-bootstrap';
 import {ContextMenu, MenuItem, ContextMenuTrigger, SubMenu} from "react-contextmenu";
+import {toast} from 'react-toastify';
 
 class TrackList extends Component {
 
@@ -121,7 +122,7 @@ class TrackList extends Component {
             if ( this.context.isDragging ) {
                 let dropElement = document.elementFromPoint(event.pageX, event.pageY);
 
-                //TODO drop area detection
+                //drop area detection
                 if (dropElement.classList.contains('dragNdrop-droppable')) {
                     if ( dropElement.dataset.dragNdropAddTracks ) {
                         //dropped onto add tracks, add to tracks
@@ -168,10 +169,10 @@ class TrackList extends Component {
 
         } else if (!event.ctrlKey && !event.shiftKey) {
 
-            if (this.context.contextMenuOpened) {
+            if (event.button == 2) {
                 //track was right clicked
 
-                if (!this.state.tracks[clickedIndex].selected) {
+                if (!this.state.tracks[clickedIndex].selected  ) {
                     //clicked track is not already already selected
                     for (let [i,
                         track]of this.state.tracks.entries()) {
@@ -186,16 +187,30 @@ class TrackList extends Component {
             } else {
                 //track was left clicked
 
-                //if track is not already selected (for dragNdrop purposes)
-                if ( !this.state.tracks[clickedIndex].selected ) {
+                if ( this.state.selectedTracks.length === this.state.tracks.length ) {
+                    //every track is already seletec
+                    for (let [i,track]of this.state.tracks.entries()) {
+
+                        if (i === clickedIndex ) {
+                            track.selected = false;
+                        } else {
+                            track.selected = true;
+                        }
+
+                    }
+                } else{
+                    //normal track select
 
                     for (let [i,track]of this.state.tracks.entries()) {
-                        if (i === clickedIndex) {
+
+                        if (i === clickedIndex ) {
                             track.selected = true;
                         } else {
                             track.selected = false;
                         }
+
                     }
+
                 }
 
             }
@@ -256,6 +271,12 @@ class TrackList extends Component {
 
                 if (response.success) {
                     //show toast
+
+                    let addContext = playlistName ? playlistName : 'library';
+
+                    toast(`${this.state.selectedTracks.length} track${this.state.selectedTracks.length>1?'s where':' was'} added to ${addContext}.`, {
+                      type: toast.TYPE.SUCCESS
+                    });
                     console.log('Tracks added to library or playlist: ', response);
                 }
 
@@ -266,18 +287,26 @@ class TrackList extends Component {
 
     }
 
-    removeSelectedTracksForUser(playlistID) {
+    removeSelectedTracksForUser(playlistID, playlistName) {
         //pass playlist id if removing from playlist
 
         playlistID = playlistID
             ? playlistID
             : '';
 
+        playlistName = playlistName
+            ? playlistName
+            : '';
+
         if (this.state.selectedTracks && this.state.selectedTracks.length > 0) {
-            refracter.removeUserTracks(refracter.userKey, this.state.selectedTracks, playlistID).then(response => {
+            refracter.removeUserTracks(refracter.userKey, this.state.selectedTracks, playlistID, playlistName).then(response => {
 
                 if (response.success) {
                     //show toast
+                    let addContext = playlistName ? playlistName : 'library';
+                    toast(`${this.state.selectedTracks.length} track${this.state.selectedTracks.length>1?'s where':' was'} removed from ${addContext}.`, {
+                      type: toast.TYPE.SUCCESS
+                    });
                     console.log('Tracks removed from library or playlist: ', response);
                     //update state
                     if ( !this.props.isAlbum ) {
@@ -460,15 +489,15 @@ class TrackList extends Component {
                     <MenuItem onClick={this.handleContextPlayTrack}>
                         Play Track
                     </MenuItem>
-                    <MenuItem onClick={this.handleContextChangeSource}>
+                    {/* <MenuItem onClick={this.handleContextChangeSource}>
                         Change source
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem divider/> {this.props.playlistID
-                        ? <MenuItem onClick={() => this.removeSelectedTracksForUser(this.props.playlistID)}>
+                        ? <MenuItem onClick={() => this.removeSelectedTracksForUser(this.props.playlistID,this.props.playlistName)}>
                                 Remove {this.state.selectedTracks.length > 1
                                     ? ` ${this.state.selectedTracks.length} tracks `
                                     : ' '}
-                                from playlist
+                                from {this.props.playlistName}
                             </MenuItem>
                         : null
                     }
@@ -487,10 +516,11 @@ class TrackList extends Component {
                         </MenuItem>
                     }
                     <SubMenu title='Add to playlist'>
+                        {/*
+                        TODO add new playlist creation trigger and pass tracks to be added
                         <MenuItem onClick={this.handleContextNewPlaylist}>
                             New playlist
-                            {/* TODO add new playlist creation trigger and pass tracks to be added  */}
-                        </MenuItem>
+                        </MenuItem> */}
                         {this.props.user.playlists.map((playlist, playlistIndex) => {
                             return (
                                 <MenuItem key={playlistIndex} onClick={() => this.addSelectedTracksToUser(playlist.id, playlist.name)}>
@@ -506,58 +536,68 @@ class TrackList extends Component {
                         <tr>
                             <th className="play-btn-col"></th>
                             {this.props.isLibrary
-                                ? <th className="number-col">#</th>
+                                ? <th className="number-col"><span>#</span></th>
                                 : <th className="number-col pointer" onClick={() => this.onSort('number')}>
-                                    {this.state.sortName === 'number' && this.state.sortOrder === 'asc'
-                                        ? sortAscIcon
-                                        : null}
-                                    {this.state.sortName === 'number' && this.state.sortOrder === 'desc'
-                                        ? sortDescIcon
-                                        : null}
-                                    #
+                                    <span>
+                                        {this.state.sortName === 'number' && this.state.sortOrder === 'asc'
+                                            ? sortAscIcon
+                                            : null}
+                                        {this.state.sortName === 'number' && this.state.sortOrder === 'desc'
+                                            ? sortDescIcon
+                                            : null}
+                                        #
+                                    </span>
                                 </th>
                             }
                             <th className="name-col pointer" onClick={() => this.onSort('title')}>
-                                {this.state.sortName === 'title' && this.state.sortOrder === 'asc'
-                                    ? sortAscIcon
-                                    : null}
-                                {this.state.sortName === 'title' && this.state.sortOrder === 'desc'
-                                    ? sortDescIcon
-                                    : null}
-                                Name
+                                <span>
+                                    {this.state.sortName === 'title' && this.state.sortOrder === 'asc'
+                                        ? sortAscIcon
+                                        : null}
+                                    {this.state.sortName === 'title' && this.state.sortOrder === 'desc'
+                                        ? sortDescIcon
+                                        : null}
+                                    Name
+                                </span>
                             </th>
                             { this.props.isLibrary || this.props.isPlaylist
                                 ? <th className="album-col pointer" onClick={() => this.onSort('album')}>
-                                    {this.state.sortName === 'album' && this.state.sortOrder === 'asc'
-                                        ? sortAscIcon
-                                        : null}
-                                    {this.state.sortName === 'album' && this.state.sortOrder === 'desc'
-                                        ? sortDescIcon
-                                        : null}
-                                    Album
+                                    <span>
+                                        {this.state.sortName === 'album' && this.state.sortOrder === 'asc'
+                                            ? sortAscIcon
+                                            : null}
+                                        {this.state.sortName === 'album' && this.state.sortOrder === 'desc'
+                                            ? sortDescIcon
+                                            : null}
+                                        Album
+                                    </span>
                                 </th>
                                 : null
                             }
                             {!this.props.isLibrary
-                                ? <th className="artist-col">Artist</th>
+                                ? <th className="artist-col"><span>Artist</span></th>
                                 : <th className="artist-col pointer" onClick={() => this.onSort('artist')}>
-                                    {this.state.sortName === 'artist' && this.state.sortOrder === 'asc'
-                                        ? sortAscIcon
-                                        : null}
-                                    {this.state.sortName === 'artist' && this.state.sortOrder === 'desc'
-                                        ? sortDescIcon
-                                        : null}
-                                    Artist
+                                    <span>
+                                        {this.state.sortName === 'artist' && this.state.sortOrder === 'asc'
+                                            ? sortAscIcon
+                                            : null}
+                                        {this.state.sortName === 'artist' && this.state.sortOrder === 'desc'
+                                            ? sortDescIcon
+                                            : null}
+                                        Artist
+                                    </span>
                                 </th>
                             }
                             <th className="duration-col pointer" onClick={() => this.onSort('duration')}>
-                                {this.state.sortName === 'duration' && this.state.sortOrder === 'asc'
-                                    ? sortAscIcon
-                                    : null}
-                                {this.state.sortName === 'duration' && this.state.sortOrder === 'desc'
-                                    ? sortDescIcon
-                                    : null}
-                                Duration
+                                <span>
+                                    {this.state.sortName === 'duration' && this.state.sortOrder === 'asc'
+                                        ? sortAscIcon
+                                        : null}
+                                    {this.state.sortName === 'duration' && this.state.sortOrder === 'desc'
+                                        ? sortDescIcon
+                                        : null}
+                                    Duration
+                                </span>
                             </th>
                         </tr>
                     </thead>
@@ -572,51 +612,57 @@ class TrackList extends Component {
                             let trackClasses = `track-row ${activeClass} ${selectedClass}`;
                             return (
                                 <ContextMenuTrigger renderTag={'tr'} id="track-context" key={trackIndex} attributes={{
+                                    'data-track-ID': track.trackID,
                                     className: trackClasses,
                                     //onClick: (event) => this.selectTrack(event, track, trackIndex),
                                     onDoubleClick: () => this.playTrack(track)
                                 }} collect={() => {
                                     return track;
                                 }}>
-                                    <td
+                                    <td title="Play/Pause"
                                         className={`play-btn-col ${playIconClass}`}
                                         onClick={() => this.playTrack(track)}
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
                                         >
                                     </td>
-                                    <td
+                                    <td title="Number"
                                         className="number-col"
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
                                         >
-                                        {track.number}
+                                        <span>{track.number}</span>
                                     </td>
-                                    <td
+                                    <td title={track.title}
                                         className="name-col"
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
                                         >
-                                        {track.title}
+                                        <span>{track.title}</span>
                                     </td>
                                     { this.props.isLibrary || this.props.isPlaylist ?
-                                        <td
+                                        <td title={track.album}
                                             className="album-col"
                                             onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
                                             >
-                                            {this.props.isAlbum ? track.album : <Link to={`/album/${encodeURIComponent(track.artist)}/${encodeURIComponent(track.album)}`}>{track.album}</Link>}
+                                            <span>
+                                                {this.props.isAlbum ? track.album : <Link to={`/album/${encodeURIComponent(track.artist)}/${encodeURIComponent(track.album)}`}>{track.album}</Link>}
+                                            </span>
                                         </td>
                                         :null
                                     }
-                                    <td
+                                    <td title={track.artist}
                                         className="artist-col"
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
                                         >
+                                        <span>
                                         {this.props.isArtist ? track.artist : <Link to={`/artist/${encodeURIComponent(track.artist)}`}>{track.artist}</Link>}
-
+                                        </span>
                                     </td>
                                     <td
                                         className="duration-col"
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
                                         >
-                                        {refracter.secondsToMinutes(track.duration)}
+                                        <span>
+                                            {refracter.secondsToMinutes(track.duration)}
+                                        </span>
                                     </td>
                                 </ContextMenuTrigger>
                             )

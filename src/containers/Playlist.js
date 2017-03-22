@@ -59,21 +59,26 @@ class Playlist extends Component {
 
                     <Col sm={12} smPush={0} md={10} mdPush={1}>
 
-                        <h1>{this.state.playlistName}</h1>
+                        <div className="card">
 
-                        { this.state.tracks.length > 0 ?
-                            <TrackList
-                                playlistID={this.state.playlistID}
-                                playlistName={this.state.playlistName}
-                                user={this.props.user}
-                                playing={this.props.playing}
-                                tracks={this.state.tracks}
-                                queueId={this.props.queueId}
-                                activeTrack={this.props.activeTrack}
-                                updateQueue={this.context.parentState.updateQueue}
-                            />
-                            : <p>It looks like no tracks have been added to this playlist yet. If you are the playlist owner get adding!</p>
-                        }
+                            <h1>{this.state.playlistName}</h1>
+
+                            { this.state.tracks.length > 0 ?
+                                <TrackList
+                                    isPlaylist={true}
+                                    playlistID={this.state.playlistID}
+                                    playlistName={this.state.playlistName}
+                                    user={this.props.user}
+                                    playing={this.props.playing}
+                                    tracks={this.state.tracks}
+                                    queueId={this.props.queueId}
+                                    activeTrack={this.props.activeTrack}
+                                    updateQueue={this.context.parentState.updateQueue}
+                                />
+                                : <p>It looks like no tracks have been added to this playlist yet. If you are the playlist owner get adding!</p>
+                            }
+
+                        </div>
 
                     </Col>
 

@@ -1,7 +1,8 @@
 //import * as refracter from '../refracter';
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-//import {Button} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
+import ScrollArea from 'react-scrollbar';
 import UserPlaylists from '../components/UserPlaylists';
 
 class Sidebar extends Component {
@@ -21,13 +22,15 @@ class Sidebar extends Component {
 
                     { this.props.user
                         ?
-                        <div className="logged-in">
+                        <div className="logged-in wrapper">
 
-                            <Link to={'/library'} data-drag-ndrop-add-tracks={true} className="dragNdrop-droppable">
-                                Library
+                            <Link to={'/library'} data-drag-ndrop-add-tracks={true} className="link library-link dragNdrop-droppable">
+                                <span className="text"><span className="library ion-ios-book"></span>Library</span>
                             </Link>
 
-                            <UserPlaylists playlists={this.props.user.playlists}></UserPlaylists>
+                            <ScrollArea className="scrollable" smoothScrolling={true} speed={0.8} >
+                                <UserPlaylists playlists={this.props.user.playlists}></UserPlaylists>
+                            </ScrollArea>
 
                         </div>
                         :
@@ -45,7 +48,7 @@ class Sidebar extends Component {
                     <div className="album-art">
                         {this.props.activeTrack
                             ? <img src={this.props.activeTrack.art} alt="Artwork"/>
-                            : null}
+                            : <div className="icon ion-disc"></div>}
                     </div>
 
                 </div>

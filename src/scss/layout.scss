@@ -11,41 +11,12 @@ body, html {
     background: $darkBackground;
 }
 
+hr {
+    opacity: 0.25;
+}
+
 .pointer {
     cursor: pointer;
-}
-
-html.dragNdrop-isDragging {
-    * {
-        user-select: none;
-    }
-}
-
-.dragNdrop-preview {
-    position: fixed;
-    z-index: 2000;
-    width: 200px;
-    padding: 1em;
-    background: $white;
-    color: $darkBackground;
-    transform: rotate3d(0,0,0);
-}
-
-input {
-    color: black;
-}
-
-.icon {
-    text-align: center;
-    user-select: none;
-
-    &:before {
-        position: absolute;
-        width: 100%;
-        top: 50%;
-        left: 0;
-        margin-top: -0.5em;
-    }
 }
 
 .container {
@@ -74,24 +45,97 @@ input {
     overflow: visible;
 }
 
-// .scrollable {
-//     position: relative;
-//     width: 100%;
-//     height: 100%;
-//     overflow: auto;
-// }
+.scrollable {
+    height: 100%;
+}
+
+//scrollbar
+.scrollarea .scrollbar-container.vertical .scrollbar {
+    background: $white;
+}
 
 .page {
     position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
+    //width: 100%;
+    //height: 100%;
+    //overflow: auto;
 }
 
 .card {
     margin: 50px 0;
     padding: 50px;
     background: rgba($lightBackground,0.1);
+}
+
+//icons
+.icon {
+    text-align: center;
+    user-select: none;
+
+    &:before {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        left: 0;
+        margin-top: -0.5em;
+    }
+
+    &:hover {
+        text-decoration: none !important;
+    }
+}
+
+//toast messages
+
+.toastify {
+    z-index: 9999;
+    color: $white;
+
+
+    &.toastify--top-right {
+        top: calc( #{$topBarHeight} + 1em + #{$borderPadding});
+    }
+
+    .toastify__close {
+        font-size: 1.2em;
+        line-height: 0;
+        padding-bottom: 4px;
+
+        &:hover {
+            background: none;
+            color: $white;
+        }
+    }
+
+    .toastify-content {
+        display: flex;
+        align-items: center;
+        background: $medBackground;
+        padding-left: 15px;
+        box-shadow: $dropShadowDepth1;
+        animation-timing-function: linear !important;
+    }
+
+    .toastify__body {
+        font-size: 1em;
+    }
+}
+
+//drag and drop
+html.dragNdrop-isDragging {
+    * {
+        user-select: none;
+    }
+}
+
+.dragNdrop-preview {
+    position: fixed;
+    z-index: 2000;
+    width: 200px;
+    padding: 1em;
+    background: $white;
+    color: $darkBackground;
+    transform: rotate3d(0,0,0);
 }
 
 //vert cenering for modals
@@ -103,20 +147,19 @@ body.modal-open .modal .modal-dialog {
     margin: auto;
 }
 
+//context menu
 .react-contextmenu {
-    min-width: 160px;
-    padding: 5px 0;
-    margin: 2px 0 0;
+    z-index: 99999;
+    width: 200px;
     font-size: 16px;
-    color: #373a3c;
+    color: $white;
     text-align: left;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
-    border-radius: .25rem;
-    outline: none;
+    background-color: $medBackground;
+    //border-top: 1px solid $medBackground;
+    //border-bottom: 1px solid $medBackground;
     opacity: 0;
     pointer-events: none;
+    box-shadow: $dropShadowDepth1;
 }
 
 .react-contextmenu.react-contextmenu--visible {
@@ -126,22 +169,28 @@ body.modal-open .modal .modal-dialog {
 
 .react-contextmenu-item {
     width: 200px;
-    padding: 3px 20px;
+    padding: 10px 20px;
     font-weight: 400;
     line-height: 1.5;
-    color: #373a3c;
+    //color: #373a3c;
     text-align: inherit;
     //white-space: nowrap;
+    //border-left: 1px solid $medBackground;
+    //border-right: 1px solid $medBackground;
     background: 0 0;
-    border: 0;
 	cursor: pointer;
+    box-shadow: $dropShadowDepth1;
+
+    .react-contextmenu{
+        border-left: 1px solid $medBackground;
+    }
 }
 
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item:hover {
-    color: #fff;
-    background-color: #0275d8;
-    border-color: #0275d8;
+    color: $darkBackground;
+    background-color: $primaryColor;
+    border-color: $darkBackground;
     text-decoration: none;
 }
 
@@ -149,35 +198,58 @@ body.modal-open .modal .modal-dialog {
 .react-contextmenu-item.react-contextmenu-item--disabled:hover {
     color: #878a8c;
     background-color: transparent;
-    border-color: rgba(0,0,0,.15);
+    //border-color: rgba(0,0,0,.3);
 }
 
 .react-contextmenu-item--divider {
-    margin-bottom: 3px;
-    padding: 2px 0;
-    border-bottom: 1px solid rgba(0,0,0,.15);
+    //margin-bottom: 3px;
+    padding: 0;
+    border-bottom: 2px solid rgba(0,0,0,.3);
     cursor: inherit;
 }
 .react-contextmenu-item--divider:hover {
     background-color: transparent;
-    border-color: rgba(0,0,0,.15);
+    //border-color: rgba(0,0,0,.3);
 }
 
 .react-contextmenu-item.react-contextmenu-submenu {
 	padding: 0;
+    border: none;
 }
 
 .react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item {
 }
 
 .react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item:after {
-    content: "▶";
+    content: "❯";
     display: inline-block;
     position: absolute;
-    right: 7px;
+    right: 10px;
 }
 
 .example-multiple-targets::after {
     content: attr(data-count);
     display: block;
+}
+
+//slick carousel overrides
+.slick-next:before, .slick-prev:before {
+    transition: all $standardHoverTime;
+    color: $white;
+}
+
+.slick-arrow {
+    transition: all $standardHoverTime;
+}
+
+.slick-disabled {
+    opacity: 0;
+}
+
+.slick-prev {
+    left: -30px;
+}
+
+.slick-next {
+    right: -30px;
 }

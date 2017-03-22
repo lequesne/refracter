@@ -1,7 +1,8 @@
+import * as refracter from '../refracter';
 import React, {Component} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import Form from '../components/Form';
-import * as refracter from '../refracter';
+import { toast } from 'react-toastify';
 
 class LogInForm extends Component {
 
@@ -39,10 +40,18 @@ class LogInForm extends Component {
             if (response.success) {
                 //logged in
 
+                //set user in app state and complete app init
                 this.props.successfulLogin(response.user);
-
                 this.setState({formLoading: false});
-                
+
+                //hide form modal
+                this.props.onHide();
+
+                //display login alert/toast
+                toast(`You are now logged in as ''${response.user.username}'.`, {
+                  type: toast.TYPE.SUCCESS
+                });
+
             } else {
                 //error
                 this.setState({formLoading: false, serverError: response.errors});
@@ -98,8 +107,8 @@ class LogInForm extends Component {
             {
                 name: 'username',
                 type: 'text',
-                placeholder: 'Username or email',
-                label: 'Enter Username or email',
+                placeholder: 'Username',
+                label: 'Enter Username',
                 validation: {
                     required: true
                 }
@@ -118,7 +127,7 @@ class LogInForm extends Component {
 
             <Modal show={this.props.show} onHide={this.props.onHide}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Log In</Modal.Title>
+                    <Modal.Title>Sign In</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
 

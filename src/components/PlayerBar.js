@@ -27,8 +27,6 @@ class PlayerBar extends Component {
         this.setProgress = this.setProgress.bind(this);
         this.updateProgress = this.updateProgress.bind(this);
         this.setVolume = this.setVolume.bind(this);
-        this.playPrevious = this.playPrevious.bind(this);
-        this.playNext = this.playNext.bind(this);
 
         this.youTubeReady = this.youTubeReady.bind(this);
         this.youTubeStateChange = this.youTubeStateChange.bind(this);
@@ -76,10 +74,6 @@ class PlayerBar extends Component {
         }
     }
 
-    playPrevious() {}
-
-    playNext() {}
-
     setProgress(value) {
         //console.log(this.youTubePlayer.getVideoData());
         let progressInSeconds = this.youTubePlayer.getDuration() / 100 * value;
@@ -101,7 +95,7 @@ class PlayerBar extends Component {
                     : 100, //in percent
                 trackDuration: this.youTubePlayer.getDuration(),
                 trackProgress: this.youTubePlayer.getCurrentTime()
-            })
+            });
         }
 
     }

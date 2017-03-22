@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Col, Row} from 'react-bootstrap';
 import 'whatwg-fetch';
 import Spinner from '../components/Spinner';
-import Tile from '../components/Tile';
+import TileList from '../components/TileList';
 import * as refracter from '../refracter';
 
 class Search extends Component {
@@ -12,18 +12,9 @@ class Search extends Component {
 
         //reset results
         this.state = {
-            artists: {
-                loaded: false,
-                results: []
-            },
-            albums: {
-                loaded: false,
-                results: []
-            },
-            tracks: {
-                loaded: false,
-                results: []
-            }
+            artists: [],
+            albums: [],
+            tracks: []
         }
 
         this.performSearch = this.performSearch.bind(this);
@@ -34,7 +25,7 @@ class Search extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps && nextProps.params.query !== this.props.params.query ) {
+        if (nextProps.params.query !== this.props.params.query ) {
             this.performSearch(nextProps.params.query);
         }
     }
@@ -42,71 +33,21 @@ class Search extends Component {
     performSearch(searchQuery) {
         if (searchQuery) {
 
-            //reset results
-            this.setState({
-                artists: {
-                    loaded: false,
-                    results: []
-                },
-                albums: {
-                    loaded: false,
-                    results: []
-                },
-                tracks: {
-                    loaded: false,
-                    results: []
-                }
-            });
+            //TODO set loader in state
 
-            //fetch artist matches for search
-            fetch(`${refracter.lastFmEndpoint}?method=artist.search&artist=${searchQuery}&api_key=${refracter.lastFmApiKey()}&format=json`).then(response => {
-                return response.json();
-            }).then(json => {
+            refracter.search(searchQuery).then(searchData => {
 
-                console.log('Artist: ', json);
+                //TODO Hide Loader
+
+                console.log('Search results: ', searchData);
                 this.setState({
-                    artists: {
-                        loaded: true,
-                        results: json.results.artistmatches.artist
-                    }
-                })
+                    artists: searchData.artists,
+                    albums: searchData.albums,
+                    tracks: searchData.tracks
+                });
 
             }).catch(err => {
-                console.log(err);
-            });
-
-            //fetch album matches for search
-            fetch(`${refracter.lastFmEndpoint}?method=album.search&album=${searchQuery}&api_key=${refracter.lastFmApiKey()}&format=json`).then(response => {
-                return response.json();
-            }).then(json => {
-
-                console.log('Album: ', json);
-                this.setState({
-                    albums: {
-                        loaded: true,
-                        results: json.results.albummatches.album
-                    }
-                })
-
-            }).catch(err => {
-                console.log(err);
-            });
-
-            //fetch track matches for search
-            fetch(`${refracter.lastFmEndpoint}?method=track.search&track=${searchQuery}&api_key=${refracter.lastFmApiKey()}&format=json`).then(response => {
-                return response.json();
-            }).then(json => {
-
-                console.log('Track: ', json);
-                this.setState({
-                    tracks: {
-                        loaded: true,
-                        results: json.results.trackmatches.track
-                    }
-                })
-
-            }).catch(err => {
-                console.log(err);
+                console.log('ERROR RETURNED: ', err);
             });
 
         }
@@ -114,85 +55,48 @@ class Search extends Component {
 
     render() {
 
-        let artistResults;
-        let albumResults;
-        let trackResults;
-
-        //set artist results list
-        if (this.state.artists.results.length > 0) {
-            artistResults = this.state.artists.results.map((artist, index) => {
-                return index < 10
-                    ? <Col xs={2} key={index}>
-                            <Tile link={`/artist/${encodeURIComponent(artist.name)}`} mainTitle={artist.name} image={artist.image[0]['#text']}/>
-                        </Col>
-                    : null;
-            });
-        } else {
-            artistResults = 'No matching artists found.'
-        }
-
-        //set albums results list
-        if (this.state.albums.results.length > 0) {
-            albumResults = this.state.albums.results.map((album, index) => {
-                return index < 10
-                    ? <Col xs={2} key={index}>
-                            <Tile link={`/album/${encodeURIComponent(album.artist)}/${encodeURIComponent(album.name)}`} mainTitle={album.name} secondaryTitle={album.artist} image={album.image[0]['#text']}/>
-                        </Col>
-                    : null;
-            });
-        } else {
-            albumResults = 'No matching albums found.'
-        }
-
-        //set tracks results list
-        //link need to bind to a get track info request to find the album name, then can link to albim/artist/track
-        if (this.state.tracks.results.length > 0) {
-            trackResults = this.state.tracks.results.map((track, index) => {
-                return index < 10
-                    ? <Col xs={2} key={index}>
-                            <Tile onTileClick={()=>refracter.getLastFMTrackLink(track.name,track.artist)} mainTitle={track.name} secondaryTitle={track.artist} image={track.image[0]['#text']}/>
-                        </Col>
-                    : null;
-            });
-        } else {
-            trackResults = 'No matching tracks found.'
-        }
-
         return (
             <div className="search page">
 
                 <div className="container">
 
-                    <Col xs={10} xsPush={1}>
+                    <Col md={12} mdPush={0} lg={10} lgPush={1} >
 
-                        <div className="results-section">
-                            <h1>
-                                Artists
-                                <Spinner hideWhen={this.state.artists.loaded}/>
-                            </h1>
-                            <Row>
-                                {artistResults}
-                            </Row>
+                        <div className="results-artists card">
+
+                            <h2>Artists</h2>
+
+                            <TileList
+                                //isArtist={true}
+                                linkType="artist"
+                                tiles={this.state.artists}
+                                carousel={true}
+                            />
+
                         </div>
 
-                        <div className="results-section">
-                            <h1>
-                                Albums
-                                <Spinner hideWhen={this.state.albums.loaded}/>
-                            </h1>
-                            <Row>
-                                {albumResults}
-                            </Row>
+                        <div className="results-albums card">
+
+                            <h2>Albums</h2>
+
+                            <TileList
+                                linkType="album"
+                                tiles={this.state.albums}
+                                carousel={true}
+                            />
+
                         </div>
 
-                        <div className="results-section">
-                            <h1>
-                                Tracks
-                                <Spinner hideWhen={this.state.tracks.loaded}/>
-                            </h1>
-                            <Row>
-                                {trackResults}
-                            </Row>
+                        <div className="results-tracks card">
+
+                            <h2>Tracks</h2>
+
+                            <TileList
+                                linkType="track"
+                                tiles={this.state.tracks}
+                                carousel={true}
+                            />
+
                         </div>
 
                     </Col>

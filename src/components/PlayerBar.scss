@@ -5,6 +5,7 @@
     left: 0;
     height: $playerBarHeight;
     width: 100%;
+    background: $darkBackground;
     border: solid transparent $borderPadding;
     color: gree;
     padding: 0 130px 0 #{$sidebarWidth - $borderPadding};
@@ -16,6 +17,7 @@
     left: 0;
     height: $sidebarWidth - $borderPadding - $borderPadding;
     width: $sidebarWidth - $borderPadding - $borderPadding;
+    transform: translate3d(0,150%,0);
 }
 
 .player-btn {

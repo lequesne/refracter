@@ -1,11 +1,10 @@
 .artist {
 
     h1 {
-        margin: 75px 0;
+        //margin: 75px 0;
     }
 
     h2 {
-        font-style: italic;
     }
 
     .container {
@@ -17,6 +16,7 @@
     }
 
     .background-art {
+        display: block;
         user-select: none;
         position: absolute;
         z-index: -1;
@@ -26,10 +26,20 @@
         height: 100%;
         background-position: center center;
         background-size: cover;
-        box-shadow: inset 150px -150px 250px 10px $darkBackground;
-        //border: $borderPadding solid $darkBackground;
-        border-bottom-left-radius: 100%;
+        //box-shadow: inset 150px -150px 250px 10px $darkBackground;
+        //border-bottom-left-radius: 100%;
         opacity: 0.3;
+
+        &:after {
+            content: '';
+            position: absolute;
+            z-index: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20%;
+            background: linear-gradient( rgba($darkBackground,0), $darkBackground);
+        }
     }
 
     .add-album-btn {

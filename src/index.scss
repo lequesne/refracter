@@ -1,9 +1,10 @@
 //libraries
 @import url('https://fonts.googleapis.com/css?family=Titillium+Web');
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+//@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 @import url('http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css');
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css');
-@import url('https://npmcdn.com/react-bootstrap-table/dist/react-bootstrap-table-all.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css');
 //@import '/../node_modules/normaliz.css/normalize'
 
 
@@ -26,9 +27,18 @@ $medLightBackground: #555;
 $medBackground: #333;
 $darkBackground: #121212;
 
+//timings
+$standardHoverTime: 0.2s;
+
+//shadow depths
+$dropShadowDepth1: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+$dropShadowDepth2: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+$dropShadowDepth3: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+
 //global imports
 @import 'scss/layout';
 @import 'scss/typography';
+@import 'scss/buttons';
 @import 'scss/forms';
 @import 'scss/spinners';
 
@@ -36,6 +46,7 @@ $darkBackground: #121212;
 @import 'components/TopBar';
 @import 'components/PlayerBar';
 @import 'components/TrackList';
+@import 'components/TileList';
 @import 'components/Tile';
 
 //container imports

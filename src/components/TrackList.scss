@@ -6,12 +6,13 @@
     }
 
     table {
+        margin: 0;
 
         thead {
             tr {
                 border: none;
                 background: none !important;
-                border-bottom: 1px solid $white;
+                //border-bottom: 1px solid $white;
 
                 .play-btn-col {
                     width: 40px;
@@ -27,12 +28,26 @@
 
                 th {
                     border: none;
+                    text-transform: uppercase;
+                    padding: 0.75em;
+                    max-width: 177px;
+                    list-height: 1em;
+
+                    span {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: inline-block;
+                        max-width: 100%;
+                    }
 
                     &.pointer:hover {
                         background: rgba($lightBackground,0.2);
                     }
 
                     .sort-icon {
+                        position: relative;
+                        top: 5px;
                         margin-right: 0.5em;
                     }
                 }
@@ -47,7 +62,17 @@
                 cursor: default;
                 border: none;
                 font-size: 1.2em;
-                padding: 0.75em;
+                padding: 1em 1em 0.8em 1em;
+                max-width: 177px;
+                line-height: 1em;
+
+                span {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: inline-block;
+                    max-width: 100%;
+                }
             }
 
             .play-icon {
@@ -67,24 +92,39 @@
             }
 
             &:hover{
-                background: lighten( $darkBackground, 10%);
+                background: $darkBackground;
             }
 
             &.selected-track {
                 background: $lightBackground;
                 color: $darkBackground;
+
+                a, a:visited {
+                    color: $darkBackground;
+                }
             }
 
             &.active-track {
                 background: $primaryColor;
                 color: $darkBackground;
 
+                a, a:visited {
+                    color: $darkBackground;
+                }
+
                 @import '../scss/animEqualizer';
 
                 .play-icon.equalizer {
                     transform-origin: 0 0;
                     transform: scale(0.1) rotate(180deg);
-                    margin: 2em;
+                    margin: 2.1em;
+
+                    &:hover {
+
+                        &:before {
+                            transform: none;
+                        }
+                    }
                 }
 
             }

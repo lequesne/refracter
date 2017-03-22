@@ -36,7 +36,7 @@ if ( $playlistName ) {
 
             if ( $playlistField['playlistID'] ) {
                 //playlist with name already exists for user
-                $error[] = 'User already has a playlist of that name.';
+                $error[] = 'Playlist was not created because you already have a playlist of the same name.';
                 $responseObject['errors'] = $error;
                 $responseObject['success'] = false;
             } else {

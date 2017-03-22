@@ -1,6 +1,7 @@
 import * as refracter from '../refracter';
 import React, {Component} from 'react';
-import { ToastContainer } from 'react-toastify';
+import ScrollArea from 'react-scrollbar';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import TopBar from '../components/TopBar';
 import Sidebar from './Sidebar';
@@ -49,6 +50,13 @@ class App extends Component {
     }
 
     componentDidMount(){
+
+        //will you kindly welcome the user
+        if ( this.state.user ){
+            toast(`Welcome ${this.state.user.username}.`, {
+              type: toast.TYPE.INFO
+            });
+        }
     }
 
     checkForUserEmailActivation(){
@@ -62,11 +70,16 @@ class App extends Component {
             }).then(response => {
 
                 if ( response.success ) {
-                    // NOTE: account activated and show login pane and message telling user to login, possible auto log in
+                    //account activated and show login pane and message telling user to sign in
                     this.showModal('showLogInForm');
-                    alert('Activation successful! Please Login.');
+                    toast(`Your account was activated! Please sign in.`, {
+                      type: toast.TYPE.SUCCESS
+                    });
                 } else {
                     //possibly show activation error here
+                    toast(`Activation error: ${response}`, {
+                      type: toast.TYPE.SUCCESS
+                    });
                 }
 
             }).catch(error => {
@@ -97,7 +110,6 @@ class App extends Component {
             //set login cookie
             refracter.setCookie( refracter.loginCookieName, user.cookie, 14 );
 
-            //display login alert/toast
             console.log('User logged in: ', this.state.user);
 
         } else {
@@ -169,8 +181,6 @@ class App extends Component {
         });
     }
 
-    //TODO replace show/close forms with a function that takes the state key to show or hide (showSignUpForm or showLogInForm)
-
     showForgotPasswordForm(){
         this.setState({
             showForgotPasswordForm: true
@@ -221,6 +231,8 @@ class App extends Component {
         return (
             <div className="Refracter-app">
 
+                <ToastContainer autoClose={5000} position="top-right"/>
+
                 <TopBar
                     user={this.state.user}
                     logOutUser={this.logOutUser}
@@ -240,12 +252,16 @@ class App extends Component {
                 />
 
                 <div className="content-window">
-                    {React.cloneElement( this.props.children, {
-                        //appState: this.state
-                        user: this.state.user,
-                        playing: this.state.playing,
-                        activeTrack: this.state.activeTrack
-                    })}
+                    <ScrollArea className="scrollable" smoothScrolling={true} speed={1.2} >
+                        <div>
+                            {React.cloneElement( this.props.children, {
+                                //appState: this.state
+                                user: this.state.user,
+                                playing: this.state.playing,
+                                activeTrack: this.state.activeTrack
+                            })}
+                        </div>
+                    </ScrollArea>
                 </div>
 
                 <SignUpForm

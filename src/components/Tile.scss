@@ -1,3 +1,58 @@
 .Tile {
-    display: inline-block;
+    cursor: pointer;
+    display: block;
+    //color: $white;
+    background: $medBackground;
+    margin: 15px 0;
+    transition: all $standardHoverTime;
+    box-shadow: $dropShadowDepth1;
+
+    &:hover {
+        box-shadow: $dropShadowDepth2;
+    }
+
+    .tile-image {
+        position: relative;
+        width: 100%;
+        padding-bottom: 100%;
+
+        .icon {
+            font-size: calc(4vw + 4vh);
+            color: $primaryColor !important;
+            //opacity: 0.5;
+        }
+
+        img {
+            width: 100%;
+            position: absolute;
+        }
+    }
+
+    .tile-info {
+        padding: 0.5em;
+        font-size: 0.9em;
+
+        .tile-main-title, .tile-secondary-title {
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tile-main-title {
+            font-size: 1.1em;
+        }
+
+        .tile-secondary-title {
+            font-weight: bold;
+        }
+    }
+}
+
+.slick-slider {
+
+    .Tile {
+        margin: 15px 0;
+    }
+
 }

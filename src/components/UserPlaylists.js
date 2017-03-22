@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {browserHistory} from 'react-router';
 import {Button} from 'react-bootstrap';
 import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu";
+import {toast} from 'react-toastify';
 
 class UserPlaylists extends Component {
 
@@ -117,6 +118,7 @@ class UserPlaylists extends Component {
             refracter.editUserPlaylist(refracter.userKey, playlistName, playlistID).then(response => {
                 //return playlist object
 
+
                 if ( response.newPlaylistID && response.newPlaylistName ){
                     //new playlist was created
 
@@ -128,10 +130,15 @@ class UserPlaylists extends Component {
 
                     this.context.parentState.updateUserPlaylists(this.state.playlists);
 
-                    //TODO show new playlist success in toast
+                    //show new playlist success in toast
+                    toast(`The playlist '${response.newPlaylistName}' was just created.`, {
+                      type: toast.TYPE.SUCCESS
+                    });
 
                 } else if ( response.newPlaylistName ) {
                     //playlist name was updated
+
+                    //TODO trigger name update in app state if on that playlist page (update title)
 
                     //update existing playlist with new name in state
                     for ( let playlist of this.state.playlists ){
@@ -144,7 +151,10 @@ class UserPlaylists extends Component {
 
                     this.context.parentState.updateUserPlaylists(this.state.playlists);
 
-                    //TODO show playlist updated name success in toast
+                    //show playlist updated name success in toast
+                    toast(`Changed playlist name to '${response.newPlaylistName}'.`, {
+                      type: toast.TYPE.SUCCESS
+                    });
 
                 }
 
@@ -154,12 +164,16 @@ class UserPlaylists extends Component {
                 });
 
             }).catch(error => {
-                //TODO show errors in toast
-                console.log('editUserPlaylist: ', error);
+                //show errors in toast
+                toast(`${error}`, {
+                  type: toast.TYPE.ERROR
+                });
                 //reset newPlaylist input
                 this.setState({
                     newPlaylist: null
                 });
+
+                console.log('editUserPlaylist: ', error);
             });
 
         }
@@ -215,7 +229,7 @@ class UserPlaylists extends Component {
                         return (
                             <input
                                 ref="editingPlaylist"
-                                className="playlist-link"
+                                className="link"
                                 defaultValue={playlist.name}
                                 data-id={playlist.id}
                                 onBlur={this.onPlaylistBlur}
@@ -234,7 +248,7 @@ class UserPlaylists extends Component {
                                     'data-drag-ndrop-add-tracks': true,
                                     'data-playlist-Id': playlist.id,
                                     'data-playlist-name': playlist.name,
-                                    className: 'playlist-link dragNdrop-droppable',
+                                    className: 'link dragNdrop-droppable',
                                     onClick: ()=>this.linkToPlaylist(playlist.id),
                                     //onDoubleClick: () => this.existingPlaylistEdit(playlistIndex)
                                 }}
@@ -245,7 +259,7 @@ class UserPlaylists extends Component {
                                         name: playlist.name
                                     }
                                 }}>
-                                {playlist.name}
+                                <span className="text"><span className="list ion-ios-list-outline"></span><span className="notes ion-ios-musical-notes"></span> {playlist.name}</span>
                             </ContextMenuTrigger>
 
                         )
@@ -256,7 +270,7 @@ class UserPlaylists extends Component {
                 {this.state.newPlaylist ?
                     <input
                         ref="newPlaylist"
-                        className="playlist-link"
+                        className="link"
                         placeholder="Enter new playlist name"
                         onBlur={this.onPlaylistBlur}
                         onKeyPress={this.onPlaylistEnter}
@@ -264,7 +278,7 @@ class UserPlaylists extends Component {
                 : null}
 
                 { !this.state.newPlaylist
-                ? <Button onClick={this.createNewPlaylist}>Create new playlist</Button>
+                ? <Button className="new-playlist" onClick={this.createNewPlaylist}>Create new playlist</Button>
                 : null
                 }
 

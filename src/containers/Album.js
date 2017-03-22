@@ -1,7 +1,8 @@
 import * as refracter from '../refracter';
 import React, {Component} from 'react';
-//import {Link} from 'react-router';
+import {Link, browserHistory} from 'react-router';
 import {Row, Col, Button} from 'react-bootstrap';
+import {toast} from 'react-toastify';
 import TrackList from '../components/TrackList';
 
 class Album extends Component {
@@ -28,18 +29,23 @@ class Album extends Component {
                 tracks: albumData.tracks
             });
 
-            //TODO fix if track deeplink, play matching track
+            //if track name is passed as url param, play this track on load
             if (this.props.params.track) {
                 for (let track of albumData.tracks ) {
                     if (track.title === this.props.params.track) {
+                        //play track from url
                         this.context.parentState.updateQueue(track, albumData.tracks);
-                        //TODO add scroll to active track on load
+                        //scroll to active track on load
+                        document.querySelectorAll(`[data-track-id~="${track.trackID}"]`)[0].scrollIntoView();
                         return;
                     }
                 }
             }
 
         }).catch(err => {
+            //TODO show error to use and redirect
+            browserHistory.push(`/artist/${this.props.params.artist}`);
+
             console.log('ERROR RETURNED: ', err);
         });
 
@@ -50,8 +56,19 @@ class Album extends Component {
         playlistID = playlistID ? playlistID : '';
 
         refracter.addUserTracks(refracter.userKey, this.state.tracks, playlistID).then(response => {
-            //TODO hide add album to library/playlist if just added to that
+
             console.log('Album added to library: ', response);
+
+            //let addContext = playlistID ? playlistID : null;
+
+            toast(`${this.state.album.name} was added to your library.`, {
+              type: toast.TYPE.SUCCESS
+            });
+
+            this.setState({
+                albumInLibrary: true
+            });
+
         }).catch(err => {
             console.log('ERROR RETURNED: ', err);
         });
@@ -79,27 +96,23 @@ class Album extends Component {
 
                 <div className="container">
 
-                    <Row className="album-info">
+                    <Row>
 
-                        <Col sm={12} smPush={0} md={10} mdPush={1}>
+                        <Col md={12} mdPush={0} lg={10} lgPush={1} >
 
-                            <Row>
-                                <Col sm={3}>
-                                    <img className="album-art" src={this.state.albumArt}/>
-                                </Col>
-                                <Col sm={9}>
-                                    <h1>{this.state.album.name}</h1>
+                            <div className="album-info">
+                                <img className="album-art" src={this.state.albumArt}/>
+                                <h1>{this.state.album.name}</h1>
 
-                                    <h2>{this.state.album.artist}</h2>
+                                <h2><Link to={`/artist/${encodeURIComponent(this.state.album.artist)}`}>{this.state.album.artist}</Link></h2>
 
-                                    {albumTags ? <div className="tags">{albumTags}</div> : null}
+                                {albumTags ? <div className="tags">{albumTags}</div> : null}
 
-                                    { this.props.user && !this.state.albumInLibrary
-                                        ? <Button className="add-album-btn" onClick={()=>this.addAlbumToUser()}>Add album to library</Button>
-                                        : null
-                                    }
-                                </Col>
-                            </Row>
+                                { this.props.user && !this.state.albumInLibrary
+                                    ? <Button className="add-album-btn" onClick={()=>this.addAlbumToUser()}>Add album to library</Button>
+                                    : null
+                                }
+                            </div>
 
                             <div className="card">
 

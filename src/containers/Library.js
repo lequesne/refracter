@@ -5,7 +5,7 @@ import {Col} from 'react-bootstrap';
 import TrackList from '../components/TrackList';
 
 //TODO library quick type filter (possibly update queue with only filtered tracks)
-//TODO add library song, artist, album sorting
+//TODO add library song, artist, album filters
 
 class Library extends Component {
 
@@ -50,22 +50,26 @@ class Library extends Component {
 
                     <Col sm={12} smPush={0} md={10} mdPush={1}>
 
+                        <div className="card">
+
                         <h1>Library</h1>
 
-                        { this.state.tracks.length > 0 ?
-                            <TrackList
-                                defaultSortName="artist"
-                                defaultSortOrder="desc"
-                                isLibrary={true}
-                                user={this.props.user}
-                                playing={this.props.playing}
-                                tracks={this.state.tracks}
-                                queueId={this.props.queueId}
-                                activeTrack={this.props.activeTrack}
-                                updateQueue={this.context.parentState.updateQueue}
-                            />
-                            : <p>Loading or no tracks in state</p>
-                        }
+                            { this.state.tracks.length > 0 ?
+                                <TrackList
+                                    defaultSortName="artist"
+                                    defaultSortOrder="desc"
+                                    isLibrary={true}
+                                    user={this.props.user}
+                                    playing={this.props.playing}
+                                    tracks={this.state.tracks}
+                                    queueId={this.props.queueId}
+                                    activeTrack={this.props.activeTrack}
+                                    updateQueue={this.context.parentState.updateQueue}
+                                />
+                                : <p>Loading or no tracks in state</p>
+                            }
+
+                        </div>
 
                     </Col>
 

@@ -4,6 +4,7 @@
 
 //imports
 import { browserHistory } from 'react-router';
+import { toast } from 'react-toastify';
 import 'whatwg-fetch';
 
 //define some global variables
@@ -90,14 +91,17 @@ export const revertSortFunc = (a, b, order) => { // order is desc or asc
 export const getLastFMTrackLink = (trackName, trackArtist) => {
 
     //first get album info from lastFM
-    fetch(`${lastFmEndpoint}?method=track.getinfo&track=${trackName}&artist=${trackArtist}&api_key=${lastFmApiKey()}&format=json`).then(response => {
+    fetch(`${lastFmEndpoint}?method=track.getinfo&track=${encodeURIComponent(trackName)}&artist=${encodeURIComponent(trackArtist)}&api_key=${lastFmApiKey()}&format=json`).then(response => {
         return response.json();
     }).then(response => {
-        console.log(response);
 
-        if ( response.track ) {
+        if ( response.track && response.track.album ) {
             let trackLink = `/album/${encodeURIComponent(trackArtist)}/${encodeURIComponent(response.track.album.title)}/${encodeURIComponent(trackName)}`
             browserHistory.push(trackLink);
+        } else {
+            toast(`Data for this track could not be found. :(`, {
+              type: toast.TYPE.ERROR
+            });
         }
 
     }).catch(err => {
@@ -105,18 +109,106 @@ export const getLastFMTrackLink = (trackName, trackArtist) => {
     });
 }
 
+export const search = (searchQuery) => {
+
+    return new Promise(function(resolve, reject) {
+
+        let requestsMade = 0;
+        let searchData = {};
+        const shouldResolve = () => {
+            if ( requestsMade === requestsToMake.length ) {
+                resolve(searchData);
+            }
+        }
+
+        //first get album info from lastFM
+        let requestsToMake = [
+
+            fetch(`${lastFmEndpoint}?method=artist.search&artist=${searchQuery}&api_key=${lastFmApiKey()}&limit=16&format=json`).then(response => {
+                return response.json();
+            }).then(response => {
+                requestsMade++;
+                searchData.artists = response.results.artistmatches.artist;
+                shouldResolve();
+            }).catch(err => {
+                console.log(err);
+            }),
+
+            //fetch album matches for artist
+            fetch(`${lastFmEndpoint}?method=album.search&album=${searchQuery}&api_key=${lastFmApiKey()}&limit=16&format=json`).then(response => {
+                return response.json();
+            }).then(response => {
+                requestsMade++;
+                searchData.albums = response.results.albummatches.album;
+                shouldResolve();
+            }).catch(err => {
+                console.log(err);
+            }),
+
+            //fetch track matches for artist
+            fetch(`${lastFmEndpoint}?method=track.search&track=${searchQuery}&api_key=${lastFmApiKey()}&limit=16&format=json`).then(response => {
+                return response.json();
+            }).then(response => {
+                requestsMade++;
+                searchData.tracks = response.results.trackmatches.track;
+                shouldResolve();
+            }).catch(err => {
+                console.log(err);
+            })
+
+        ];
+
+    });
+}
+
 export const getArtistInfo = (artist) => {
 
     return new Promise(function(resolve, reject) {
 
+        let requestsMade = 0;
+        let artistData = {};
+        const shouldResolve = () => {
+            if ( requestsMade === requestsToMake.length ) {
+                resolve(artistData);
+            }
+        }
+
         //first get album info from lastFM
-        fetch(`${lastFmEndpoint}?method=artist.getinfo&artist=${artist}&api_key=${lastFmApiKey()}&format=json`).then(response => {
-            return response.json();
-        }).then(response => {
-            resolve(response.artist);
-        }).catch(err => {
-            reject(err);
-        });
+        let requestsToMake = [
+
+            fetch(`${lastFmEndpoint}?method=artist.getinfo&artist=${artist}&api_key=${lastFmApiKey()}&format=json`).then(response => {
+                return response.json();
+            }).then(response => {
+                requestsMade++;
+                artistData.artistInfo = response.artist;
+                shouldResolve();
+            }).catch(err => {
+                console.log(err);
+            }),
+
+            //fetch album matches for artist
+            fetch(`${lastFmEndpoint}?method=artist.getTopAlbums&artist=${artist}&limit=24&api_key=${lastFmApiKey()}&format=json`).then(response => {
+                return response.json();
+            }).then(response => {
+                requestsMade++;
+                artistData.artistAlbums = response.topalbums.album;
+                shouldResolve();
+            }).catch(err => {
+                console.log(err);
+            }),
+
+            //fetch track matches for artist
+            fetch(`${lastFmEndpoint}?method=artist.getTopTracks&artist=${artist}&limit=12&api_key=${lastFmApiKey()}&format=json`).then(response => {
+                return response.json();
+            }).then(response => {
+                requestsMade++;
+                artistData.artistTracks = response.toptracks.track;
+                shouldResolve();
+            }).catch(err => {
+                console.log(err);
+            })
+
+        ];
 
     });
 }
@@ -132,8 +224,12 @@ export const findTracksByAlbum = (artist, album, key) => {
             return response.json();
         }).then(response => {
 
-            //set lastfm album info in return object
-            albumData.info = response.album;
+            if ( response.album && response.album.tracks.track.length > 0 ) {
+                //set lastfm album info in return object
+                albumData.info = response.album;
+            } else {
+                return reject('Unfortunately no track information could be found for this album.');
+            }
 
             //then see if tracks are already in database
             fetch(`${refracterEndpoint}getAlbum.php?artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}&key=${key}`).then(response => {
@@ -222,7 +318,7 @@ export const getTrackSource = (track, key) => {
                 let query = `${track.artist} ${track.title}`;
 
                 //youtube search
-                fetch(`https://www.googleapis.com/youtube/v3/search/?part=id&key=AIzaSyBqJN5ztzfbty3nZaosCYkJB3TcsETL344&q=${query}`).then(response => {
+                fetch(`https://www.googleapis.com/youtube/v3/search/?part=snippet&key=AIzaSyBqJN5ztzfbty3nZaosCYkJB3TcsETL344&type=video&q=${query}`).then(response => {
                     return response.json();
                 }).then(response => {
 
