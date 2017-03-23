@@ -200,12 +200,12 @@ class PlayerBar extends Component {
             }
         };
 
-        //set volume icons based off volume range
-        let volumeAmountClass = 'ion-android-volume-off icon';
+        //set volume icon absolutes based off volume range
+        let volumeAmountClass = 'ion-android-volume-off icon absolute';
         if (this.state.setVolume > 50) {
-            volumeAmountClass = 'ion-android-volume-up icon';
+            volumeAmountClass = 'ion-android-volume-up icon absolute';
         } else if (this.state.setVolume > 0) {
-            volumeAmountClass = 'ion-android-volume-down icon';
+            volumeAmountClass = 'ion-android-volume-down icon absolute';
         }
 
         return (
@@ -216,16 +216,16 @@ class PlayerBar extends Component {
                 <div className="player-controls-lhs">
 
                     <div onClick={this.props.onPrevTrack} title="Previous track" className="prev-track player-btn">
-                        <div className="ion-ios-skipbackward icon"></div>
+                        <div className="ion-ios-skipbackward icon absolute"></div>
                     </div>
                     <div onClick={this.togglePlayPause.bind(this)} title="Play / Pause" className="player-play-pause player-btn">
                         {this.state.playing
-                            ? <div className="ion-pause icon"></div>
-                            : <div className="ion-play icon"></div>
+                            ? <div className="ion-pause icon absolute"></div>
+                            : <div className="ion-play icon absolute"></div>
                         }
                     </div>
                     <div onClick={this.props.onNextTrack} title="Previous track" className="next-track player-btn">
-                        <div className="ion-ios-skipforward icon"></div>
+                        <div className="ion-ios-skipforward icon absolute"></div>
                     </div>
                     <div className="volume-mute">
                         <div onClick={this.toggleMuteBtn.bind(this)} title="Mute / Unmute" className="mute-unmute player-btn">
@@ -260,10 +260,10 @@ class PlayerBar extends Component {
 
                 <div className="player-controls-rhs">
                     <div title="Loop On / Off" className="loop-track player-btn">
-                        <div className="ion-loop icon"></div>
+                        <div className="ion-loop icon absolute"></div>
                     </div>
                     <div title="Shuffle On / Off" className="shuffle-tracks player-btn">
-                        <div className="ion-shuffle icon"></div>
+                        <div className="ion-shuffle icon absolute absolute"></div>
                     </div>
                 </div>
 

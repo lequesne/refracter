@@ -1,7 +1,8 @@
-button.btn, button.btn-default {
+button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents div  {
+    height: $defaultButtonHeight;
     border-radius: 0;
     border: none;
-    color: white;
+    color: $white;
     background: $medLightBackground;
     padding: 0.75em 1em;
     font-weight: 500;
@@ -10,6 +11,36 @@ button.btn, button.btn-default {
 
     &:hover {
         box-shadow: $dropShadowDepth1;
-        background: $white;
+        background: $primaryColor;
+        color: white;
+    }
+
+
+}
+
+.dropdown {
+    position: relative;
+    height: $defaultButtonHeight;
+    max-width: 250px;
+    background: $medBackground;
+    overflow: hidden;
+    transition: all .3s;
+
+    &:hover {
+        box-shadow: inet $dropShadowDepth2;
+    }
+
+    .dropdown-contents {
+        position: absolute;
+        top: $defaultButtonHeight;
+        left: 0;
+        width: 100%;
+    }
+
+    .dropdown-label {
+        text-align: center;
+        .icon {
+            float: right;
+        }
     }
 }

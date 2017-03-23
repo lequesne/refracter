@@ -25,7 +25,7 @@ hr {
 }
 
 .padded-inner {
-    position: absolute;
+    //position: absolute;
     top: $borderPadding;
     left: $borderPadding;
     width: 100%;
@@ -65,10 +65,16 @@ hr {
     margin: 50px 0;
     padding: 50px;
     background: rgba($lightBackground,0.1);
+
+    h1, h2 {
+        &:first-child {
+            margin-top: 0;
+        }
+    }
 }
 
 //icons
-.icon {
+.icon.absolute {
     text-align: center;
     user-select: none;
 
@@ -80,6 +86,10 @@ hr {
         margin-top: -0.5em;
     }
 
+
+}
+
+.icon {
     &:hover {
         text-decoration: none !important;
     }

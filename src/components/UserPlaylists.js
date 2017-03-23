@@ -128,7 +128,8 @@ class UserPlaylists extends Component {
                         name: response.newPlaylistName
                     });
 
-                    this.context.parentState.updateUserPlaylists(this.state.playlists);
+                    //update the app user playlists state
+                    this.props.updateUserPlaylists(this.state.playlists);
 
                     //show new playlist success in toast
                     toast(`The playlist '${response.newPlaylistName}' was just created.`, {
@@ -136,9 +137,7 @@ class UserPlaylists extends Component {
                     });
 
                 } else if ( response.newPlaylistName ) {
-                    //playlist name was updated
-
-                    //TODO trigger name update in app state if on that playlist page (update title)
+                    //playlist name was edited
 
                     //update existing playlist with new name in state
                     for ( let playlist of this.state.playlists ){
@@ -149,7 +148,8 @@ class UserPlaylists extends Component {
                         }
                     }
 
-                    this.context.parentState.updateUserPlaylists(this.state.playlists);
+                    //update the app user playlists state
+                    this.props.updateUserPlaylists(this.state.playlists);
 
                     //show playlist updated name success in toast
                     toast(`Changed playlist name to '${response.newPlaylistName}'.`, {
@@ -197,6 +197,9 @@ class UserPlaylists extends Component {
                 playlists: this.state.playlists
             });
 
+            //update the app user playlists state
+            this.props.updateUserPlaylists(this.state.playlists);
+
         }).catch(error => {
             console.log('removeUserPlaylist: ', error);
         });
@@ -241,10 +244,11 @@ class UserPlaylists extends Component {
                         return (
 
                             <ContextMenuTrigger
+                                key={playlistIndex}
                                 renderTag={'a'}
                                 id="playlists-context"
-                                key={playlistIndex}
                                 attributes={{
+                                    'title': `Playlist - ${playlist.name}`,
                                     'data-drag-ndrop-add-tracks': true,
                                     'data-playlist-Id': playlist.id,
                                     'data-playlist-name': playlist.name,
@@ -259,7 +263,13 @@ class UserPlaylists extends Component {
                                         name: playlist.name
                                     }
                                 }}>
-                                <span className="text"><span className="list ion-ios-list-outline"></span><span className="notes ion-ios-musical-notes"></span> {playlist.name}</span>
+                                <span className="text">
+                                    <span className="playlist-icon">
+                                        <span className="list ion-ios-list-outline"></span>
+                                        <span className="notes ion-ios-musical-notes"></span>
+                                    </span>
+                                    {playlist.name}
+                                </span>
                             </ContextMenuTrigger>
 
                         )

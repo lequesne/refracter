@@ -30,6 +30,7 @@ class App extends Component {
         this.checkPasswordReset = this.checkPasswordReset.bind(this);
         this.successfulLogin = this.successfulLogin.bind(this);
         this.logOutUser = this.logOutUser.bind(this);
+        this.updateUserPlaylists = this.updateUserPlaylists.bind(this);
         this.updateQueue = this.updateQueue.bind(this);
         this.playNextTrackInQueue = this.playNextTrackInQueue.bind(this);
         this.playPreviousTrackInQueue = this.playPreviousTrackInQueue.bind(this);
@@ -136,6 +137,15 @@ class App extends Component {
 
     }
 
+    updateUserPlaylists(playlists){
+        //updates app state with updated playlists
+        this.setState({
+            user: this.state.user.playlists = playlists
+        });
+
+        console.log(this.state.user.playlists);
+    }
+
     updateQueue(track, trackList) {
 
         if ( !track && trackList ) {
@@ -240,6 +250,7 @@ class App extends Component {
 
                 <Sidebar
                     user={this.state.user}
+                    updateUserPlaylists={this.updateUserPlaylists}
                     activeTrack={this.state.activeTrack}
                 />
 

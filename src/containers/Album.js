@@ -4,6 +4,7 @@ import {Link, browserHistory} from 'react-router';
 import {Row, Col, Button} from 'react-bootstrap';
 import {toast} from 'react-toastify';
 import TrackList from '../components/TrackList';
+import Dropdown from '../components/Dropdown';
 
 class Album extends Component {
 
@@ -51,24 +52,23 @@ class Album extends Component {
 
     }
 
-    addAlbumToUser(playlistID){
+    addAlbumToUser(playlistID, playlistName){
         //pass optional playlist id if added to playlist
         playlistID = playlistID ? playlistID : '';
+        playlistName = playlistName ? playlistName : '';
 
-        refracter.addUserTracks(refracter.userKey, this.state.tracks, playlistID).then(response => {
+        refracter.addUserTracks(refracter.userKey, this.state.tracks, playlistID, playlistName).then(response => {
 
-            console.log('Album added to library: ', response);
+            let addContext = playlistName && playlistID ? playlistName : 'library';
 
-            //let addContext = playlistID ? playlistID : null;
-
-            toast(`${this.state.album.name} was added to your library.`, {
+            toast(`${this.state.album.name} was added to ${addContext}.`, {
               type: toast.TYPE.SUCCESS
             });
-
             this.setState({
                 albumInLibrary: true
             });
 
+            console.log('Album added to library: ', response);
         }).catch(err => {
             console.log('ERROR RETURNED: ', err);
         });
@@ -108,10 +108,18 @@ class Album extends Component {
 
                                 {albumTags ? <div className="tags">{albumTags}</div> : null}
 
-                                { this.props.user && !this.state.albumInLibrary
-                                    ? <Button className="add-album-btn" onClick={()=>this.addAlbumToUser()}>Add album to library</Button>
-                                    : null
-                                }
+                                { this.props.user ?
+                                //add album drop down
+                                <Dropdown label="Add album">
+                                    <div onClick={()=>this.addAlbumToUser()}>
+                                        Library
+                                    </div>
+                                    {this.props.user ? this.props.user.playlists.map((playlist, index) => {
+                                        return (<div key={index} onClick={()=>this.addAlbumToUser(playlist.id, playlist.name)}>{playlist.name}</div>);
+                                    }):null}
+                                </Dropdown>
+                                : null}
+
                             </div>
 
                             <div className="card">

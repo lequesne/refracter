@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { browserHistory } from 'react-router';
 import { Button } from 'react-bootstrap';
-import RefracterLogo from '../assets/refracter-logo.svg';
+import RefracterLogo from '../assets/refracter-logo-full.svg';
 
 class TopBar extends Component {
 
@@ -30,7 +30,7 @@ class TopBar extends Component {
                     <img className="refracter-logo" src={RefracterLogo} alt="Refracter"/>
                     <label className="seach-input-container">
                         <input id="search-input" type="text" placeholder="Search..." defaultValue={this.state.searchValue} onKeyPress={ this.performNewSearch }/>
-                        <div className="ion-android-search icon"></div>
+                        <div className="ion-android-search icon absolute"></div>
                     </label>
                     { this.props.user
                         ? <Button onClick={this.props.logOutUser} className="signout-btn">Sign Out</Button>

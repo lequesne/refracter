@@ -53,7 +53,7 @@ class TrackList extends Component {
 
     componentDidMount() {
         //run initial sort based off initial state/props
-        this.onSortChange(this.state.sortName, this.state.sortOrder);
+        this.onSortChange(this.state.sortName, this.state.sortOrder, true);
     }
 
     componentDidUpdate(){
@@ -272,9 +272,9 @@ class TrackList extends Component {
                 if (response.success) {
                     //show toast
 
-                    let addContext = playlistName ? playlistName : 'library';
+                    let addContext = playlistName && playlistID ? playlistName : 'library';
 
-                    toast(`${this.state.selectedTracks.length} track${this.state.selectedTracks.length>1?'s where':' was'} added to ${addContext}.`, {
+                    toast(`${this.state.selectedTracks.length} track${this.state.selectedTracks.length>1?'s were':' was'} added to ${addContext}.`, {
                       type: toast.TYPE.SUCCESS
                     });
                     console.log('Tracks added to library or playlist: ', response);
@@ -341,7 +341,7 @@ class TrackList extends Component {
         this.onSortChange(sortName, sortOrder);
     }
 
-    onSortChange(sortName, sortOrder) {
+    onSortChange(sortName, sortOrder, isInitialSort) {
 
         //first sort list based off provided sortName
         let tracks = this.state.tracks;
@@ -432,8 +432,11 @@ class TrackList extends Component {
 
         //set sorted tracks in state
         this.setState({tracks: sortedTrackList})
+
         //update app queue with newly sorted tracklist
-        this.props.updateQueue(null, sortedTrackList);
+        if ( !isInitialSort ) {
+            this.props.updateQueue(null, sortedTrackList);
+        }
     }
 
     activeTrackClass(track) {

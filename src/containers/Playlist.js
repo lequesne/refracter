@@ -23,8 +23,19 @@ class Playlist extends Component {
 
     componentWillReceiveProps(nextProps) {
         //only load new playlist if new playlist id
-        if ( nextProps.params.id !== this.props.params.id )
+        if ( nextProps.params.id !== this.props.params.id ) {
             this.loadPlaylist(nextProps.params.id);
+        }
+
+        //update playlist name
+        for ( let playlist of nextProps.user.playlists ) {
+            if ( playlist.id === this.state.playlistID ) {
+                this.setState({
+                    playlistName: playlist.name
+                });
+                break;
+            }
+        }
     }
 
     loadPlaylist(playlistID){
@@ -61,7 +72,13 @@ class Playlist extends Component {
 
                         <div className="card">
 
-                            <h1>{this.state.playlistName}</h1>
+                            <h1>
+                                <span className="playlist-icon">
+                                    <span className="list ion-ios-list-outline"></span>
+                                    <span className="notes ion-ios-musical-notes"></span>
+                                </span>
+                                {this.state.playlistName}
+                            </h1>
 
                             { this.state.tracks.length > 0 ?
                                 <TrackList

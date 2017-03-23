@@ -40,14 +40,15 @@
     }
 
     .tags {
-        margin: 1em 0;
+        margin: 0.4em 0;
     }
 
     .album-info {
         position: relative;
         margin: 50px 0;
         padding-left: 210px;
-        min-height: 185px;
+        height: 185px;
+        overflow: visible;
     }
 
     .album-art {
@@ -55,6 +56,7 @@
         top: 0;
         left: 0;
         width: 185px;
+        margin-bottom: 0;
     }
 
     .add-album-btn {

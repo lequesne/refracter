@@ -52,7 +52,7 @@ class Library extends Component {
 
                         <div className="card">
 
-                        <h1>Library</h1>
+                        <h1><span className="icon library ion-ios-book"></span>{this.props.user.username}'s  library</h1>
 
                             { this.state.tracks.length > 0 ?
                                 <TrackList
