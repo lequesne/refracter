@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { browserHistory } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { Button } from 'react-bootstrap';
 import RefracterLogo from '../assets/refracter-logo-full.svg';
 
@@ -27,13 +27,16 @@ class TopBar extends Component {
         return (
             <div className="topbar">
                 <div className="padded-inner">
-                    <img className="refracter-logo" src={RefracterLogo} alt="Refracter"/>
+                    <Link to="/" className="refracter-refracter-logo-full refracter-logo icon"><span className="alpha-label">Alpha</span></Link>
                     <label className="seach-input-container">
-                        <input id="search-input" type="text" placeholder="Search..." defaultValue={this.state.searchValue} onKeyPress={ this.performNewSearch }/>
+                        <input id="search-input" type="text" placeholder="Search" defaultValue={this.state.searchValue} onKeyPress={ this.performNewSearch }/>
                         <div className="ion-android-search icon absolute"></div>
                     </label>
                     { this.props.user
-                        ? <Button onClick={this.props.logOutUser} className="signout-btn">Sign Out</Button>
+                        ? <div className="logged-in">
+                            {/* <div className="username"><span className="ion-person icon"></span> {this.props.user.username}</div> */}
+                            <Button onClick={this.props.logOutUser} className="signout-btn">Sign Out</Button>
+                        </div>
                         : null
                     }
                 </div>

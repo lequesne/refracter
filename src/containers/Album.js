@@ -22,6 +22,8 @@ class Album extends Component {
 
     componentWillMount() {
 
+        this.context.parentState.showPageSpinner();
+
         refracter.findTracksByAlbum(this.props.params.artist, this.props.params.album, refracter.userKey).then(albumData => {
 
             this.setState({
@@ -37,16 +39,20 @@ class Album extends Component {
                         //play track from url
                         this.context.parentState.updateQueue(track, albumData.tracks);
                         //scroll to active track on load
-                        document.querySelectorAll(`[data-track-id~="${track.trackID}"]`)[0].scrollIntoView();
-                        return;
+                        //document.querySelectorAll(`[data-track-id~="${track.trackID}"]`)[0].scrollIntoView();
+                        break;
                     }
                 }
             }
 
-        }).catch(err => {
-            //TODO show error to use and redirect
-            browserHistory.push(`/artist/${this.props.params.artist}`);
+            this.context.parentState.hidePageSpinner();
 
+        }).catch(err => {
+            browserHistory.push(`/artist/${this.props.params.artist}`);
+            toast(err, {
+                type: toast.TYPE.ERROR,
+                autoClose: 10000
+            });
             console.log('ERROR RETURNED: ', err);
         });
 
@@ -76,75 +82,70 @@ class Album extends Component {
 
     render() {
 
-        let albumTags;
-        if ( this.state.album.tags ) {
-            albumTags = this.state.album.tags.tag.map((tag, index) => {
-                if ( tag.name !== 'albums I own' ) {
-                    return (
-                        <span className="tag" key={index}> #{tag.name} </span>
-                    )
-                } else {
-                    return null;
-                }
-            });
-        }
+        // let albumTags;
+        // if ( this.state.album.tags ) {
+        //     albumTags = this.state.album.tags.tag.map((tag, index) => {
+        //         if ( tag.name !== 'albums I own' ) {
+        //             return (
+        //                 <span className="tag" key={index}> #{tag.name} </span>
+        //             )
+        //         } else {
+        //             return null;
+        //         }
+        //     });
+        // }
 
         return (
             <div className="album page">
 
-                <div className="background-art" style={{backgroundImage: `url(${this.state.albumArt})`}}></div>
+                <div className="background-art-container">
+                    <div className="background-art" style={{backgroundImage: `url(${this.state.albumArt})`}}></div>
+                </div>
 
                 <div className="container">
 
-                    <Row>
+                    <div className="album-info">
+                        <img className="album-art" src={this.state.albumArt}/>
+                        <h1>{this.state.album.name}</h1>
 
-                        <Col md={12} mdPush={0} lg={10} lgPush={1} >
+                        <h2><Link to={`/artist/${encodeURIComponent(this.state.album.artist)}`}>{this.state.album.artist}</Link></h2>
 
-                            <div className="album-info">
-                                <img className="album-art" src={this.state.albumArt}/>
-                                <h1>{this.state.album.name}</h1>
+                        {/* {albumTags ? <div className="tags">{albumTags}</div> : null} */}
 
-                                <h2><Link to={`/artist/${encodeURIComponent(this.state.album.artist)}`}>{this.state.album.artist}</Link></h2>
-
-                                {albumTags ? <div className="tags">{albumTags}</div> : null}
-
-                                { this.props.user ?
-                                //add album drop down
-                                <Dropdown label="Add album">
-                                    <div onClick={()=>this.addAlbumToUser()}>
-                                        Library
-                                    </div>
-                                    {this.props.user ? this.props.user.playlists.map((playlist, index) => {
-                                        return (<div key={index} onClick={()=>this.addAlbumToUser(playlist.id, playlist.name)}>{playlist.name}</div>);
-                                    }):null}
-                                </Dropdown>
-                                : null}
-
+                        { this.props.user ?
+                        //add album drop down
+                        <Dropdown label="Add album">
+                            <div onClick={()=>this.addAlbumToUser()}>
+                                Library
                             </div>
+                            {this.props.user ? this.props.user.playlists.map((playlist, index) => {
+                                return (<div key={index} onClick={()=>this.addAlbumToUser(playlist.id, playlist.name)}>{playlist.name}</div>);
+                            }):null}
+                        </Dropdown>
+                        : null}
 
-                            <div className="card">
+                    </div>
 
-                                { this.state.tracks.length > 0 ?
-                                    <TrackList
-                                        isAlbum={this.state.album.name}
-                                        existsInLibrary={this.state.albumInLibrary}
-                                        user={this.props.user}
-                                        playing={this.props.playing}
-                                        tracks={this.state.tracks}
-                                        queueId={this.props.queueId}
-                                        activeTrack={this.props.activeTrack}
-                                        updateQueue={this.context.parentState.updateQueue}
-                                    />
-                                    : <p>Loading or no tracks in state</p>
-                                }
+                    <div className="card">
 
-                            </div>
+                        { this.state.tracks.length > 0 ?
+                            <TrackList
+                                isAlbum={this.state.album.name}
+                                existsInLibrary={this.state.albumInLibrary}
+                                user={this.props.user}
+                                playing={this.props.playing}
+                                tracks={this.state.tracks}
+                                queueId={this.props.queueId}
+                                activeTrack={this.props.activeTrack}
+                                updateQueue={this.context.parentState.updateQueue}
+                            />
+                            : <p>Loading or no tracks in state</p>
+                        }
 
-                        </Col>
-
-                    </Row>
+                    </div>
 
                 </div>
+
             </div>
         );
     }

@@ -1,6 +1,7 @@
 import * as refracter from '../refracter';
 import React, {Component} from 'react';
 import {Col, Button} from 'react-bootstrap';
+import {toast} from 'react-toastify';
 import TrackList from '../components/TrackList';
 import TileList from '../components/TileList';
 
@@ -30,20 +31,26 @@ class Artist extends Component {
 
     loadArtist(artistName){
 
-        //TODO set loader in state
+        this.context.parentState.showPageSpinner();
 
         refracter.getArtistInfo(artistName).then(artistData => {
 
-            //TODO Hide Loader
-
             console.log('Artist info: ', artistData);
+            //TODO If artist info can not be grabbed from last fm
+
             this.setState({
                 info: artistData.artistInfo,
                 tracks: artistData.artistTracks,
                 albums: artistData.artistAlbums
             });
 
+            this.context.parentState.hidePageSpinner();
+
         }).catch(err => {
+            toast(err, {
+                type: toast.TYPE.ERROR,
+                autoClose: 10000
+            });
             console.log('ERROR RETURNED: ', err);
         });
 
@@ -63,68 +70,66 @@ class Artist extends Component {
         return (
             <div className="artist page">
 
-                <div className="background-art" style={{backgroundImage: `url(${this.state.info.image?this.state.info.image[3]["#text"]:null})`}}></div>
+                <div className="background-art-container">
+                    <div className="background-art" style={{backgroundImage: `url(${this.state.info.image?this.state.info.image[3]["#text"]:null})`}}></div>
+                </div>
 
                 <div className="container">
 
-                    <Col md={12} mdPush={0} lg={10} lgPush={1} >
+                    <div className="artist-intro">
 
-                        <div className="artist-intro">
+                        <h1>{this.state.info.name}</h1>
 
-                            <h1>{this.state.info.name}</h1>
+                        <div className="artist-bio card">
 
-                            <div className="artist-bio card">
+                            {this.state.info.bio ? this.state.info.bio.summary.replace(`<a href="https://www.last.fm/music/${this.state.info.name.split(' ').join('+')}">Read more on Last.fm</a>`,'') : null}
 
-                                {this.state.info.bio ? this.state.info.bio.summary.replace(`<a href="https://www.last.fm/music/${this.state.info.name.split(' ').join('+')}">Read more on Last.fm</a>`,'') : null}
+                            <hr/>
 
-                                <hr/>
-
-                                {artistTags}
-
-                            </div>
+                            {artistTags}
 
                         </div>
 
-                        <div className="artist-albums card">
+                    </div>
 
-                            <h2>Albums</h2>
+                    <div className="artist-albums card">
 
-                            <TileList
-                                isArtistPage={true}
-                                linkType="album"
-                                tiles={this.state.albums}
-                                carousel={true}
-                                //carouselSlideNumber={12}
-                            />
+                        <h2>Albums</h2>
 
-                        </div>
+                        <TileList
+                            isArtistPage={true}
+                            linkType="album"
+                            tiles={this.state.albums}
+                            carousel={true}
+                            //carouselSlideNumber={12}
+                        />
 
-                        <div className="artist-songs card">
+                    </div>
 
-                            <h2>Top Songs</h2>
+                    <div className="artist-songs card">
 
-                            <TileList
-                                isArtistPage={true}
-                                linkType="track"
-                                tiles={this.state.tracks}
-                                carousel={true}
-                            />
+                        <h2>Top Songs</h2>
 
-                        </div>
+                        <TileList
+                            isArtistPage={true}
+                            linkType="track"
+                            tiles={this.state.tracks}
+                            carousel={true}
+                        />
 
-                        <div className="artist-songs card">
+                    </div>
 
-                            <h2>Related Artists</h2>
+                    <div className="artist-songs card">
 
-                            <TileList
-                                isArtistPage={true}
-                                linkType="artist"
-                                tiles={this.state.info.similar?this.state.info.similar.artist:null}
-                            />
+                        <h2>Related Artists</h2>
 
-                        </div>
+                        <TileList
+                            isArtistPage={true}
+                            linkType="artist"
+                            tiles={this.state.info.similar?this.state.info.similar.artist:null}
+                        />
 
-                    </Col>
+                    </div>
 
                 </div>
 
@@ -132,7 +137,10 @@ class Artist extends Component {
         );
     }
 
-
 }
+
+Artist.contextTypes = {
+    parentState: React.PropTypes.object
+};
 
 export default Artist;

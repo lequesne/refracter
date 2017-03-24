@@ -40,7 +40,7 @@ class TrackList extends Component {
     }
 
     componentWillMount() {
-        this.setState({queueId: this.props.queueId});
+        //this.setState({queueId: this.props.queueId});
     }
 
     componentWillReceiveProps(nextProps) {
@@ -155,27 +155,28 @@ class TrackList extends Component {
         this.props.updateQueue(track, this.state.tracks);
     }
 
-    selectTrack(event, selectedTrack, clickedIndex) {
+    selectTrack(event, selectedTrack, clickedIndex, mouseUp) {
 
         //set dragNdrop context
         this.context.rdyForDrag = true;
         this.context.dragStartX = event.pageX;
         this.context.dragStartY = event.pageY;
 
+        let stateTracks = this.state.tracks;
+
         //select tracks based off click, ctrl click, and shift click
         if (event.ctrlKey) {
             //ctrl multiple select
-            this.state.tracks[clickedIndex].selected = true;
+            stateTracks[clickedIndex].selected = true;
 
         } else if (!event.ctrlKey && !event.shiftKey) {
 
-            if (event.button == 2) {
+            if ( event.button === 2 ) {
                 //track was right clicked
 
-                if (!this.state.tracks[clickedIndex].selected  ) {
+                if (!stateTracks[clickedIndex].selected) {
                     //clicked track is not already already selected
-                    for (let [i,
-                        track]of this.state.tracks.entries()) {
+                    for (let [i,track]of stateTracks.entries()) {
                         if (i === clickedIndex) {
                             track.selected = true;
                         } else {
@@ -187,28 +188,32 @@ class TrackList extends Component {
             } else {
                 //track was left clicked
 
-                if ( this.state.selectedTracks.length === this.state.tracks.length ) {
-                    //every track is already seletec
-                    for (let [i,track]of this.state.tracks.entries()) {
+                if ( mouseUp && !this.context.isDragging ) {
+
+                    //every track is already selected
+                    for (let [i,track]of stateTracks.entries()) {
 
                         if (i === clickedIndex ) {
-                            track.selected = false;
-                        } else {
                             track.selected = true;
+                        } else {
+                            track.selected = false;
                         }
 
                     }
+
                 } else{
                     //normal track select
 
-                    for (let [i,track]of this.state.tracks.entries()) {
+                    if (!stateTracks[clickedIndex].selected) {
+                        for (let [i,track]of stateTracks.entries()) {
 
-                        if (i === clickedIndex ) {
-                            track.selected = true;
-                        } else {
-                            track.selected = false;
+                            if (i === clickedIndex ) {
+                                track.selected = true;
+                            } else {
+                                track.selected = false;
+                            }
+
                         }
-
                     }
 
                 }
@@ -218,8 +223,7 @@ class TrackList extends Component {
         } else if (event.shiftKey && !event.ctrlKey) {
             //shift click
             if (clickedIndex > this.state.lastClickedTrackIndex) {
-                for (let [i,
-                    track]of this.state.tracks.entries()) {
+                for (let [i,track]of stateTracks.entries()) {
                     if (i >= this.state.lastClickedTrackIndex && i <= clickedIndex) {
                         track.selected = true;
                     } else {
@@ -227,8 +231,7 @@ class TrackList extends Component {
                     }
                 }
             } else if (clickedIndex < this.state.lastClickedTrackIndex) {
-                for (let [i,
-                    track]of this.state.tracks.entries()) {
+                for (let [i,track]of stateTracks.entries()) {
                     if (i >= clickedIndex && i <= this.state.lastClickedTrackIndex) {
                         track.selected = true;
                     } else {
@@ -240,13 +243,17 @@ class TrackList extends Component {
 
         //push selected tracks to a selected tracks array in state
         let selectedTracks = [];
-        for (let track of this.state.tracks) {
+        for (let track of stateTracks) {
             if (track.selected)
                 selectedTracks.push(track);
             }
 
         //update selected tracks in state
-        this.setState({lastClickedTrackIndex: clickedIndex, tracks: this.state.tracks, selectedTracks: selectedTracks});
+        this.setState({
+            lastClickedTrackIndex: clickedIndex,
+            tracks: stateTracks,
+            selectedTracks: selectedTracks
+        });
 
     }
 
@@ -349,48 +356,45 @@ class TrackList extends Component {
         let sortedByAlbumTrackData = [];
         let sortedTrackList;
 
-        for (let track of tracks) {
+        //sort numbers
+        if (sortName === 'number' || sortName === 'duration') {
 
-            //sort numbers
-            if (sortName === 'number' || sortName === 'duration') {
-
-                if (sortOrder === 'desc') {
-                    tracks.sort(function(a, b) {
-                        return a[sortName] - b[sortName];
-                    });
-                } else if (sortOrder === 'asc') {
-                    tracks.sort(function(a, b) {
-                        return b[sortName] - a[sortName];
-                    });
-                }
-
-            }
-
-            //sort alpha
-            if (sortName === 'title' || sortName === 'album' || sortName === 'artist') {
-
-                if (sortOrder === 'desc') {
-                    tracks.sort(function(a, b) {
-                        if (a[sortName] < b[sortName])
-                            return -1;
-                        if (a[sortName] > b[sortName])
-                            return 1;
-                        return 0;
-                    });
-                } else if (sortOrder === 'asc') {
-                    tracks.sort(function(a, b) {
-                        if (b[sortName] < a[sortName])
-                            return -1;
-                        if (b[sortName] > a[sortName])
-                            return 1;
-                        return 0;
-                    });
-                }
-
+            if (sortOrder === 'desc') {
+                tracks.sort(function(a, b) {
+                    return a[sortName] - b[sortName];
+                });
+            } else if (sortOrder === 'asc') {
+                tracks.sort(function(a, b) {
+                    return b[sortName] - a[sortName];
+                });
             }
 
         }
 
+        //sort alpha
+        if (sortName === 'title' || sortName === 'album' || sortName === 'artist') {
+
+            if (sortOrder === 'desc') {
+                tracks.sort(function(a, b) {
+                    if (a[sortName] < b[sortName])
+                        return -1;
+                    if (a[sortName] > b[sortName])
+                        return 1;
+                    return 0;
+                });
+            } else if (sortOrder === 'asc') {
+                tracks.sort(function(a, b) {
+                    if (b[sortName] < a[sortName])
+                        return -1;
+                    if (b[sortName] > a[sortName])
+                        return 1;
+                    return 0;
+                });
+            }
+
+        }
+
+        //special sort for artists and album to retain album orders
         if (sortName === 'album' || sortName === 'artist') {
 
             for (let track of tracks) {
@@ -415,7 +419,7 @@ class TrackList extends Component {
                 let album = albums[key];
                 //sort each album by track numbers
                 album.sort(function(a, b) {
-                    return parseInt(a.number) - parseInt(b.number);
+                    return Number(a.number) - Number(b.number);
                 });
                 //stitch albums back to together
                 for (let track of album) {
@@ -441,7 +445,8 @@ class TrackList extends Component {
 
     activeTrackClass(track) {
         if (this.props.activeTrack) {
-            //NOTE come back and test it works correctly with lists that share the same track id (should only be active on original queue)
+            //TODO IMPORTANT, MULTIPLE ACIVE TRACKS come back and test it works correctly with lists that share the same track id (should only be active on original queue)
+            //MAKE ACTIVE TRACK USE TRACK ID AND ITS INDEX IN THE QUEUE TO SET CLASS
             //if ( this.state.queueId === this.props.queueId ) {
             return track.trackID === this.props.activeTrack.trackID
                 ? 'active-track'
@@ -495,7 +500,8 @@ class TrackList extends Component {
                     {/* <MenuItem onClick={this.handleContextChangeSource}>
                         Change source
                     </MenuItem> */}
-                    <MenuItem divider/> {this.props.playlistID
+                    <MenuItem divider/>
+                    {this.props.playlistID
                         ? <MenuItem onClick={() => this.removeSelectedTracksForUser(this.props.playlistID,this.props.playlistName)}>
                                 Remove {this.state.selectedTracks.length > 1
                                     ? ` ${this.state.selectedTracks.length} tracks `
@@ -524,13 +530,13 @@ class TrackList extends Component {
                         <MenuItem onClick={this.handleContextNewPlaylist}>
                             New playlist
                         </MenuItem> */}
-                        {this.props.user.playlists.map((playlist, playlistIndex) => {
+                        {this.props.user ? this.props.user.playlists.map((playlist, playlistIndex) => {
                             return (
                                 <MenuItem key={playlistIndex} onClick={() => this.addSelectedTracksToUser(playlist.id, playlist.name)}>
                                     {playlist.name}
                                 </MenuItem>
                             )
-                        })}
+                        }):null}
                     </SubMenu>
                 </ContextMenu>
 
@@ -631,12 +637,14 @@ class TrackList extends Component {
                                     <td title="Number"
                                         className="number-col"
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
+                                        onMouseUp={(event) => this.selectTrack(event, track, trackIndex, true)}
                                         >
                                         <span>{track.number}</span>
                                     </td>
                                     <td title={track.title}
                                         className="name-col"
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
+                                        onMouseUp={(event) => this.selectTrack(event, track, trackIndex, true)}
                                         >
                                         <span>{track.title}</span>
                                     </td>
@@ -644,6 +652,7 @@ class TrackList extends Component {
                                         <td title={track.album}
                                             className="album-col"
                                             onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
+                                            onMouseUp={(event) => this.selectTrack(event, track, trackIndex, true)}
                                             >
                                             <span>
                                                 {this.props.isAlbum ? track.album : <Link to={`/album/${encodeURIComponent(track.artist)}/${encodeURIComponent(track.album)}`}>{track.album}</Link>}
@@ -654,6 +663,7 @@ class TrackList extends Component {
                                     <td title={track.artist}
                                         className="artist-col"
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
+                                        onMouseUp={(event) => this.selectTrack(event, track, trackIndex, true)}
                                         >
                                         <span>
                                         {this.props.isArtist ? track.artist : <Link to={`/artist/${encodeURIComponent(track.artist)}`}>{track.artist}</Link>}
@@ -662,6 +672,7 @@ class TrackList extends Component {
                                     <td
                                         className="duration-col"
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
+                                        onMouseUp={(event) => this.selectTrack(event, track, trackIndex, true)}
                                         >
                                         <span>
                                             {refracter.secondsToMinutes(track.duration)}

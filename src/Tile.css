@@ -1,9 +1,0 @@
-.Tile {
-  display: block; }
-  .Tile .tile-image {
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; }
-    .Tile .tile-image img {
-      width: 100%;
-      position: absolute; }

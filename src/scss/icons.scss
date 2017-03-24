@@ -1,0 +1,50 @@
+
+.refracter-refracter-logo-full {
+    overflow: hidden;
+    &:before {
+        line-height: 0.43em;
+    }
+}
+
+.refracter-repo {
+    position: relative;
+    top: 0.2em;
+}
+
+.icon.absolute {
+    text-align: center;
+    user-select: none;
+
+    &:before {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        left: 0;
+        margin-top: -0.5em;
+    }
+
+
+}
+
+.icon {
+    &:hover {
+        text-decoration: none !important;
+    }
+}
+
+//symbol icons
+.playlist-icon {
+    margin-right: 15px;
+    .notes {
+        position: relative;
+        top: 0.2em;
+        left: -0.2em;
+        text-shadow: -1px -1px 2px rgba(black,0.3);
+    }
+
+    .list {
+        position: relative;
+        top: -0.05em;
+        left: 0.2em;
+    }
+}

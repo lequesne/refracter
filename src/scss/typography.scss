@@ -2,7 +2,7 @@
 body {
     font-family: $mainFont;
     color: $white;
-    font-size: 1.5em;
+    font-size: 1.6em;
     line-height: 1.5em;
 }
 
@@ -10,6 +10,10 @@ a {
 
     &, &:visited {
         color: $white;
+    }
+
+    &:focus {
+        text-decoration: none;;
     }
 
     &:hover  {
@@ -35,24 +39,6 @@ h2 {
 
     &:first-child {
         margin-top: 0;
-    }
-}
-
-//symbol icons
-
-.playlist-icon {
-    margin-right: 15px;
-    .notes {
-        position: relative;
-        top: 0.2em;
-        left: -0.2em;
-        text-shadow: -1px -1px 2px rgba(black,0.3);
-    }
-
-    .list {
-        position: relative;
-        top: -0.05em;
-        left: 0.2em;
     }
 }
 

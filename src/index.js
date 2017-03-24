@@ -1,3 +1,4 @@
+import './index.css';
 import * as refracter from './refracter';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -9,30 +10,6 @@ import Album from './containers/Album';
 import Artist from './containers/Artist';
 import Library from './containers/Library';
 import Playlist from './containers/Playlist';
-import './index.css';
-
-const initApp = (user) => {
-    ReactDOM.render((
-        <div>
-            <Router history={browserHistory}>
-                <Route path="/" component={App} user={user}>
-                    <IndexRoute component={Home}/>
-                    {/* <Route path="/signup" component={SignUpForm} /> */}
-                    <Route path="/search/:query" component={Search} />
-                    <Route path="/album/:artist/:album" component={Album}>
-                        <Route path="/album/:artist/:album/:track" component={Album}/>
-                    </Route>
-                    <Route path="/artist/:artist" component={Artist}/>
-                    <Route path="/library" component={Library}/>
-                    <Route path="/playlist/:id" component={Playlist}/>
-                </Route>
-            </Router>
-        </div>
-    ), document.getElementById('root'));
-}
-
-//init app after on load user check
-// TODO: PRELOADER FOR APP BEFORE LOAD USER RESPONSE
 
 //set login cookie
 let cookie = refracter.getCookie( refracter.loginCookieName );
@@ -57,3 +34,24 @@ fetch(`${refracter.refracterEndpoint}loadUser.php?&cookie=${cookie}`).then(respo
 }).catch(error => {
     console.log('Issue connnecting to login: ', error);
 });
+
+//init app, run after user logged in check
+const initApp = (user) => {
+    ReactDOM.render((
+        <div>
+            <div className="icon absolute refracter-refracter-logo background-logo"></div>
+            <Router history={browserHistory}>
+                <Route path="/" component={App} user={user}>
+                    <IndexRoute component={Home}/>
+                    <Route path="/search/:query" component={Search} />
+                    <Route path="/album/:artist/:album" component={Album}>
+                        <Route path="/album/:artist/:album/:track" component={Album}/>
+                    </Route>
+                    <Route path="/artist/:artist" component={Artist}/>
+                    <Route path="/library" component={Library}/>
+                    <Route path="/playlist/:id" component={Playlist}/>
+                </Route>
+            </Router>
+        </div>
+    ), document.getElementById('root'));
+}

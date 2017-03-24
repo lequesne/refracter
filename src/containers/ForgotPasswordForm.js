@@ -1,7 +1,9 @@
+import * as refracter from '../refracter';
 import React, {Component} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import Form from '../components/Form';
-import * as refracter from '../refracter';
+import {toast} from 'react-toastify';
+import RefracterSpinner from '../components/RefracterSpinner';
 
 class ForgotPasswordForm extends Component {
 
@@ -10,7 +12,8 @@ class ForgotPasswordForm extends Component {
 
         //setup state
         this.state = {
-            showModal: false
+            showModal: false,
+            showSpinner: false
         };
 
         //bindings
@@ -22,7 +25,7 @@ class ForgotPasswordForm extends Component {
     handleSubmit(formData) {
 
         //set loading status
-        this.setState({formLoading: true, serverError: null});
+        this.setState({showSpinner: true, serverError: null});
 
         //forgot password request to api (sends user email with password reset token)
         fetch(`${refracter.refracterEndpoint}forgotPassword.php?email=${formData.email}`).then(response => {
@@ -34,14 +37,21 @@ class ForgotPasswordForm extends Component {
             if (response.success) {
                 //password was reset and link sent
 
-                this.setState({formLoading: false});
+                setTimeout(()=>{
+                    this.props.onHide();
+                    toast(`A password reset link has been sent to your email. Please check your inbox and follow the directions.`, {
+                        type: toast.TYPE.INFO,
+                        autoClose: 10000
+                    });
+                }, 1000);
+
             } else {
                 //error
-                this.setState({formLoading: false, serverError: response.errors});
+                this.setState({showSpinner: false, serverError: response.errors});
             }
 
         }).catch(error => {
-            this.setState({formLoading: false});
+            this.setState({showSpinner: false, serverError: error});
             console.log('login: ', error);
         });
 
@@ -54,7 +64,6 @@ class ForgotPasswordForm extends Component {
                 name: 'email',
                 type: 'email',
                 placeholder: 'Your email address',
-                //label: 'Enter Username or email',
                 validation: {
                     required: true,
                     email: true
@@ -64,7 +73,7 @@ class ForgotPasswordForm extends Component {
 
         return (
 
-            <Modal show={this.props.show} onHide={this.props.onHide}>
+            <Modal show={this.props.show} onHide={this.props.onHide} dialogClassName="small-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Forgot Password</Modal.Title>
                 </Modal.Header>
@@ -74,17 +83,19 @@ class ForgotPasswordForm extends Component {
                         You will receive an email that will help you create a new password for your account.
                     </p>
 
-                    <Form id="forgot-password-form"
+                    <br/>
+
+                    <Form
+                        id="forgot-password-form"
                         inputs={inputs}
                         submitBtn="Reset my password"
                         onSubmit={this.handleSubmit}
-                        serverError={this.state.serverError}>
-                    </Form>
+                        serverError={this.state.serverError}
+                    />
+
+                    <RefracterSpinner show={this.state.showSpinner} size={100}/>
 
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={this.props.onHide}>Close</Button>
-                </Modal.Footer>
             </Modal>
 
         );

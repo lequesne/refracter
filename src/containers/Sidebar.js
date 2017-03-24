@@ -1,7 +1,7 @@
 //import * as refracter from '../refracter';
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import {Button} from 'react-bootstrap';
+import {Row, Col,Button} from 'react-bootstrap';
 import ScrollArea from 'react-scrollbar';
 import UserPlaylists from '../components/UserPlaylists';
 
@@ -25,7 +25,7 @@ class Sidebar extends Component {
                         <div className="logged-in wrapper">
 
                             <Link to={'/library'} data-drag-ndrop-add-tracks={true} className="link library-link dragNdrop-droppable">
-                                <span className="text"><span className="library ion-ios-book"></span>Library</span>
+                                <span className="text"><span className="library refracter-repo"></span>Library</span>
                             </Link>
 
                             <ScrollArea className="scrollable" smoothScrolling={true} speed={0.8} >
@@ -39,11 +39,18 @@ class Sidebar extends Component {
                             <ScrollArea className="scrollable" smoothScrolling={true} speed={0.8} >
 
                                 <div className="login-signup">
-                                    <p>
-                                        Sign in or register to save tracks and albums to your library and create custom playlists.
-                                    </p>
-                                    <Button onClick={()=>this.context.parentState.showModal('showLogInForm')} className="button-standard">Sign In</Button>
-                                    <Button onClick={()=>this.context.parentState.showModal('showSignUpForm')} className="button-standard">Register</Button>
+
+                                    Sign in or register to save tracks and albums to your library and create custom playlists.
+
+                                    <Row className="sign-in-register-buttons">
+                                        <Col xs={6}>
+                                            <Button block onClick={()=>this.context.parentState.showModal('showLogInForm')} className="button-standard">Sign In</Button>
+                                        </Col>
+                                        <Col xs={6}>
+                                            <Button block onClick={()=>this.context.parentState.showModal('showSignUpForm')} className="button-standard">Register</Button>
+                                        </Col>
+                                    </Row>
+
                                 </div>
 
                             </ScrollArea>
@@ -51,10 +58,11 @@ class Sidebar extends Component {
                         </div>
                     }
 
+                    {/* TODO add link on art to the correct queue/source of active track */}
                     <div className="album-art">
                         {this.props.activeTrack
                             ? <img src={this.props.activeTrack.art} alt="Artwork"/>
-                            : <div className="icon absolute ion-disc"></div>}
+                            : <div className="icon absolute refracter-refracter-logo"></div>}
                     </div>
 
                 </div>

@@ -1,8 +1,10 @@
 import * as refracter from '../refracter';
 import React, {Component} from 'react';
+import { browserHistory } from 'react-router';
 import ScrollArea from 'react-scrollbar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import RefracterSpinner from '../components/RefracterSpinner';
 import TopBar from '../components/TopBar';
 import Sidebar from './Sidebar';
 import PlayerBar from '../components/PlayerBar';
@@ -18,12 +20,14 @@ class App extends Component {
 
         //set initial app state
         this.state = {
+            pathname: null,
             user: props.route.user ? props.route.user : null, //if user props passed on load set in state
             searchValue: '',
             activeTrack: null,
             playing: false,
             queueId: 0,
-            queue: []
+            queue: [],
+            showPageSpinner: false
         }
 
         this.checkForUserEmailActivation = this.checkForUserEmailActivation.bind(this);
@@ -37,6 +41,8 @@ class App extends Component {
         this.updateAppPlayState = this.updateAppPlayState.bind(this);
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
+        this.showPageSpinner = this.showPageSpinner.bind(this);
+        this.hidePageSpinner = this.hidePageSpinner.bind(this);
 
     }
     getChildContext() {
@@ -48,16 +54,42 @@ class App extends Component {
         this.checkForUserEmailActivation();
         //check if query params exist for user password reset
         this.checkPasswordReset();
+
+        //on route change show page spinner
+        browserHistory.listen( location =>  {
+            if ( !this.state.pathname || location.pathname !== this.state.pathname ) {
+                this.showPageSpinner();
+            }
+            this.setState({
+                pathname: location.pathname
+            })
+        });
     }
 
     componentDidMount(){
 
-        //will you kindly welcome the user
-        if ( this.state.user ){
-            toast(`Welcome ${this.state.user.username}.`, {
-              type: toast.TYPE.INFO
-            });
-        }
+        setTimeout(()=>{
+            //hide splash
+            let splash = document.getElementById('splash');
+            splash.classList.remove('showing');
+            splash.classList.add('hiding');
+            //let splashDuration = parseFloat(getComputedStyle(splash)['transitionDuration']) + 1000;
+            //splash.style.opacity = 0;
+
+            //remove splash after transition in
+            setTimeout(()=>{
+                splash.remove();
+            },1000);
+
+            //will you kindly welcome the user
+            if ( this.state.user ){
+                toast(`Welcome ${this.state.user.username}.`, {
+                  type: toast.TYPE.INFO
+                });
+            }
+
+        },2000);
+
     }
 
     checkForUserEmailActivation(){
@@ -137,13 +169,13 @@ class App extends Component {
 
     }
 
-    updateUserPlaylists(playlists){
-        //updates app state with updated playlists
+    updateUserPlaylists(newPlayListArray){
+        //updates the user object with new or removed playlists
+        let user = this.state.user;
+        user.playlists = newPlayListArray;
         this.setState({
-            user: this.state.user.playlists = playlists
+            user: user
         });
-
-        console.log(this.state.user.playlists);
     }
 
     updateQueue(track, trackList) {
@@ -227,13 +259,16 @@ class App extends Component {
         });
     }
 
-    updateUserPlaylists(newPlayListArray){
-        //updates the user object with new or removed playlists
-        let user = this.state.user;
-        user.playlists = newPlayListArray;
-        this.setState({
-            user: user
-        });
+    showPageSpinner(){
+        this.setState({showPageSpinner:true});
+    }
+
+    hidePageSpinner(){
+        this.refs.pageScrollArea.scrollTop();
+
+        setTimeout(()=>{
+            this.setState({showPageSpinner:false});
+        },500);
     }
 
     render() {
@@ -263,16 +298,15 @@ class App extends Component {
                 />
 
                 <div className="content-window">
-                    <ScrollArea className="scrollable" smoothScrolling={true} speed={1.2} >
-                        <div>
-                            {React.cloneElement( this.props.children, {
-                                //appState: this.state
-                                user: this.state.user,
-                                playing: this.state.playing,
-                                activeTrack: this.state.activeTrack
-                            })}
-                        </div>
+                    <ScrollArea ref="pageScrollArea" className="scrollable" smoothScrolling={true} speed={1.2} >
+                        {React.cloneElement( this.props.children, {
+                            //appState: this.state
+                            user: this.state.user,
+                            playing: this.state.playing,
+                            activeTrack: this.state.activeTrack
+                        })}
                     </ScrollArea>
+                    <RefracterSpinner show={this.state.showPageSpinner} size={150}/>
                 </div>
 
                 <SignUpForm
@@ -296,11 +330,14 @@ class App extends Component {
                     onHide={()=>this.hideModal('showPasswordResetForm')}
                     show={this.state.showPasswordResetForm}
                 />
-
             </div>
         );
     }
 }
+
+App.contextTypes = {
+    pathname: React.PropTypes.string
+};
 
 App.childContextTypes = {
     parentState: React.PropTypes.object

@@ -23,11 +23,14 @@ class User extends Password{
 		}
 	}
 
-    private function get_user_row($username){
+    private function get_user_row($usernameOrEmail){
 
 		try {
-			$stmt = $this->_db->prepare('SELECT password, username, userID, email, cookie FROM users WHERE username = :username AND active="Yes" ');
-			$stmt->execute(array('username' => $username));
+			$stmt = $this->_db->prepare('SELECT password, username, userID, email, cookie FROM users WHERE username = :username OR email = :email AND active="Yes" ');
+			$stmt->execute(array(
+                ':username' => $usernameOrEmail,
+                ':email' => $usernameOrEmail
+            ));
 
 			return $stmt->fetch();
 

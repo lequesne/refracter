@@ -22,7 +22,7 @@ const Dropdown = ({children, label}) => {
     return (
         <div onMouseLeave={shrinkDropDown} className="dropdown">
             <div onClick={expendDropDown} className="dropdown-label">{label} <span className="icon ion-arrow-down-b"></span></div>
-            <div className="dropdown-contents">
+            <div onClick={shrinkDropDown} className="dropdown-contents">
                 {children}
             </div>
         </div>

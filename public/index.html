@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <base href="/"/>
+
+<head>
+    <base href="/" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -15,8 +16,15 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Refracter</title>
-  </head>
-  <body>
+</head>
+
+<body>
+    <div id="splash" class="spinner-container showing">
+        <div class="refracter-spinner">
+            <span class="refracter-logo-spinner-middle"></span>
+            <span class="refracter-logo-spinner-outer"></span>
+        </div>
+    </div>
     <div id="root"></div>
     <!--
       This HTML file is a template.
@@ -28,5 +36,6 @@
       To begin the development, run `npm start`.
       To create a production bundle, use `npm run build`.
     -->
-  </body>
+</body>
+
 </html>

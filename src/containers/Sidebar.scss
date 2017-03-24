@@ -2,7 +2,7 @@
     $libraryLinkHeight: 65px;
 
     position: fixed;
-    z-index: 50;
+    z-index: 101;
     top: $topBarHeight;
     left: 0;
     width: $sidebarWidth;
@@ -13,9 +13,6 @@
     padding-bottom: $sidebarWidth - $borderPadding;
 
     .padded-inner {
-        // position: absolute;
-        // top: 0;
-        // left: 0;
         width: 100%;
         height: 100%;
         background: $medBackground;
@@ -29,17 +26,15 @@
         width: 100%;
         height: $sidebarWidth - $borderPadding - $borderPadding;
         background: $primaryColor;
-        //padding: 5px;
 
         .icon {
-            color: $primaryColor;
-            font-size: $sidebarWidth;
-            text-shadow: 0 0 10px rgba(black,0.2);
+            color: lighten( $primaryColor, 3% );
+            font-size: $sidebarWidth / 1.2;
+            //text-shadow: 0 0 10px rgba(black,0.2);
         }
 
         img {
             width: 100%;
-            //box-shadow: 0 0 20px 5px rgba(black, 0.5);
         }
     }
 
@@ -48,22 +43,20 @@
         height: 100%;
 
         &.logged-in {
-            padding-top: $libraryLinkHeight;
+            padding-top: $libraryLinkHeight + $borderPadding;
         }
     }
 
     .login-signup {
         text-align: center;
-        padding: 20px;
+        padding: 30px;
+
+        .sign-in-register-buttons {
+            margin: 30px -25px;
+        }
     }
 
     .logged-in {
-    }
-
-    button {
-        display: block;
-        width: calc(100% - 40px);
-        margin: 20px;
     }
 
     .link {
@@ -71,23 +64,26 @@
         position: relative;
         display: block;
         width: 100%;
+        //height: $defaultButtonHeight;
         border: none;
         padding: 12px 15px;
         color: $white;
         background: transparent;
-        border-bottom: 1px solid $darkBackground;
+        //border-bottom: 1px solid $darkBackground;
         transition: all $standardHoverTime;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
 
-        &input {
-            color: $darkBackground;
+
+        &:hover, &:focus {
+            background: $medLightBackground;
+            //box-shadow: $dropShadowDepth1;
         }
 
-        &:hover, &.dragNdrop-hover {
-            background: $medLightBackground;
-            box-shadow: $dropShadowDepth1;
+        &.dragNdrop-hover {
+            background: $darkBackground;
+            padding-left: 30px;
         }
 
         &:hover, &:visited {
@@ -99,6 +95,14 @@
 
     }
 
+    input.link {
+        color: $darkBackground;
+        font-size: 1em;
+    }
+
+    .user-playlists {
+    }
+
     .playlist-icon {
         font-size: 1.1em;
     }
@@ -107,17 +111,17 @@
         position: absolute;
         top: 0;
         left: 0;
-        height: $libraryLinkHeight;
+        height: $libraryLinkHeight + $borderPadding;
         font-size: 1.5em;
-        padding: 20px 15px;
+        padding: 15px;
+        border-bottom: $borderPadding solid $darkBackground;
 
         .library {
-            margin-right: 20px;
-            margin-left: 2px;
+            margin-right: 15px;
         }
     }
 
-    .user-playlists {
+    button.btn, button.btn-default {
 
     }
 }

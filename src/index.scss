@@ -1,6 +1,7 @@
 //libraries
 @import url('https://fonts.googleapis.com/css?family=Titillium+Web');
 //@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+@import url('https://file.myfontastic.com/K9negnKURwanTC49Nc55qc/icons.css');
 @import url('http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css');
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css');
@@ -12,13 +13,23 @@
 $mainFont: 'Titillium Web', sans-serif;
 //$mainFont: 'Source Sans Pro', sans-serif;
 
+//breakpoints
+$smaller-xs: '(max-width:399px)';
+$larger-xs: '(min-width:400px)';
+$smaller-sm: '(max-width:767px)';
+$larger-sm: '(min-width:768px)';
+$smaller-md: '(max-width:991px)';
+$larger-md: '(min-width:992px)';
+$smaller-lg: '(max-width:1199px)';
+$larger-lg: '(min-width:1200px)';
+
 //dimensions
 $topBarHeight: 70px;
 $sidebarWidth: 350px;
 $playerBarHeight: 70px;
 $borderPadding: 5px;
+$contentWindowHeight: calc(100vh - #{$playerBarHeight} - #{$topBarHeight} - #{$borderPadding});
 $pageComponentMargin: 50px;
-
 $defaultButtonHeight: 46px;
 
 //colors
@@ -39,6 +50,8 @@ $dropShadowDepth3: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 
 //global imports
 @import 'scss/layout';
+@import 'scss/modals';
+@import 'scss/icons';
 @import 'scss/typography';
 @import 'scss/buttons';
 @import 'scss/forms';
@@ -52,6 +65,12 @@ $dropShadowDepth3: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 @import 'components/Tile';
 
 //container imports
+@import 'containers/Home';
 @import 'containers/Album';
 @import 'containers/Artist';
 @import 'containers/Sidebar';
+
+//alpha label
+.alpha-label {
+    font-size: 14px;
+}

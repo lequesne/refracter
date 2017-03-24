@@ -4,9 +4,8 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
     border: none;
     color: $white;
     background: $medLightBackground;
-    padding: 0.75em 1em;
-    font-weight: 500;
-    font-size: 16px;
+    padding: 0.2em 1em;
+    font-size: 20px;
     transition: all $standardHoverTime;
 
     &:hover {
@@ -14,7 +13,6 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
         background: $primaryColor;
         color: white;
     }
-
 
 }
 
@@ -26,8 +24,12 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
     overflow: hidden;
     transition: all .3s;
 
+    &, * {
+        user-select: none;
+    }
+
     &:hover {
-        box-shadow: inet $dropShadowDepth2;
+        box-shadow: $dropShadowDepth1;
     }
 
     .dropdown-contents {
@@ -35,12 +37,22 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
         top: $defaultButtonHeight;
         left: 0;
         width: 100%;
+
+        div {
+            cursor: pointer;
+        }
     }
 
     .dropdown-label {
         text-align: center;
+        cursor: default;
+
         .icon {
             float: right;
         }
+    }
+
+    .dropdown-label, .dropdown-contents div {
+        padding-top: 0.5em;
     }
 }

@@ -1,11 +1,19 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web");
+@import url("https://file.myfontastic.com/K9negnKURwanTC49Nc55qc/icons.css");
 @import url("http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css");
 @import url("https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css");
 * {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  outline: 0 !important; }
+
+::selection {
+  background: #EDA564; }
+
+::-moz-selection {
+  background: #EDA564; }
 
 body, html {
   width: 100%;
@@ -15,6 +23,40 @@ body, html {
   margin: 0;
   background: #121212; }
 
+.Refracter-app {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh; }
+
+#splash {
+  position: fixed;
+  z-index: 999999;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  transition: opacity 1s; }
+  #splash.spinner-container.showing {
+    visibility: visible;
+    opacity: 1;
+    animation: none; }
+
+.background-logo {
+  position: absolute;
+  z-index: 0;
+  top: 5%;
+  left: 20%;
+  width: 100%;
+  height: 100%;
+  font-size: 130vh;
+  color: #151515; }
+
 hr {
   opacity: 0.25; }
 
@@ -23,7 +65,17 @@ hr {
 
 .container {
   width: 100%;
-  max-width: 1440px; }
+  max-width: 1400px;
+  padding-left: 50px;
+  padding-right: 50px; }
+  @media (max-width: 1199px) {
+    .container {
+      padding-left: 30px;
+      padding-right: 30px; } }
+  @media (max-width: 991px) {
+    .container {
+      padding-left: 15px;
+      padding-right: 15px; } }
 
 .padded-inner {
   top: 5px;
@@ -33,7 +85,7 @@ hr {
 
 .content-window {
   position: absolute;
-  z-index: 1000;
+  z-index: 100;
   top: 70px;
   right: 0;
   width: calc( 100% - 350px);
@@ -46,11 +98,23 @@ hr {
 .scrollable {
   height: 100%; }
 
-.scrollarea .scrollbar-container.vertical .scrollbar {
+.Refracter-app .scrollarea .scrollbar-container.vertical .scrollbar {
   background: #efefef; }
 
+.y-center {
+  display: flex;
+  align-items: center; }
+
+.x-center {
+  display: flex;
+  justify-content: center; }
+
 .page {
-  position: relative; }
+  position: relative;
+  min-height: calc(100vh - 70px - 70px - 5px); }
+
+.col-padding {
+  padding: 30px; }
 
 .card {
   margin: 50px 0;
@@ -59,43 +123,34 @@ hr {
   .card h1:first-child, .card h2:first-child {
     margin-top: 0; }
 
-.icon.absolute {
-  text-align: center;
-  user-select: none; }
-  .icon.absolute:before {
-    position: absolute;
-    width: 100%;
-    top: 50%;
-    left: 0;
-    margin-top: -0.5em; }
-
-.icon:hover {
-  text-decoration: none !important; }
-
-.toastify {
+.Refracter-app .toastify {
   z-index: 9999;
   color: #efefef; }
-  .toastify.toastify--top-right {
-    top: calc( 70px + 1em + 5px); }
-  .toastify .toastify__close {
+  .Refracter-app .toastify.toastify--top-right {
+    top: calc( 70px + 5px); }
+  .Refracter-app .toastify .toastify__close {
     font-size: 1.2em;
     line-height: 0;
     padding-bottom: 4px; }
-    .toastify .toastify__close:hover {
+    .Refracter-app .toastify .toastify__close:hover {
       background: none;
       color: #efefef; }
-  .toastify .toastify-content {
+  .Refracter-app .toastify .toastify-content {
     display: flex;
     align-items: center;
     background: #333;
     padding-left: 15px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     animation-timing-function: linear !important; }
-  .toastify .toastify__body {
-    font-size: 1em; }
+  .Refracter-app .toastify .toastify__body {
+    font-size: 1em;
+    padding-right: 25px; }
 
 html.dragNdrop-isDragging * {
   user-select: none; }
+
+html.dragNdrop-isDragging .content-window {
+  z-index: 102; }
 
 .dragNdrop-preview {
   position: fixed;
@@ -104,14 +159,8 @@ html.dragNdrop-isDragging * {
   padding: 1em;
   background: #efefef;
   color: #121212;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   transform: rotate3d(0, 0, 0); }
-
-body.modal-open .modal {
-  display: flex !important;
-  height: 100%; }
-
-body.modal-open .modal .modal-dialog {
-  margin: auto; }
 
 .react-contextmenu {
   z-index: 99999;
@@ -190,14 +239,95 @@ body.modal-open .modal .modal-dialog {
 .slick-next {
   right: -30px; }
 
+body.modal-open .modal {
+  display: flex !important;
+  height: 100%; }
+
+body.modal-open .modal .modal-dialog {
+  margin: auto; }
+
+.modal-dialog {
+  max-width: 600px;
+  width: calc(100% - 5px - 5px); }
+  .modal-dialog.small-modal {
+    max-width: 400px; }
+
+.modal-body {
+  padding: 30px;
+  padding-top: 20px; }
+
+.modal-content {
+  background: #333;
+  border-radius: 0;
+  text-align: center; }
+  .modal-content .close {
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    line-height: 0;
+    color: #efefef;
+    text-shadow: none;
+    opacity: 1;
+    transition: color 0.2s; }
+    .modal-content .close:hover {
+      color: #EDA564; }
+
+.modal-header {
+  padding: 30px 30px 0 30px;
+  border: none; }
+
+.modal-title {
+  font-size: 2em; }
+
+.modal-footer {
+  padding: 0 30px 30px 30px;
+  border: none; }
+
+.refracter-refracter-logo-full {
+  overflow: hidden; }
+  .refracter-refracter-logo-full:before {
+    line-height: 0.43em; }
+
+.refracter-repo {
+  position: relative;
+  top: 0.2em; }
+
+.icon.absolute {
+  text-align: center;
+  user-select: none; }
+  .icon.absolute:before {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    margin-top: -0.5em; }
+
+.icon:hover {
+  text-decoration: none !important; }
+
+.playlist-icon {
+  margin-right: 15px; }
+  .playlist-icon .notes {
+    position: relative;
+    top: 0.2em;
+    left: -0.2em;
+    text-shadow: -1px -1px 2px rgba(0, 0, 0, 0.3); }
+  .playlist-icon .list {
+    position: relative;
+    top: -0.05em;
+    left: 0.2em; }
+
 body {
   font-family: "Titillium Web", sans-serif;
   color: #efefef;
-  font-size: 1.5em;
+  font-size: 1.6em;
   line-height: 1.5em; }
 
 a, a:visited {
   color: #efefef; }
+
+a:focus {
+  text-decoration: none; }
 
 a:hover {
   color: #EDA564; }
@@ -217,18 +347,6 @@ h2 {
   h2:first-child {
     margin-top: 0; }
 
-.playlist-icon {
-  margin-right: 15px; }
-  .playlist-icon .notes {
-    position: relative;
-    top: 0.2em;
-    left: -0.2em;
-    text-shadow: -1px -1px 2px rgba(0, 0, 0, 0.3); }
-  .playlist-icon .list {
-    position: relative;
-    top: -0.05em;
-    left: 0.2em; }
-
 .tag {
   font-size: 0.9em; }
 
@@ -238,9 +356,8 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
   border: none;
   color: #efefef;
   background: #555;
-  padding: 0.75em 1em;
-  font-weight: 500;
-  font-size: 16px;
+  padding: 0.2em 1em;
+  font-size: 20px;
   transition: all 0.2s; }
   button.btn:hover, button.btn-default:hover, .dropdown .dropdown-label:hover, .dropdown-contents div:hover {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -254,60 +371,75 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
   background: #333;
   overflow: hidden;
   transition: all .3s; }
+  .dropdown, .dropdown * {
+    user-select: none; }
   .dropdown:hover {
-    box-shadow: inet 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
   .dropdown .dropdown-contents {
     position: absolute;
     top: 46px;
     left: 0;
     width: 100%; }
+    .dropdown .dropdown-contents div {
+      cursor: pointer; }
   .dropdown .dropdown-label {
-    text-align: center; }
+    text-align: center;
+    cursor: default; }
     .dropdown .dropdown-label .icon {
       float: right; }
+  .dropdown .dropdown-label, .dropdown .dropdown-contents div {
+    padding-top: 0.5em; }
 
-.modal-content {
-  background: #333;
-  border-radius: 0;
-  text-align: center; }
+.input-container {
+  text-align: left;
+  margin: -6px -6px 0.5em -6px;
+  padding: 6px; }
 
 label {
-  display: block; }
+  display: block;
+  margin-bottom: 0.5em;
+  font-size: 0.8em; }
+
+input:-webkit-autofill, input:focus:-webkit-autofill {
+  -webkit-text-fill-color: #efefef !important;
+  -webkit-box-shadow: 0 0 0px 1000px #3c3c3c inset; }
 
 input {
   display: block;
-  color: #121212; }
+  width: 100%;
+  background: #3c3c3c;
+  color: #efefef;
+  border: none;
+  font-size: 1.2em;
+  padding: 0.5em 0.5em;
+  transition: all .3s; }
+  input:focus {
+    padding-left: 0.5em;
+    background: #555;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
 
 input:focus, textarea:focus {
   outline: none; }
 
-.input-range {
-  display: inline-block;
-  position: relative;
-  top: 0;
-  left: 0;
-  height: 100%; }
-  .input-range .input-range__track {
-    top: 0;
-    margin: 0;
-    height: 100%;
-    border: none;
-    border-radius: 0;
-    background: #dcdcdc; }
-  .input-range .input-range__track--active {
-    background: #EDA564; }
-  .input-range .input-range__slider {
-    display: none; }
+button[type="submit"] {
+  margin-top: 1em; }
+
+.forgot-password-link {
+  margin-top: 15px; }
+
+.input-errors, .server-errors {
+  font-size: 0.8em;
+  padding: 0.5em 1em;
+  background: #ff6666;
+  text-align: left; }
+
+.server-errors {
+  margin-top: 15px; }
 
 /*
 ================================================================================
 SPINNERS
 ================================================================================
-A Sass mixin to generate a pure CSS3 loading/busy indicator.
-https://github.com/franzheidl/spinners
-Franz Heidl 2014
-MIT License
---------------------------------------------------------------------------------
 USAGE
 
 Default:
@@ -333,6 +465,98 @@ Pass any number of seconds referring to the duration of one full rotation for an
 
 --------------------------------------------------------------------------------
 */
+.spinner-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #333;
+  opacity: 0;
+  visibility: hidden; }
+  .spinner-container .refracter-spinner {
+    position: relative;
+    font-size: 150px;
+    width: 1em;
+    height: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EDA564;
+    transform: scale(0); }
+    .spinner-container .refracter-spinner span {
+      position: absolute;
+      height: 100%; }
+    .spinner-container .refracter-spinner .refracter-logo-spinner-outer {
+      animation-name: rotateRefracterSpinner;
+      animation-duration: 1.5s;
+      animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+      animation-iteration-count: infinite; }
+
+@keyframes rotateRefracterSpinner {
+  0% {
+    transform: rotate3d(0, 0, 1, 45deg); }
+  100% {
+    transform: rotate3d(0, 0, 1, 405deg); } }
+    .spinner-container .refracter-spinner .refracter-logo-spinner-middle {
+      animation-name: pulseRefracterSpinner;
+      animation-duration: 1.5s;
+      animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+      animation-iteration-count: infinite; }
+
+@keyframes pulseRefracterSpinner {
+  0% {
+    transform: scale(0.6); }
+  50% {
+    transform: scale(1.2); }
+  100% {
+    transform: scale(0.6); } }
+  .spinner-container.showing {
+    visibility: visible;
+    opacity: 1; }
+    .spinner-container.showing .refracter-spinner {
+      animation-name: showSpinner;
+      animation-duration: .3s;
+      animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+      animation-fill-mode: forwards; }
+
+@keyframes showSpinner {
+  0% {
+    transform: scale(0); }
+  100% {
+    transform: scale(1); } }
+  .spinner-container.hiding {
+    visibility: visible;
+    animation-name: hideSpinnerContainer;
+    animation-duration: .3s;
+    animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    animation-fill-mode: forwards; }
+
+@keyframes hideSpinnerContainer {
+  0% {
+    opacity: 1; }
+  99% {
+    opacity: 0; }
+  100% {
+    visibility: hidden; } }
+    .spinner-container.hiding .refracter-spinner {
+      transform: scale(1);
+      animation-name: hideSpinner;
+      animation-duration: .3s;
+      animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+      animation-fill-mode: forwards; }
+
+@keyframes hideSpinner {
+  0% {
+    transform: scale(1); }
+  100% {
+    transform: scale(0); } }
+
 @-webkit-keyframes spinner-animation {
   0% {
     -webkit-transform: rotate(0deg); }
@@ -399,46 +623,48 @@ Pass any number of seconds referring to the duration of one full rotation for an
     left: 0;
     width: 100%;
     height: 100%;
-    background: #dcdcdc;
-    padding: 5px; }
+    background: #333;
+    padding: 7px 245px; }
   .topbar .refracter-logo {
     position: absolute;
-    left: 20px;
-    top: 25%;
-    height: 50%;
-    opacity: 0.7; }
-  .topbar .signout-btn {
-    position: absolute;
-    right: 20px;
-    top: 25%; }
+    left: 0;
+    top: 0;
+    height: 100%;
+    padding: 0 20px;
+    color: #efefef;
+    font-size: 150px;
+    overflow: visible; }
+    .topbar .refracter-logo .alpha-label {
+      position: absolute;
+      top: 22px;
+      right: -30px;
+      padding: 5px;
+      font-size: 14px;
+      line-height: 0.9em;
+      background: #efefef;
+      color: #121212;
+      font-weight: bold; }
   .topbar .seach-input-container {
     position: relative;
     display: block;
     margin: auto;
-    max-width: 600px;
+    max-width: 550px;
     height: 100%;
     color: #efefef; }
     .topbar .seach-input-container input {
-      display: block;
       position: absolute;
       z-index: 50;
       height: 100%;
       width: 100%;
-      background: #555;
-      color: #efefef;
-      border: none;
-      font-size: 20px;
-      padding: 20px 20px 20px 75px;
-      transition: all .3s; }
+      font-size: 1.5em;
+      padding: 20px 20px 20px 70px;
+      margin: 0; }
       .topbar .seach-input-container input:focus {
-        padding-left: 20px;
-        background: #484848;
-        color: #EDA564; }
+        padding-left: 20px; }
         .topbar .seach-input-container input:focus + .icon {
           left: 100%;
           right: 0%;
-          transform: translate3d(-100%, 0, 0);
-          color: #EDA564; }
+          transform: translate3d(-100%, 0, 0); }
     .topbar .seach-input-container .icon {
       position: absolute;
       z-index: 51;
@@ -450,6 +676,23 @@ Pass any number of seconds referring to the duration of one full rotation for an
       pointer-events: none;
       transition: all .3s;
       transform: translate3d(0, 0, 0); }
+  .topbar .logged-in {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 235px;
+    padding-right: 112px; }
+    .topbar .logged-in .username {
+      width: 100%;
+      padding: 10px;
+      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+    .topbar .logged-in .signout-btn {
+      position: absolute;
+      top: 0;
+      right: 0; }
 
 .PlayerBar {
   position: fixed;
@@ -462,85 +705,95 @@ Pass any number of seconds referring to the duration of one full rotation for an
   border: solid transparent 5px;
   color: gree;
   padding: 0 130px 0 345px; }
-
-#yt-container {
-  position: absolute;
-  bottom: calc( 100% + 5px);
-  left: 0;
-  height: 340px;
-  width: 340px;
-  transform: translate3d(0, 150%, 0); }
-
-.player-btn {
-  display: inline-block;
-  position: relative;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 60px;
-  background: #EDA564;
-  font-size: 1.5em;
-  cursor: pointer;
-  transition: .1s; }
-  .player-btn:hover {
-    opacity: 0.7; }
-  .player-btn.player-play-pause {
-    font-size: 2em;
-    margin: 0 5px; }
-  .player-btn .icon {
+  .PlayerBar .input-range {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 100%; }
+    .PlayerBar .input-range .input-range__track {
+      top: 0;
+      margin: 0;
+      height: 100%;
+      border: none;
+      border-radius: 0;
+      background: #dcdcdc; }
+    .PlayerBar .input-range .input-range__track--active {
+      background: #EDA564; }
+    .PlayerBar .input-range .input-range__slider {
+      display: none; }
+  .PlayerBar #yt-container {
     position: absolute;
+    bottom: calc( 100% + 5px);
+    left: 0;
+    height: 340px;
+    width: 340px;
+    transform: translate3d(0, 150%, 0); }
+  .PlayerBar .player-btn {
+    display: inline-block;
+    position: relative;
     top: 0;
     left: 0;
     height: 100%;
+    width: 60px;
+    background: #EDA564;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: .1s; }
+    .PlayerBar .player-btn:hover {
+      opacity: 0.7; }
+    .PlayerBar .player-btn.player-play-pause {
+      font-size: 2em;
+      margin: 0 5px; }
+    .PlayerBar .player-btn .icon {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%; }
+  .PlayerBar .volume-mute {
+    display: inline-block;
+    height: 100%;
+    margin-left: 5px;
+    font-size: 1.2em; }
+    .PlayerBar .volume-mute .input-range {
+      width: 85px; }
+  .PlayerBar .player-controls-lhs {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 340px; }
+  .PlayerBar .progress-bar-container {
+    position: relative;
+    display: inline-block;
+    height: 100%;
     width: 100%; }
-
-.volume-mute {
-  display: inline-block;
-  height: 100%;
-  margin-left: 5px;
-  font-size: 1.2em; }
-  .volume-mute .input-range {
-    width: 85px; }
-
-.player-controls-lhs {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 100%;
-  width: 340px; }
-
-.progress-bar-container {
-  position: relative;
-  display: inline-block;
-  height: 100%;
-  width: 100%; }
-
-.track-details {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: left;
-  pointer-events: none;
-  font-size: 1.1em;
-  color: #121212;
-  line-height: 1.6em;
-  padding: .3em .75em; }
-  .track-details .track-title {
-    font-size: 1.3em; }
-  .track-details .track-progress {
-    float: right; }
-
-.player-controls-rhs {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  height: 100%;
-  width: 130px;
-  text-align: right; }
-  .player-controls-rhs .loop-track {
-    margin: 0 5px; }
+  .PlayerBar .track-details {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    pointer-events: none;
+    font-size: 1em;
+    color: #121212;
+    line-height: 1.5em;
+    padding: .35em .75em; }
+    .PlayerBar .track-details .track-title {
+      font-size: 1.5em; }
+    .PlayerBar .track-details .track-progress {
+      float: right; }
+  .PlayerBar .player-controls-rhs {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 130px;
+    text-align: right; }
+    .PlayerBar .player-controls-rhs .loop-track {
+      margin: 0 5px; }
 
 .track-list * {
   user-select: none; }
@@ -559,9 +812,10 @@ Pass any number of seconds referring to the duration of one full rotation for an
     .track-list table thead tr th {
       border: none;
       text-transform: uppercase;
-      padding: 0.75em;
+      padding: 10px 10px 8px;
       max-width: 177px;
-      list-height: 1em; }
+      font-size: 0.8em;
+      transition: all 0.2s; }
       .track-list table thead tr th span {
         white-space: nowrap;
         overflow: hidden;
@@ -581,9 +835,8 @@ Pass any number of seconds referring to the duration of one full rotation for an
       cursor: default;
       border: none;
       font-size: 1.2em;
-      padding: 1em 1em 0.8em 1em;
-      max-width: 177px;
-      line-height: 1em; }
+      padding: 10px 15px 8px;
+      max-width: 177px; }
       .track-list table tr td span {
         white-space: nowrap;
         overflow: hidden;
@@ -798,8 +1051,8 @@ Pass any number of seconds referring to the duration of one full rotation for an
     height: 11.25vmin; } }
       .track-list table tr.active-track .play-icon.equalizer {
         transform-origin: 0 0;
-        transform: scale(0.1) rotate(180deg);
-        margin: 2.1em; }
+        transform: scale(0.11) rotate(180deg);
+        margin: 1.8em 1.7em; }
         .track-list table tr.active-track .play-icon.equalizer:hover:before {
           transform: none; }
 
@@ -817,8 +1070,8 @@ Pass any number of seconds referring to the duration of one full rotation for an
     width: 100%;
     padding-bottom: 100%; }
     .Tile .tile-image .icon {
-      font-size: calc(4vw + 4vh);
-      color: #EDA564 !important; }
+      font-size: calc(3.5vw + 3.5vh);
+      color: #efefef !important; }
     .Tile .tile-image img {
       width: 100%;
       position: absolute; }
@@ -838,14 +1091,39 @@ Pass any number of seconds referring to the duration of one full rotation for an
 .slick-slider .Tile {
   margin: 15px 0; }
 
+.home {
+  min-height: calc(100vh - 70px - 70px - 5px);
+  text-align: center; }
+  .home .home-welcome {
+    max-width: 500px; }
+  .home .refracter-logo {
+    color: #EDA564;
+    font-size: 400px;
+    margin-bottom: 25px; }
+  .home .sign-in-register-buttons {
+    margin: 50px 0; }
+
 .album h1 {
+  position: relative;
   margin: 0; }
 
 .album h2 {
-  margin: 0.5em 0; }
+  font-size: 1.2em;
+  margin: 10px 0 25px; }
 
 .album .container {
   z-index: 5; }
+
+.album .background-art-container {
+  display: block;
+  user-select: none;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #121212; }
 
 .album .background-art {
   user-select: none;
@@ -854,7 +1132,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
   top: 0;
   right: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-position: center center;
   background-size: cover;
   opacity: 0.1; }
@@ -877,6 +1155,8 @@ Pass any number of seconds referring to the duration of one full rotation for an
   padding-left: 210px;
   height: 185px;
   overflow: visible; }
+  .album .album-info .dropdown {
+    margin-top: 3.5em; }
 
 .album .album-art {
   position: absolute;
@@ -885,14 +1165,22 @@ Pass any number of seconds referring to the duration of one full rotation for an
   width: 185px;
   margin-bottom: 0; }
 
-.album .add-album-btn {
-  margin: 0.5em 0; }
-
 .artist .container {
   z-index: 5; }
 
 .artist .artist-intro {
   text-align: center; }
+
+.artist .background-art-container {
+  display: block;
+  user-select: none;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #121212; }
 
 .artist .background-art {
   display: block;
@@ -902,7 +1190,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
   top: 0;
   right: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-position: center center;
   background-size: cover;
   opacity: 0.3; }
@@ -921,7 +1209,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
 
 .sidebar {
   position: fixed;
-  z-index: 50;
+  z-index: 101;
   top: 70px;
   left: 0;
   width: 350px;
@@ -943,23 +1231,20 @@ Pass any number of seconds referring to the duration of one full rotation for an
     height: 340px;
     background: #EDA564; }
     .sidebar .album-art .icon {
-      color: #EDA564;
-      font-size: 350px;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
+      color: #efad72;
+      font-size: 291.66667px; }
     .sidebar .album-art img {
       width: 100%; }
   .sidebar .wrapper {
     position: relative;
     height: 100%; }
     .sidebar .wrapper.logged-in {
-      padding-top: 65px; }
+      padding-top: 70px; }
   .sidebar .login-signup {
     text-align: center;
-    padding: 20px; }
-  .sidebar button {
-    display: block;
-    width: calc(100% - 40px);
-    margin: 20px; }
+    padding: 30px; }
+    .sidebar .login-signup .sign-in-register-buttons {
+      margin: 30px -25px; }
   .sidebar .link {
     cursor: pointer;
     position: relative;
@@ -969,29 +1254,34 @@ Pass any number of seconds referring to the duration of one full rotation for an
     padding: 12px 15px;
     color: #efefef;
     background: transparent;
-    border-bottom: 1px solid #121212;
     transition: all 0.2s;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; }
-    .sidebar .linkinput {
-      color: #121212; }
-    .sidebar .link:hover, .sidebar .link.dragNdrop-hover {
-      background: #555;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
+    .sidebar .link:hover, .sidebar .link:focus {
+      background: #555; }
+    .sidebar .link.dragNdrop-hover {
+      background: #121212;
+      padding-left: 30px; }
     .sidebar .link:hover, .sidebar .link:visited {
       text-decoration: none; }
       .sidebar .link:hover .text, .sidebar .link:visited .text {
         text-decoration: none; }
+  .sidebar input.link {
+    color: #121212;
+    font-size: 1em; }
   .sidebar .playlist-icon {
     font-size: 1.1em; }
   .sidebar .library-link {
     position: absolute;
     top: 0;
     left: 0;
-    height: 65px;
+    height: 70px;
     font-size: 1.5em;
-    padding: 20px 15px; }
+    padding: 15px;
+    border-bottom: 5px solid #121212; }
     .sidebar .library-link .library {
-      margin-right: 20px;
-      margin-left: 2px; }
+      margin-right: 15px; }
+
+.alpha-label {
+  font-size: 14px; }

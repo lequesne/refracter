@@ -1,7 +1,9 @@
+import * as refracter from '../refracter';
 import React, {Component} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import Form from '../components/Form';
-import * as refracter from '../refracter';
+import {toast} from 'react-toastify';
+import RefracterSpinner from '../components/RefracterSpinner';
 
 class SignUpForm extends Component {
 
@@ -10,23 +12,18 @@ class SignUpForm extends Component {
 
         //setup state
         this.state = {
-            showModal: false
+            showModal: false,
+            showSpinner: false
         };
 
         //bindings
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    onComponentWillMount(){
-    }
-
     handleSubmit(formData) {
 
         //set loading status
-        this.setState({
-            formLoading: true,
-            serverError: null
-        });
+        this.setState({showSpinner: true, serverError: null});
 
         //registration
         fetch(`${refracter.refracterEndpoint}register.php?username=${formData.username}&password=${formData.password}&passwordConfirm=${formData.passwordConfirm}&email=${formData.email}`).then(response => {
@@ -34,16 +31,23 @@ class SignUpForm extends Component {
         }).then(response => {
             console.log(response);
 
-            if ( response.success ) {
-                // NOTE: Registration successful. Tell user the registration was successful and to check inbox for activaton link
+            if (response.success) {
+
+                //hide form modal
+                setTimeout(()=>{
+                    this.props.onHide();
+                    toast(`An account activation email has been sent to your email. Please check your inbox to complete registration.`, {
+                        type: toast.TYPE.INFO,
+                        autoClose: 10000
+                    });
+                },1000);
+
             } else {
-                this.setState({
-                    formLoading: false,
-                    serverError: response.errors
-                });
+                //error
+                this.setState({showSpinner: false, serverError: response.errors});
             }
         }).catch(error => {
-            console.log(error);
+            this.setState({showSpinner: false, serverError: error});
         });
 
     }
@@ -61,8 +65,7 @@ class SignUpForm extends Component {
                     minChar: 5,
                     maxChar: 25
                 }
-            },
-            {
+            }, {
                 name: 'email',
                 type: 'email',
                 placeholder: 'Email',
@@ -72,8 +75,7 @@ class SignUpForm extends Component {
                     email: true,
                     maxChar: 250
                 }
-            },
-            {
+            }, {
                 name: 'password',
                 type: 'password',
                 placeholder: 'Password',
@@ -83,8 +85,7 @@ class SignUpForm extends Component {
                     minChar: 8,
                     maxChar: 20
                 }
-            },
-            {
+            }, {
                 name: 'passwordConfirm',
                 type: 'password',
                 placeholder: 'Password',
@@ -98,9 +99,9 @@ class SignUpForm extends Component {
 
         return (
 
-            <Modal show={this.props.show} onHide={this.props.onHide}>
+            <Modal show={this.props.show} onHide={this.props.onHide} dialogClassName="small-modal">
                 <Modal.Header closeButton>
-                    <Modal.Title>Sign up</Modal.Title>
+                    <Modal.Title>Register</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
 
@@ -112,10 +113,9 @@ class SignUpForm extends Component {
                         serverError={this.state.serverError}
                     />
 
+                    <RefracterSpinner show={this.state.showSpinner} size={100}/>
+
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={this.props.onHide}>Close</Button>
-                </Modal.Footer>
             </Modal>
 
         );

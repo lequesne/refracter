@@ -1,5 +1,13 @@
 * {
     box-sizing: border-box;
+    outline:0 !important;
+}
+
+::selection {
+  background: $primaryColor;
+}
+::-moz-selection {
+  background: $primaryColor;
 }
 
 body, html {
@@ -9,6 +17,47 @@ body, html {
     padding: 0;
     margin: 0;
     background: $darkBackground;
+}
+
+
+.Refracter-app {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+#splash {
+    position: fixed;
+    z-index: 999999;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    transition: opacity 1s;
+
+    &.spinner-container.showing {
+        visibility: visible;
+        opacity: 1;
+        animation: none;
+    }
+
+}
+
+.background-logo {
+    position: absolute;
+    z-index: 0;
+    top: 5%;
+    left: 20%;
+    width: 100%;
+    height: 100%;
+    font-size: 130vh;
+    color: lighten($darkBackground,1%);
 }
 
 hr {
@@ -21,7 +70,19 @@ hr {
 
 .container {
     width: 100%;
-    max-width: 1440px;
+    max-width: 1400px;
+    padding-left: 50px;
+    padding-right: 50px;
+
+    @media #{$smaller-lg} {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    @media #{$smaller-md} {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 }
 
 .padded-inner {
@@ -34,7 +95,7 @@ hr {
 
 .content-window {
     position: absolute;
-    z-index: 1000;
+    z-index: 100;
     top: $topBarHeight;
     right: 0;
     width: calc( 100% - #{$sidebarWidth} );
@@ -50,15 +111,31 @@ hr {
 }
 
 //scrollbar
-.scrollarea .scrollbar-container.vertical .scrollbar {
-    background: $white;
+
+.Refracter-app {
+    .scrollarea .scrollbar-container.vertical .scrollbar {
+        background: $white;
+    }
+}
+
+//vert center
+.y-center {
+    display: flex;
+    align-items: center;
+}
+
+.x-center {
+    display: flex;
+    justify-content: center;
 }
 
 .page {
     position: relative;
-    //width: 100%;
-    //height: 100%;
-    //overflow: auto;
+    min-height: $contentWindowHeight;
+}
+
+.col-padding {
+    padding: 30px;
 }
 
 .card {
@@ -73,61 +150,42 @@ hr {
     }
 }
 
-//icons
-.icon.absolute {
-    text-align: center;
-    user-select: none;
-
-    &:before {
-        position: absolute;
-        width: 100%;
-        top: 50%;
-        left: 0;
-        margin-top: -0.5em;
-    }
-
-
-}
-
-.icon {
-    &:hover {
-        text-decoration: none !important;
-    }
-}
-
 //toast messages
 
-.toastify {
-    z-index: 9999;
-    color: $white;
+.Refracter-app {
+    .toastify {
+        z-index: 9999;
+        color: $white;
 
 
-    &.toastify--top-right {
-        top: calc( #{$topBarHeight} + 1em + #{$borderPadding});
-    }
-
-    .toastify__close {
-        font-size: 1.2em;
-        line-height: 0;
-        padding-bottom: 4px;
-
-        &:hover {
-            background: none;
-            color: $white;
+        &.toastify--top-right {
+            top: calc( #{$topBarHeight} + #{$borderPadding});
         }
-    }
 
-    .toastify-content {
-        display: flex;
-        align-items: center;
-        background: $medBackground;
-        padding-left: 15px;
-        box-shadow: $dropShadowDepth1;
-        animation-timing-function: linear !important;
-    }
+        .toastify__close {
+            font-size: 1.2em;
+            line-height: 0;
+            padding-bottom: 4px;
 
-    .toastify__body {
-        font-size: 1em;
+            &:hover {
+                background: none;
+                color: $white;
+            }
+        }
+
+        .toastify-content {
+            display: flex;
+            align-items: center;
+            background: $medBackground;
+            padding-left: 15px;
+            box-shadow: $dropShadowDepth1;
+            animation-timing-function: linear !important;
+        }
+
+        .toastify__body {
+            font-size: 1em;
+            padding-right: 25px;
+        }
     }
 }
 
@@ -135,6 +193,10 @@ hr {
 html.dragNdrop-isDragging {
     * {
         user-select: none;
+    }
+
+    .content-window {
+        z-index: 102;
     }
 }
 
@@ -145,16 +207,8 @@ html.dragNdrop-isDragging {
     padding: 1em;
     background: $white;
     color: $darkBackground;
+    box-shadow: $dropShadowDepth2;
     transform: rotate3d(0,0,0);
-}
-
-//vert cenering for modals
-body.modal-open .modal {
-    display: flex !important;
-    height: 100%;
-}
-body.modal-open .modal .modal-dialog {
-    margin: auto;
 }
 
 //context menu

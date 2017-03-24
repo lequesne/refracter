@@ -1,7 +1,7 @@
 import * as refracter from '../refracter';
 import React, {Component} from 'react';
 import {browserHistory} from 'react-router';
-import {Button} from 'react-bootstrap';
+import {Col, Button} from 'react-bootstrap';
 import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu";
 import {toast} from 'react-toastify';
 
@@ -49,9 +49,10 @@ class UserPlaylists extends Component {
     }
 
     existingPlaylistEdit(event, playlist, element){
-        this.state.playlists[playlist.index].editable = true;
+        let playlists = this.state.playlists;
+        playlists[playlist.index].editable = true;
         this.setState({
-            playlist: this.state.playlists
+            playlist: playlists
         });
     }
 
@@ -287,10 +288,11 @@ class UserPlaylists extends Component {
                     />
                 : null}
 
-                { !this.state.newPlaylist
-                ? <Button className="new-playlist" onClick={this.createNewPlaylist}>Create new playlist</Button>
-                : null
-                }
+                { !this.state.newPlaylist ?
+                    <div className="col-padding">
+                        <Button block className="new-playlist" onClick={this.createNewPlaylist}>Create new playlist</Button>
+                    </div>
+                : null}
 
             </div>
         );

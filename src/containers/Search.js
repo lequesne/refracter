@@ -31,26 +31,30 @@ class Search extends Component {
     }
 
     performSearch(searchQuery) {
-        if (searchQuery) {
 
-            //TODO set loader in state
+        this.context.parentState.showPageSpinner();
 
-            refracter.search(searchQuery).then(searchData => {
+        refracter.search(searchQuery).then(searchData => {
 
-                //TODO Hide Loader
+            console.log('Search results: ', searchData);
 
-                console.log('Search results: ', searchData);
-                this.setState({
-                    artists: searchData.artists,
-                    albums: searchData.albums,
-                    tracks: searchData.tracks
-                });
-
-            }).catch(err => {
-                console.log('ERROR RETURNED: ', err);
+            this.setState({
+                artists: searchData.artists,
+                albums: searchData.albums,
+                tracks: searchData.tracks
             });
 
-        }
+            this.context.parentState.hidePageSpinner();
+
+        }).catch(err => {
+            this.context.parentState.hidePageSpinner();
+            toast(err, {
+                type: toast.TYPE.ERROR,
+                autoClose: 10000
+            });
+            console.log('ERROR RETURNED: ', err);
+        });
+
     }
 
     render() {

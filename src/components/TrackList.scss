@@ -12,7 +12,6 @@
             tr {
                 border: none;
                 background: none !important;
-                //border-bottom: 1px solid $white;
 
                 .play-btn-col {
                     width: 40px;
@@ -29,9 +28,10 @@
                 th {
                     border: none;
                     text-transform: uppercase;
-                    padding: 0.75em;
+                    padding: 10px 10px 8px;
                     max-width: 177px;
-                    list-height: 1em;
+                    font-size: 0.8em;
+                    transition: all $standardHoverTime;
 
                     span {
                         white-space: nowrap;
@@ -62,9 +62,8 @@
                 cursor: default;
                 border: none;
                 font-size: 1.2em;
-                padding: 1em 1em 0.8em 1em;
+                padding: 10px 15px 8px;
                 max-width: 177px;
-                line-height: 1em;
 
                 span {
                     white-space: nowrap;
@@ -116,8 +115,8 @@
 
                 .play-icon.equalizer {
                     transform-origin: 0 0;
-                    transform: scale(0.1) rotate(180deg);
-                    margin: 2.1em;
+                    transform: scale(0.11) rotate(180deg);
+                    margin: 1.8em 1.7em;
 
                     &:hover {
 

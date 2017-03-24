@@ -14,56 +14,59 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: $lightBackground;
-        padding: 5px;
+        background: $medBackground;
+        padding: 7px 245px;
     }
 
     .refracter-logo {
         position: absolute;
-        left: 20px;
-        top: 25%;
-        height: 50%;
-        opacity: 0.7;
-    }
+        left: 0;
+        top: 0;
+        height: 100%;
+        padding: 0 20px;
+        color: $white;
+        font-size: 150px;
+        overflow: visible;
+        //opacity: 0.7;
 
-    .signout-btn {
-        position: absolute;
-        right: 20px;
-        top: 25%;
+        //alpha label
+        .alpha-label {
+            position: absolute;
+            top: 22px;
+            right: -30px;
+            padding: 5px;
+            font-size: 14px;
+            line-height: 0.9em;
+            background: $white;
+            color: $darkBackground;
+            font-weight: bold;
+        }
     }
 
     .seach-input-container {
         position: relative;
         display: block;
         margin: auto;
-        max-width: 600px;
+        max-width: 550px;
         height: 100%;
         color: $white;
 
         input {
-            display: block;
             position: absolute;
             z-index: 50;
             height: 100%;
             width: 100%;
-            background: $medLightBackground;
-            color: $white;
-            border: none;
-            font-size: 20px;
-            padding: 20px 20px 20px #{ $topBarHeight + 5px};
-            transition: all .3s;
+            font-size: 1.5em;
+            padding: 20px 20px 20px $topBarHeight;
+            margin: 0;
 
             &:focus {
                 padding-left: 20px;
-                background: darken( $medLightBackground, 5% );
-                //box-shadow: inset 0 0 0 2px $primaryColor;
-                color: $primaryColor;
 
                 & + .icon {
                     left: 100%;
                     right: 0%;
                     transform: translate3d(-100%,0,0);
-                    color: $primaryColor;
                 }
             }
         }
@@ -80,6 +83,30 @@
             pointer-events: none;
             transition: all .3s;
             transform: translate3d(0,0,0);
+        }
+    }
+
+    .logged-in {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        //padding: 10px;
+        width: 235px;
+        padding-right: 112px;
+
+        .username {
+            width: 100%;
+            padding: 10px;
+            text-align: right;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .signout-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
         }
     }
 

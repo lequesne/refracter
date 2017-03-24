@@ -40,7 +40,7 @@ class PlayerBar extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.youTubePlayer) {
-            //add check if video is past 5 seconds for example to play clip from start
+            //TODO on previous track click, if track is more than 5 seconds in go to start of track, otherwise previous
             if ( !this.props.track || nextProps.track.trackID !== this.props.track.trackID )
                 this.loadTrack(nextProps.track);
         }

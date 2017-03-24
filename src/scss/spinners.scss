@@ -2,11 +2,6 @@
 ================================================================================
 SPINNERS
 ================================================================================
-A Sass mixin to generate a pure CSS3 loading/busy indicator.
-https://github.com/franzheidl/spinners
-Franz Heidl 2014
-MIT License
---------------------------------------------------------------------------------
 USAGE
 
 Default:
@@ -33,6 +28,152 @@ Pass any number of seconds referring to the duration of one full rotation for an
 --------------------------------------------------------------------------------
 */
 
+//start refracter spinner
+
+.spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: $medBackground;
+    //default not showing
+    opacity: 0;
+    visibility: hidden;
+
+    .refracter-spinner {
+        position: relative;
+        font-size: 150px;
+        width: 1em;
+        height: 1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $primaryColor;
+        //default state
+        transform: scale(0);
+
+        span {
+            position: absolute;
+            height: 100%;
+        }
+
+        .refracter-logo-spinner-outer {
+            animation-name: rotateRefracterSpinner;
+            animation-duration: 1.5s;
+            animation-timing-function: cubic-bezier(0.445, 0.050, 0.550, 0.950);
+            animation-iteration-count: infinite;
+
+            @keyframes rotateRefracterSpinner {
+                0% {
+                    transform: rotate3d(0,0,1,45deg);
+                }
+                100% {
+                    transform: rotate3d(0,0,1,405deg);
+                }
+            }
+        }
+
+
+        .refracter-logo-spinner-middle {
+            animation-name: pulseRefracterSpinner;
+            animation-duration: 1.5s;
+            animation-timing-function: cubic-bezier(0.445, 0.050, 0.550, 0.950);
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes pulseRefracterSpinner {
+            0% {
+                transform: scale(0.6);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(0.6);
+            }
+        }
+    }
+
+    &.showing {
+        visibility: visible;
+        opacity: 1;
+
+        // animation-name: showSpinnerContainer;
+        // animation-duration: .3s;
+        // animation-timing-function: cubic-bezier(0.445, 0.050, 0.550, 0.950);
+        // animation-fill-mode: forwards;
+        // @keyframes showSpinnerContainer {
+        //     0% {
+        //         opacity: 0;
+        //     }
+        //     100% {
+        //         opacity: 1;
+        //     }
+        // }
+
+        .refracter-spinner {
+            animation-name: showSpinner;
+            animation-duration: .3s;
+            //animation-delay: .3s;
+            animation-timing-function: cubic-bezier(0.445, 0.050, 0.550, 0.950);
+            animation-fill-mode: forwards;
+            @keyframes showSpinner {
+                0% {
+                    transform: scale(0);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+        }
+
+    }
+
+    &.hiding {
+        visibility: visible;
+        animation-name: hideSpinnerContainer;
+        animation-duration: .3s;
+        animation-timing-function: cubic-bezier(0.445, 0.050, 0.550, 0.950);
+        animation-fill-mode: forwards;
+        @keyframes hideSpinnerContainer {
+            0% {
+                opacity: 1;
+            }
+            99% {
+                opacity: 0;
+            }
+            100% {
+                visibility: hidden;
+            }
+        }
+
+        .refracter-spinner {
+            transform: scale(1);
+            animation-name: hideSpinner;
+            animation-duration: .3s;
+            animation-timing-function: cubic-bezier(0.445, 0.050, 0.550, 0.950);
+            animation-fill-mode: forwards;
+            @keyframes hideSpinner {
+                0% {
+                    transform: scale(1);
+                }
+                100% {
+                    transform: scale(0);
+                }
+            }
+
+        }
+    }
+}
+
+// end refracter spinner
 
 @mixin spinner-keyframes {
   @-webkit-keyframes spinner-animation {

@@ -161,7 +161,7 @@ class Form extends Component {
 
                 {inputs}
 
-                <Button type="submit" className={this.props.submitBtn?null:'hidden'}>{this.props.submitBtn}</Button>
+                <Button block type="submit" className={this.props.submitBtn?null:'hidden'}>{this.props.submitBtn}</Button>
 
                 {this.props.children}
 

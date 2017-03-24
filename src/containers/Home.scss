@@ -1,0 +1,18 @@
+.home {
+    min-height: $contentWindowHeight;
+    text-align: center;
+
+    .home-welcome {
+        max-width: 500px;
+    }
+
+    .refracter-logo {
+        color: $primaryColor;
+        font-size: 400px;
+        margin-bottom: 25px;
+    }
+
+    .sign-in-register-buttons {
+        margin: $pageComponentMargin 0;
+    }
+}

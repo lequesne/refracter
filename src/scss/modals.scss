@@ -1,0 +1,57 @@
+//vert cenering for modals
+body.modal-open .modal {
+    display: flex !important;
+    height: 100%;
+}
+body.modal-open .modal .modal-dialog {
+    margin: auto;
+}
+
+.modal-dialog {
+    max-width: 600px;
+    width: calc(100% - #{$borderPadding} - #{$borderPadding});
+
+    &.small-modal {
+        max-width: 400px;
+    }
+}
+
+.modal-body {
+    padding: 30px;
+    padding-top: 20px;
+}
+
+.modal-content {
+    background: $medBackground;
+    border-radius: 0;
+    text-align: center;
+
+    .close {
+        position: absolute;
+        top: 25px;
+        right: 20px;
+        line-height: 0;
+        color: $white;
+        text-shadow: none;
+        opacity: 1;
+        transition: color $standardHoverTime;
+
+        &:hover {
+            color: $primaryColor;
+        }
+    }
+}
+
+.modal-header {
+    padding: 30px 30px 0 30px;
+    border: none;
+}
+
+.modal-title {
+    font-size: 2em;
+}
+
+.modal-footer {
+    padding: 0 30px 30px 30px;
+    border: none;
+}

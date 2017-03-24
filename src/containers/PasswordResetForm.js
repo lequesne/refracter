@@ -1,8 +1,10 @@
+import * as refracter from '../refracter';
 import React, {Component} from 'react';
 import { browserHistory } from 'react-router';
 import {Modal, Button} from 'react-bootstrap';
+import {toast} from 'react-toastify';
 import Form from '../components/Form';
-import * as refracter from '../refracter';
+import RefracterSpinner from '../components/RefracterSpinner';
 
 class PasswordResetForm extends Component {
 
@@ -11,24 +13,23 @@ class PasswordResetForm extends Component {
 
         //setup state
         this.state = {
-            showModal: false
+            showModal: false,
+            showSpinner: false
         };
 
         //bindings
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    onComponentWillMount() {}
-
     handleSubmit(formData) {
-
-        //set loading status
-        this.setState({formLoading: true, serverError: null});
 
         //reset password with new password and query token
         let pwResetToken = refracter.getQueryString('pwReset');
 
         if ( pwResetToken ) {
+
+            //set loading status
+            this.setState({showSpinner: true, serverError: null});
 
             fetch(`${refracter.refracterEndpoint}resetPassword.php?key=${pwResetToken}&password=${formData.password}&passwordConfirm=${formData.passwordConfirm}`).then(response => {
                 return response.json();
@@ -38,15 +39,24 @@ class PasswordResetForm extends Component {
 
                 if (response.success) {
                     //new password has been set
-                    this.setState({formLoading: false});
-                    browserHistory.push('/');
+
+                    //browserHistory.push('/');
+
+                    setTimeout(()=>{
+                        this.props.onHide();
+                        toast(`Your password has been successfully reset. Please login with your new password.`, {
+                            type: toast.TYPE.SUCCESS,
+                            autoClose: 10000
+                        });
+                    },1000);
+
                 } else {
                     //error
-                    this.setState({formLoading: false, serverError: response.errors});
+                    this.setState({showSpinner: false, serverError: response.errors});
                 }
 
             }).catch(error => {
-                this.setState({formLoading: false});
+                this.setState({showSpinner: false, serverError: error});
                 console.log('Reset Password: ', error);
             });
 
@@ -84,7 +94,7 @@ class PasswordResetForm extends Component {
 
         return (
 
-            <Modal show={this.props.show} onHide={this.props.onHide}>
+            <Modal show={this.props.show} onHide={this.props.onHide} dialogClassName="small-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Reset your password</Modal.Title>
                 </Modal.Header>
@@ -101,10 +111,9 @@ class PasswordResetForm extends Component {
                         serverError={this.state.serverError}>
                     </Form>
 
+                    <RefracterSpinner show={this.state.showSpinner} size={100}/>
+
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={this.props.onHide}>Close</Button>
-                </Modal.Footer>
             </Modal>
 
         );

@@ -10,7 +10,7 @@ const Tile = ({onTileClick, link, mainTitle, secondaryTitle, image}) => {
         <Link to={link} onClick={onClickValue} title={`${mainTitle}${secondaryTitle ? ' - '+secondaryTitle:''}`} className="Tile">
             <div className="tile-image">
 
-                { image ? <img src={image} alt={mainTitle}/> : <div className="ion-disc icon"></div> }
+                { image ? <img src={image} alt={mainTitle}/> : <div className="ion-disc icon absolute"></div> }
             </div>
             <div className="tile-info">
                 <div className="tile-main-title">{mainTitle}</div>
