@@ -60,6 +60,10 @@
             opacity: 0.7;
         }
 
+        &.enabled {
+            background: $medBackground;
+        }
+
         &.player-play-pause {
             font-size: 2em;
             margin: 0 $borderPadding;
@@ -134,5 +138,7 @@
             margin: 0 $borderPadding;
         }
     }
+
+
 
 }

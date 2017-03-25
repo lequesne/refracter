@@ -153,13 +153,17 @@ hr {
 //toast messages
 
 .Refracter-app {
+    
     .toastify {
-        z-index: 9999;
+        z-index: 99999;
         color: $white;
-
 
         &.toastify--top-right {
             top: calc( #{$topBarHeight} + #{$borderPadding});
+        }
+
+        .toastify-content--info {
+            border-color: $primaryColor;
         }
 
         .toastify__close {
@@ -193,6 +197,12 @@ hr {
 html.dragNdrop-isDragging {
     * {
         user-select: none;
+    }
+
+    .dragNdrop-droppable {
+        * {
+            pointer-events: none;
+        }
     }
 
     .content-window {

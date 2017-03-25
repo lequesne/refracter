@@ -1,4 +1,10 @@
 
+.icon {
+    &:hover {
+        text-decoration: none !important;
+    }
+}
+
 .refracter-refracter-logo-full {
     overflow: hidden;
     &:before {
@@ -23,18 +29,21 @@
         margin-top: -0.5em;
     }
 
-
 }
 
-.icon {
-    &:hover {
-        text-decoration: none !important;
-    }
+.library.icon {
+    position: relative;
+    top: 0.15em;
+    left: -0.1em;
+    margin-right: 10px;
 }
 
 //symbol icons
 .playlist-icon {
+    position: relative;
     margin-right: 15px;
+    top: 0.2em;
+
     .notes {
         position: relative;
         top: 0.2em;

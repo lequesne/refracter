@@ -25,7 +25,9 @@ class App extends Component {
             searchValue: '',
             activeTrack: null,
             playing: false,
-            queueId: 0,
+            shuffle: false,
+            alreadyShuffledTracks: [],
+            queueLocation: null,
             queue: [],
             showPageSpinner: false
         }
@@ -36,6 +38,8 @@ class App extends Component {
         this.logOutUser = this.logOutUser.bind(this);
         this.updateUserPlaylists = this.updateUserPlaylists.bind(this);
         this.updateQueue = this.updateQueue.bind(this);
+        this.playPauseTrack = this.playPauseTrack.bind(this);
+        this.shuffleToggle = this.shuffleToggle.bind(this);
         this.playNextTrackInQueue = this.playNextTrackInQueue.bind(this);
         this.playPreviousTrackInQueue = this.playPreviousTrackInQueue.bind(this);
         this.updateAppPlayState = this.updateAppPlayState.bind(this);
@@ -56,13 +60,16 @@ class App extends Component {
         this.checkPasswordReset();
 
         //on route change show page spinner
+        this.setState({
+            pathname: location.pathname
+        });
         browserHistory.listen( location =>  {
             if ( !this.state.pathname || location.pathname !== this.state.pathname ) {
                 this.showPageSpinner();
             }
             this.setState({
                 pathname: location.pathname
-            })
+            });
         });
     }
 
@@ -73,10 +80,8 @@ class App extends Component {
             let splash = document.getElementById('splash');
             splash.classList.remove('showing');
             splash.classList.add('hiding');
-            //let splashDuration = parseFloat(getComputedStyle(splash)['transitionDuration']) + 1000;
-            //splash.style.opacity = 0;
 
-            //remove splash after transition in
+            //remove splash after animate out
             setTimeout(()=>{
                 splash.remove();
             },1000);
@@ -178,18 +183,53 @@ class App extends Component {
         });
     }
 
-    updateQueue(track, trackList) {
+    updateQueue(track, trackList, queueLocation) {
 
         if ( !track && trackList ) {
             //only update queue
+
             this.setState({
                 queue: trackList,
             });
-        } else if ( !this.state.activeTrack || this.state.activeTrack.trackID !== track.trackID) {
+
+        //} else if ( !this.state.activeTrack || this.state.activeTrack.trackID !== track.trackID ) {
+        } else if ( track && queueLocation ) {
+            //new track and queue
+
+            //new track is played, set queue id
             this.setState({
-                queueId: this.state.queueId++,
+                queueLocation: queueLocation,
                 queue: trackList,
                 activeTrack: track
+            });
+
+        }
+
+    }
+
+    playPauseTrack(){
+
+        if ( !this.state.playing ) {
+            this.setState({
+                playTrack: false
+            });
+        } else {
+            this.setState({
+                playTrack: true
+            });
+        }
+
+    }
+
+    shuffleToggle(){
+
+        if ( this.state.shuffle ) {
+            this.setState({
+                shuffle: false
+            });
+        } else {
+            this.setState({
+                shuffle: true
             });
         }
 
@@ -287,14 +327,18 @@ class App extends Component {
                     user={this.state.user}
                     updateUserPlaylists={this.updateUserPlaylists}
                     activeTrack={this.state.activeTrack}
+                    queueLocation={this.state.queueLocation}
                 />
 
                 <PlayerBar
+                    playTrack={this.state.playTrack}
+                    playPauseTrack={this.playPauseTrack}
                     updateAppPlayState={this.updateAppPlayState}
-                    queueId={this.state.queueId}
+                    //queueId={this.state.queueId}
                     track={this.state.activeTrack}
                     onNextTrack={this.playNextTrackInQueue}
                     onPrevTrack={this.playPreviousTrackInQueue}
+                    shuffle={this.state.shuffle}
                 />
 
                 <div className="content-window">
@@ -303,7 +347,9 @@ class App extends Component {
                             //appState: this.state
                             user: this.state.user,
                             playing: this.state.playing,
-                            activeTrack: this.state.activeTrack
+                            activeTrack: this.state.activeTrack,
+                            queueLocation: this.state.queueLocation,
+                            shuffle: this.state.shuffle
                         })}
                     </ScrollArea>
                     <RefracterSpinner show={this.state.showPageSpinner} size={150}/>

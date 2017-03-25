@@ -7,6 +7,10 @@ body.modal-open .modal .modal-dialog {
     margin: auto;
 }
 
+.modal-backdrop {
+    background: $medBackground;
+}
+
 .modal-dialog {
     max-width: 600px;
     width: calc(100% - #{$borderPadding} - #{$borderPadding});
@@ -25,6 +29,7 @@ body.modal-open .modal .modal-dialog {
     background: $medBackground;
     border-radius: 0;
     text-align: center;
+    box-shadow: $dropShadowDepth1;
 
     .close {
         position: absolute;

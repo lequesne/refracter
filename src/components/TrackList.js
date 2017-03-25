@@ -24,7 +24,7 @@ class TrackList extends Component {
 
         //bindings
         this.playTrack = this.playTrack.bind(this);
-        this.activeTrackClass = this.activeTrackClass.bind(this);
+        this.shuffleTracks = this.shuffleTracks.bind(this);
         this.onSortChange = this.onSortChange.bind(this);
         this.addSelectedTracksToUser = this.addSelectedTracksToUser.bind(this);
         this.removeSelectedTracksForUser = this.removeSelectedTracksForUser.bind(this);
@@ -39,21 +39,29 @@ class TrackList extends Component {
 
     }
 
-    componentWillMount() {
-        //this.setState({queueId: this.props.queueId});
-    }
-
     componentWillReceiveProps(nextProps) {
         //condition for playlist page where the component does not remount on changing playlists
-        if ( nextProps.playlistID )
+        if ( nextProps.playlistID ) {
             this.setState({
                 tracks: nextProps.tracks
             });
+        }
+
+        //if shuffle was enabled and then gets disabled, reset the queue in the app with a fresh list
+        if ( !this.props.shuffle && nextProps.shuffle ) {
+            this.shuffleTracks();
+        } else if ( this.props.shuffle && !nextProps.shuffle ) {
+            this.onSortChange(this.state.sortName, this.state.sortOrder);
+        }
     }
 
     componentDidMount() {
         //run initial sort based off initial state/props
-        this.onSortChange(this.state.sortName, this.state.sortOrder, true);
+        if ( this.props.shuffle ) {
+            this.shuffleTracks();
+        } else {
+            this.onSortChange(this.state.sortName, this.state.sortOrder, true);
+        }
     }
 
     componentDidUpdate(){
@@ -149,10 +157,25 @@ class TrackList extends Component {
         }
     }
 
-
-
     playTrack(track) {
-        this.props.updateQueue(track, this.state.tracks);
+        if ( this.props.activeTrack && track.trackID === this.props.activeTrack.trackID ) {
+            //toggle play/pause
+            this.props.playPauseTrack();
+        } else {
+            //newly clicked track, update active track and queue
+            this.props.updateQueue(track, this.state.tracks, location.pathname);
+        }
+    }
+
+    shuffleTracks(){
+
+        let shuffledTracks = refracter.shuffleArray( this.state.tracks );
+
+        this.setState({
+            tracks: shuffledTracks
+        });
+
+        this.props.updateQueue(null, shuffledTracks);
     }
 
     selectTrack(event, selectedTrack, clickedIndex, mouseUp) {
@@ -443,18 +466,6 @@ class TrackList extends Component {
         }
     }
 
-    activeTrackClass(track) {
-        if (this.props.activeTrack) {
-            //TODO IMPORTANT, MULTIPLE ACIVE TRACKS come back and test it works correctly with lists that share the same track id (should only be active on original queue)
-            //MAKE ACTIVE TRACK USE TRACK ID AND ITS INDEX IN THE QUEUE TO SET CLASS
-            //if ( this.state.queueId === this.props.queueId ) {
-            return track.trackID === this.props.activeTrack.trackID
-                ? 'active-track'
-                : '';
-            //}
-        }
-    }
-
     handleContextPlayTrack(event, track, element) {
         if (track)
             this.playTrack(track);
@@ -462,11 +473,11 @@ class TrackList extends Component {
 
     render() {
 
-        const playIconClass = this.props.playing
-            ? 'play-icon ion-play equalizer'
-            : 'play-icon ion-play';
-        let sortAscIcon = <span className="sort-icon ion-arrow-up-b"></span>;
-        let sortDescIcon = <span className="sort-icon ion-arrow-down-b"></span>;
+        // const playIconClass = this.props.playing
+        //     ? 'play-icon equalizer'
+        //     : 'play-icon refracter-play';
+        let sortAscIcon = <span className="sort-icon refracter-arrow-up-b"></span>;
+        let sortDescIcon = <span className="sort-icon refracter-arrow-down-b"></span>;
 
         let dragNdropPreviewStyle = {
             display: this.state.dragNdrop ? 'block' : 'none',
@@ -483,6 +494,13 @@ class TrackList extends Component {
             trackListSource = this.props.isAlbum;
         }
 
+        let playPauseContextMenuLabal = 'Play/Pause';
+        // if ( this.props.activeTrack && this.state.selectedTracks && this.props.activeTrack.trackID === this.state.selectedTracks[this.state.selectedTracks.length - 1].trackID ) {
+        //     playPauseContextMenuLabal = this.props.playing ? 'Pause Track' : 'Play Track';
+        // } else {
+        //     playPauseContextMenuLabal = 'Play Track';
+        // }
+
         return (
             <div className="track-list">
 
@@ -495,7 +513,7 @@ class TrackList extends Component {
 
                 <ContextMenu id="track-context" onShow={this.trackContextOpen}>
                     <MenuItem onClick={this.handleContextPlayTrack}>
-                        Play Track
+                        {playPauseContextMenuLabal}
                     </MenuItem>
                     {/* <MenuItem onClick={this.handleContextChangeSource}>
                         Change source
@@ -612,13 +630,20 @@ class TrackList extends Component {
                     </thead>
                     <tbody>
                         {this.state.tracks.map((track, trackIndex) => {
-                            let activeClass = this.props.activeTrack && track.trackID === this.props.activeTrack.trackID
-                                ? 'active-track'
-                                : '';
+
+                            let activeClass = '';
+                            if ( this.props.queueLocation && this.props.queueLocation === location.pathname ) {
+                                if ( this.props.activeTrack && track.trackID === this.props.activeTrack.trackID ) {
+                                    activeClass = 'active-track';
+                                }
+                            }
+
                             let selectedClass = track.selected
                                 ? 'selected-track'
                                 : '';
+
                             let trackClasses = `track-row ${activeClass} ${selectedClass}`;
+
                             return (
                                 <ContextMenuTrigger renderTag={'tr'} id="track-context" key={trackIndex} attributes={{
                                     'data-track-ID': track.trackID,
@@ -629,10 +654,14 @@ class TrackList extends Component {
                                     return track;
                                 }}>
                                     <td title="Play/Pause"
-                                        className={`play-btn-col ${playIconClass}`}
+                                        className={`play-btn-col`}
                                         onClick={() => this.playTrack(track)}
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
                                         >
+                                        {this.props.playing && this.props.activeTrack.trackID === track.trackID && this.props.queueLocation && this.props.queueLocation === location.pathname
+                                        ? <div><div className="equalizer"></div><span className="refracter-pause icon"></span></div>
+                                        : <span className="refracter-play icon"></span>
+                                        }
                                     </td>
                                     <td title="Number"
                                         className="number-col"

@@ -64,19 +64,22 @@ class Library extends Component {
 
                     <div className="card">
 
-                        <h1><span className="library refracter-repo"></span> Library</h1>
+                        <h1><span className="library refracter-book icon"></span> Library</h1>
 
                         { this.state.tracks.length > 0 ?
                             <TrackList
+                                queueLocation={this.props.queueLocation}
+                                isLibrary={true}
                                 defaultSortName="artist"
                                 defaultSortOrder="desc"
-                                isLibrary={true}
                                 user={this.props.user}
+                                playPauseTrack={this.context.parentState.playPauseTrack}
                                 playing={this.props.playing}
                                 tracks={this.state.tracks}
                                 queueId={this.props.queueId}
                                 activeTrack={this.props.activeTrack}
                                 updateQueue={this.context.parentState.updateQueue}
+                                shuffle={this.props.shuffle}
                             />
                             : <p>Loading or no tracks in state</p>
                         }

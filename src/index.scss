@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Titillium+Web');
 //@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 @import url('https://file.myfontastic.com/K9negnKURwanTC49Nc55qc/icons.css');
-@import url('http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css');
+//@import url('http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css');
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css');
@@ -38,7 +38,7 @@ $white: #efefef;
 $lightBackground: #dcdcdc;
 $medLightBackground: #555;
 $medBackground: #333;
-$darkBackground: #121212;
+$darkBackground: #222;
 
 //timings
 $standardHoverTime: 0.2s;
@@ -49,6 +49,7 @@ $dropShadowDepth2: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 $dropShadowDepth3: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 
 //global imports
+@import 'scss/animEqualizer';
 @import 'scss/layout';
 @import 'scss/modals';
 @import 'scss/icons';

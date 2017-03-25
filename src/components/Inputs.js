@@ -24,7 +24,7 @@ class Input extends Component {
         if ( this.props.errors && this.props.errors.length > 0) {
             errors = this.props.errors.map((error, i) => {
                 return (
-                    <div className="error" key={i}>- {error}</div>
+                    <div className="error" key={i}>{error}</div>
                 )
             });
         }

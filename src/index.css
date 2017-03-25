@@ -1,10 +1,201 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web");
 @import url("https://file.myfontastic.com/K9negnKURwanTC49Nc55qc/icons.css");
-@import url("http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css");
 @import url("https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css");
+.equalizer {
+  position: absolute;
+  display: block;
+  width: 7.0px;
+  background-color: #222;
+  height: 3.5px;
+  overflow: visible; }
+
+.equalizer,
+.equalizer::before,
+.equalizer::after {
+  animation: equalize 1.25s steps(25, end) 0s infinite; }
+
+.equalizer::before,
+.equalizer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 8.75px;
+  height: 24.5px;
+  width: 7.0px;
+  background-color: #222; }
+
+.equalizer::before {
+  animation-name: equalize2; }
+
+.equalizer::after {
+  left: 17.5px;
+  animation-name: equalize3; }
+
+@keyframes equalize {
+  0% {
+    height: 7.0px; }
+  4% {
+    height: 3.5px; }
+  8% {
+    height: 7.0px; }
+  12% {
+    height: 12.25px; }
+  16% {
+    height: 17.5px; }
+  20% {
+    height: 22.75px; }
+  24% {
+    height: 21.0px; }
+  28% {
+    height: 19.25px; }
+  32% {
+    height: 19.25px; }
+  36% {
+    height: 14.0px; }
+  40% {
+    height: 17.5px; }
+  44% {
+    height: 17.5px; }
+  48% {
+    height: 19.25px; }
+  52% {
+    height: 21.0px; }
+  56% {
+    height: 22.75px; }
+  60% {
+    height: 21.0px; }
+  64% {
+    height: 21.0px; }
+  68% {
+    height: 19.25px; }
+  72% {
+    height: 17.5px; }
+  76% {
+    height: 19.25px; }
+  80% {
+    height: 21.0px; }
+  84% {
+    height: 21.0px; }
+  88% {
+    height: 22.75px; }
+  92% {
+    height: 17.5px; }
+  96% {
+    height: 12.25px; }
+  100% {
+    height: 7.0px; } }
+
+@keyframes equalize2 {
+  0% {
+    height: 21.0px; }
+  4% {
+    height: 22.75px; }
+  8% {
+    height: 21.0px; }
+  12% {
+    height: 21.0px; }
+  16% {
+    height: 19.25px; }
+  20% {
+    height: 19.25px; }
+  24% {
+    height: 19.25px; }
+  28% {
+    height: 21.0px; }
+  32% {
+    height: 21.0px; }
+  36% {
+    height: 22.75px; }
+  40% {
+    height: 22.75px; }
+  44% {
+    height: 22.75px; }
+  48% {
+    height: 19.25px; }
+  52% {
+    height: 14.0px; }
+  56% {
+    height: 10.5px; }
+  60% {
+    height: 14.0px; }
+  64% {
+    height: 17.5px; }
+  68% {
+    height: 19.25px; }
+  72% {
+    height: 22.75px; }
+  76% {
+    height: 21.0px; }
+  80% {
+    height: 21.0px; }
+  84% {
+    height: 19.25px; }
+  88% {
+    height: 19.25px; }
+  92% {
+    height: 15.75px; }
+  96% {
+    height: 19.25px; }
+  100% {
+    height: 21.0px; } }
+
+@keyframes equalize3 {
+  0% {
+    height: 15.75px; }
+  4% {
+    height: 12.25px; }
+  8% {
+    height: 15.75px; }
+  12% {
+    height: 19.25px; }
+  16% {
+    height: 22.75px; }
+  20% {
+    height: 26.25px; }
+  24% {
+    height: 24.5px; }
+  28% {
+    height: 19.25px; }
+  32% {
+    height: 15.75px; }
+  36% {
+    height: 14.0px; }
+  40% {
+    height: 12.25px; }
+  44% {
+    height: 8.75px; }
+  48% {
+    height: 14.0px; }
+  52% {
+    height: 17.5px; }
+  56% {
+    height: 19.25px; }
+  60% {
+    height: 22.75px; }
+  64% {
+    height: 21.0px; }
+  68% {
+    height: 19.25px; }
+  72% {
+    height: 19.25px; }
+  76% {
+    height: 17.5px; }
+  80% {
+    height: 21.0px; }
+  84% {
+    height: 22.75px; }
+  88% {
+    height: 24.5px; }
+  92% {
+    height: 21.0px; }
+  96% {
+    height: 17.5px; }
+  100% {
+    height: 15.75px; } }
+
 * {
   box-sizing: border-box;
   outline: 0 !important; }
@@ -21,7 +212,7 @@ body, html {
   overflow: hidden;
   padding: 0;
   margin: 0;
-  background: #121212; }
+  background: #222; }
 
 .Refracter-app {
   position: fixed;
@@ -55,7 +246,7 @@ body, html {
   width: 100%;
   height: 100%;
   font-size: 130vh;
-  color: #151515; }
+  color: #252525; }
 
 hr {
   opacity: 0.25; }
@@ -124,10 +315,12 @@ hr {
     margin-top: 0; }
 
 .Refracter-app .toastify {
-  z-index: 9999;
+  z-index: 99999;
   color: #efefef; }
   .Refracter-app .toastify.toastify--top-right {
     top: calc( 70px + 5px); }
+  .Refracter-app .toastify .toastify-content--info {
+    border-color: #EDA564; }
   .Refracter-app .toastify .toastify__close {
     font-size: 1.2em;
     line-height: 0;
@@ -149,6 +342,9 @@ hr {
 html.dragNdrop-isDragging * {
   user-select: none; }
 
+html.dragNdrop-isDragging .dragNdrop-droppable * {
+  pointer-events: none; }
+
 html.dragNdrop-isDragging .content-window {
   z-index: 102; }
 
@@ -158,7 +354,7 @@ html.dragNdrop-isDragging .content-window {
   width: 200px;
   padding: 1em;
   background: #efefef;
-  color: #121212;
+  color: #222;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   transform: rotate3d(0, 0, 0); }
 
@@ -191,9 +387,9 @@ html.dragNdrop-isDragging .content-window {
 
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item:hover {
-  color: #121212;
+  color: #222;
   background-color: #EDA564;
-  border-color: #121212;
+  border-color: #222;
   text-decoration: none; }
 
 .react-contextmenu-item.react-contextmenu-item--disabled,
@@ -246,6 +442,9 @@ body.modal-open .modal {
 body.modal-open .modal .modal-dialog {
   margin: auto; }
 
+.modal-backdrop {
+  background: #333; }
+
 .modal-dialog {
   max-width: 600px;
   width: calc(100% - 5px - 5px); }
@@ -259,7 +458,8 @@ body.modal-open .modal .modal-dialog {
 .modal-content {
   background: #333;
   border-radius: 0;
-  text-align: center; }
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
   .modal-content .close {
     position: absolute;
     top: 25px;
@@ -283,6 +483,9 @@ body.modal-open .modal .modal-dialog {
   padding: 0 30px 30px 30px;
   border: none; }
 
+.icon:hover {
+  text-decoration: none !important; }
+
 .refracter-refracter-logo-full {
   overflow: hidden; }
   .refracter-refracter-logo-full:before {
@@ -302,11 +505,16 @@ body.modal-open .modal .modal-dialog {
     left: 0;
     margin-top: -0.5em; }
 
-.icon:hover {
-  text-decoration: none !important; }
+.library.icon {
+  position: relative;
+  top: 0.15em;
+  left: -0.1em;
+  margin-right: 10px; }
 
 .playlist-icon {
-  margin-right: 15px; }
+  position: relative;
+  margin-right: 15px;
+  top: 0.2em; }
   .playlist-icon .notes {
     position: relative;
     top: 0.2em;
@@ -642,7 +850,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
       font-size: 14px;
       line-height: 0.9em;
       background: #efefef;
-      color: #121212;
+      color: #222;
       font-weight: bold; }
   .topbar .seach-input-container {
     position: relative;
@@ -657,7 +865,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
       height: 100%;
       width: 100%;
       font-size: 1.5em;
-      padding: 20px 20px 20px 70px;
+      padding: 20px 20px 20px 60px;
       margin: 0; }
       .topbar .seach-input-container input:focus {
         padding-left: 20px; }
@@ -671,7 +879,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
       left: 0%;
       top: 0;
       height: 100%;
-      width: 70px;
+      width: 60px;
       font-size: 2em;
       pointer-events: none;
       transition: all .3s;
@@ -701,7 +909,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
   left: 0;
   height: 70px;
   width: 100%;
-  background: #121212;
+  background: #222;
   border: solid transparent 5px;
   color: gree;
   padding: 0 130px 0 345px; }
@@ -742,6 +950,8 @@ Pass any number of seconds referring to the duration of one full rotation for an
     transition: .1s; }
     .PlayerBar .player-btn:hover {
       opacity: 0.7; }
+    .PlayerBar .player-btn.enabled {
+      background: #333; }
     .PlayerBar .player-btn.player-play-pause {
       font-size: 2em;
       margin: 0 5px; }
@@ -778,7 +988,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
     text-align: left;
     pointer-events: none;
     font-size: 1em;
-    color: #121212;
+    color: #222;
     line-height: 1.5em;
     padding: .35em .75em; }
     .PlayerBar .track-details .track-title {
@@ -843,218 +1053,38 @@ Pass any number of seconds referring to the duration of one full rotation for an
         text-overflow: ellipsis;
         display: inline-block;
         max-width: 100%; }
-    .track-list table tr .play-icon {
-      position: absolute;
-      cursor: pointer; }
-      .track-list table tr .play-icon:hover:before {
-        transform: scale(1.3); }
-      .track-list table tr .play-icon:before {
-        content: "\f215"; }
+      .track-list table tr td.play-btn-col {
+        position: absolute;
+        cursor: pointer;
+        line-height: 1em;
+        padding: 0.8em; }
+        .track-list table tr td.play-btn-col .equalizer {
+          display: inline-block;
+          transform-origin: 0 0;
+          transform: rotate(180deg);
+          margin: 1.2em; }
+        .track-list table tr td.play-btn-col .refracter-pause {
+          display: none;
+          margin-top: 0.1em; }
+        .track-list table tr td.play-btn-col:hover .refracter-play {
+          transform: scale(1.3); }
+        .track-list table tr td.play-btn-col:hover .equalizer {
+          display: none; }
+        .track-list table tr td.play-btn-col:hover .refracter-pause {
+          display: block;
+          transform: scale(1.3); }
     .track-list table tr:hover {
-      background: #121212; }
+      background: #222; }
     .track-list table tr.selected-track {
       background: #dcdcdc;
-      color: #121212; }
+      color: #222; }
       .track-list table tr.selected-track a, .track-list table tr.selected-track a:visited {
-        color: #121212; }
+        color: #222; }
     .track-list table tr.active-track {
       background: #EDA564;
-      color: #121212; }
+      color: #222; }
       .track-list table tr.active-track a, .track-list table tr.active-track a:visited {
-        color: #121212; }
-      .track-list table tr.active-track .equalizer {
-        position: absolute;
-        display: block;
-        width: 5.0vmin;
-        background-color: #121212;
-        height: 2.5vmin;
-        overflow: visible; }
-      .track-list table tr.active-track .equalizer,
-      .track-list table tr.active-track .equalizer::before,
-      .track-list table tr.active-track .equalizer::after {
-        animation: equalize 1.25s steps(25, end) 0s infinite; }
-      .track-list table tr.active-track .equalizer::before,
-      .track-list table tr.active-track .equalizer::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 6.25vmin;
-        height: 17.5vmin;
-        width: 5.0vmin;
-        background-color: #121212; }
-      .track-list table tr.active-track .equalizer::before {
-        animation-name: equalize2; }
-      .track-list table tr.active-track .equalizer::after {
-        left: 12.5vmin;
-        animation-name: equalize3; }
-
-@keyframes equalize {
-  0% {
-    height: 5.0vmin; }
-  4% {
-    height: 2.5vmin; }
-  8% {
-    height: 5.0vmin; }
-  12% {
-    height: 8.75vmin; }
-  16% {
-    height: 12.5vmin; }
-  20% {
-    height: 16.25vmin; }
-  24% {
-    height: 15.0vmin; }
-  28% {
-    height: 13.75vmin; }
-  32% {
-    height: 13.75vmin; }
-  36% {
-    height: 10.0vmin; }
-  40% {
-    height: 12.5vmin; }
-  44% {
-    height: 12.5vmin; }
-  48% {
-    height: 13.75vmin; }
-  52% {
-    height: 15.0vmin; }
-  56% {
-    height: 16.25vmin; }
-  60% {
-    height: 15.0vmin; }
-  64% {
-    height: 15.0vmin; }
-  68% {
-    height: 13.75vmin; }
-  72% {
-    height: 12.5vmin; }
-  76% {
-    height: 13.75vmin; }
-  80% {
-    height: 15.0vmin; }
-  84% {
-    height: 15.0vmin; }
-  88% {
-    height: 16.25vmin; }
-  92% {
-    height: 12.5vmin; }
-  96% {
-    height: 8.75vmin; }
-  100% {
-    height: 5.0vmin; } }
-
-@keyframes equalize2 {
-  0% {
-    height: 15.0vmin; }
-  4% {
-    height: 16.25vmin; }
-  8% {
-    height: 15.0vmin; }
-  12% {
-    height: 15.0vmin; }
-  16% {
-    height: 13.75vmin; }
-  20% {
-    height: 13.75vmin; }
-  24% {
-    height: 13.75vmin; }
-  28% {
-    height: 15.0vmin; }
-  32% {
-    height: 15.0vmin; }
-  36% {
-    height: 16.25vmin; }
-  40% {
-    height: 16.25vmin; }
-  44% {
-    height: 16.25vmin; }
-  48% {
-    height: 13.75vmin; }
-  52% {
-    height: 10.0vmin; }
-  56% {
-    height: 7.5vmin; }
-  60% {
-    height: 10.0vmin; }
-  64% {
-    height: 12.5vmin; }
-  68% {
-    height: 13.75vmin; }
-  72% {
-    height: 16.25vmin; }
-  76% {
-    height: 15.0vmin; }
-  80% {
-    height: 15.0vmin; }
-  84% {
-    height: 13.75vmin; }
-  88% {
-    height: 13.75vmin; }
-  92% {
-    height: 11.25vmin; }
-  96% {
-    height: 13.75vmin; }
-  100% {
-    height: 15.0vmin; } }
-
-@keyframes equalize3 {
-  0% {
-    height: 11.25vmin; }
-  4% {
-    height: 8.75vmin; }
-  8% {
-    height: 11.25vmin; }
-  12% {
-    height: 13.75vmin; }
-  16% {
-    height: 16.25vmin; }
-  20% {
-    height: 18.75vmin; }
-  24% {
-    height: 17.5vmin; }
-  28% {
-    height: 13.75vmin; }
-  32% {
-    height: 11.25vmin; }
-  36% {
-    height: 10.0vmin; }
-  40% {
-    height: 8.75vmin; }
-  44% {
-    height: 6.25vmin; }
-  48% {
-    height: 10.0vmin; }
-  52% {
-    height: 12.5vmin; }
-  56% {
-    height: 13.75vmin; }
-  60% {
-    height: 16.25vmin; }
-  64% {
-    height: 15.0vmin; }
-  68% {
-    height: 13.75vmin; }
-  72% {
-    height: 13.75vmin; }
-  76% {
-    height: 12.5vmin; }
-  80% {
-    height: 15.0vmin; }
-  84% {
-    height: 16.25vmin; }
-  88% {
-    height: 17.5vmin; }
-  92% {
-    height: 15.0vmin; }
-  96% {
-    height: 12.5vmin; }
-  100% {
-    height: 11.25vmin; } }
-      .track-list table tr.active-track .play-icon.equalizer {
-        transform-origin: 0 0;
-        transform: scale(0.11) rotate(180deg);
-        margin: 1.8em 1.7em; }
-        .track-list table tr.active-track .play-icon.equalizer:hover:before {
-          transform: none; }
+        color: #222; }
 
 .Tile {
   cursor: pointer;
@@ -1123,7 +1153,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
   right: 0;
   width: 100%;
   height: 100%;
-  background: #121212; }
+  background: #222; }
 
 .album .background-art {
   user-select: none;
@@ -1144,7 +1174,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
     left: 0;
     width: 100%;
     height: 50%;
-    background: linear-gradient(rgba(18, 18, 18, 0), #121212); }
+    background: linear-gradient(rgba(34, 34, 34, 0), #222); }
 
 .album .tags {
   margin: 0.4em 0; }
@@ -1180,7 +1210,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
   right: 0;
   width: 100%;
   height: 100%;
-  background: #121212; }
+  background: #222; }
 
 .artist .background-art {
   display: block;
@@ -1202,7 +1232,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
     left: 0;
     width: 100%;
     height: 20%;
-    background: linear-gradient(rgba(18, 18, 18, 0), #121212); }
+    background: linear-gradient(rgba(34, 34, 34, 0), #222); }
 
 .artist .add-album-btn {
   margin: 1em 0; }
@@ -1251,7 +1281,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
     display: block;
     width: 100%;
     border: none;
-    padding: 12px 15px;
+    padding: 8px 15px 14px;
     color: #efefef;
     background: transparent;
     transition: all 0.2s;
@@ -1261,17 +1291,17 @@ Pass any number of seconds referring to the duration of one full rotation for an
     .sidebar .link:hover, .sidebar .link:focus {
       background: #555; }
     .sidebar .link.dragNdrop-hover {
-      background: #121212;
+      background: #222;
       padding-left: 30px; }
     .sidebar .link:hover, .sidebar .link:visited {
       text-decoration: none; }
       .sidebar .link:hover .text, .sidebar .link:visited .text {
         text-decoration: none; }
   .sidebar input.link {
-    color: #121212;
+    color: #222;
     font-size: 1em; }
   .sidebar .playlist-icon {
-    font-size: 1.1em; }
+    font-size: 1.4em; }
   .sidebar .library-link {
     position: absolute;
     top: 0;
@@ -1279,9 +1309,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
     height: 70px;
     font-size: 1.5em;
     padding: 15px;
-    border-bottom: 5px solid #121212; }
-    .sidebar .library-link .library {
-      margin-right: 15px; }
+    border-bottom: 5px solid #222; }
 
 .alpha-label {
   font-size: 14px; }

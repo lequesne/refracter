@@ -27,6 +27,7 @@ class PlayerBar extends Component {
         this.setProgress = this.setProgress.bind(this);
         this.updateProgress = this.updateProgress.bind(this);
         this.setVolume = this.setVolume.bind(this);
+        this.onPrevious = this.onPrevious.bind(this);
 
         this.youTubeReady = this.youTubeReady.bind(this);
         this.youTubeStateChange = this.youTubeStateChange.bind(this);
@@ -40,9 +41,16 @@ class PlayerBar extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.youTubePlayer) {
-            //TODO on previous track click, if track is more than 5 seconds in go to start of track, otherwise previous
             if ( !this.props.track || nextProps.track.trackID !== this.props.track.trackID )
                 this.loadTrack(nextProps.track);
+        }
+
+        if ( this.props.track ) {
+            if ( nextProps.playTrack ) {
+                this.pauseTrack();
+            } else {
+                this.playTrack();
+            }
         }
     }
 
@@ -185,6 +193,18 @@ class PlayerBar extends Component {
 
     youTubeError(event) {
         console.log(event);
+        toast(`There was an error with the Youtube player: ${event}`, {
+            type: toast.TYPE.ERROR,
+            autoClose: 10000
+        });
+    }
+
+    onPrevious(){
+        if ( this.youTubePlayer.getCurrentTime() > 5 ) {
+            this.youTubePlayer.seekTo(0);
+        } else {
+            this.props.onPrevTrack();
+        }
     }
 
     render() {
@@ -201,11 +221,13 @@ class PlayerBar extends Component {
         };
 
         //set volume icon absolutes based off volume range
-        let volumeAmountClass = 'ion-android-volume-off icon absolute';
-        if (this.state.setVolume > 50) {
-            volumeAmountClass = 'ion-android-volume-up icon absolute';
+        let volumeAmountClass = 'refracter-volume-mute icon absolute';
+        if (this.state.setVolume > 75) {
+            volumeAmountClass = 'refracter-volume-high icon absolute';
+        } else if (this.state.setVolume > 50) {
+            volumeAmountClass = 'refracter-volume-medium icon absolute';
         } else if (this.state.setVolume > 0) {
-            volumeAmountClass = 'ion-android-volume-down icon absolute';
+            volumeAmountClass = 'refracter-volume-low icon absolute';
         }
 
         return (
@@ -215,17 +237,17 @@ class PlayerBar extends Component {
 
                 <div className="player-controls-lhs">
 
-                    <div onClick={this.props.onPrevTrack} title="Previous track" className="prev-track player-btn">
-                        <div className="ion-ios-skipbackward icon absolute"></div>
+                    <div onClick={this.onPrevious} title="Previous track" className="prev-track player-btn">
+                        <div className="refracter-ios-skipbackward icon absolute"></div>
                     </div>
-                    <div onClick={this.togglePlayPause.bind(this)} title="Play / Pause" className="player-play-pause player-btn">
+                    <div onClick={this.props.playPauseTrack} title="Play / Pause" className="player-play-pause player-btn">
                         {this.state.playing
-                            ? <div className="ion-pause icon absolute"></div>
-                            : <div className="ion-play icon absolute"></div>
+                            ? <div className="refracter-pause icon absolute"></div>
+                            : <div className="refracter-play icon absolute"></div>
                         }
                     </div>
-                    <div onClick={this.props.onNextTrack} title="Previous track" className="next-track player-btn">
-                        <div className="ion-ios-skipforward icon absolute"></div>
+                    <div onClick={this.props.onNextTrack} title="Next track" className="next-track player-btn">
+                        <div className="refracter-ios-skipforward icon absolute"></div>
                     </div>
                     <div className="volume-mute">
                         <div onClick={this.toggleMuteBtn.bind(this)} title="Mute / Unmute" className="mute-unmute player-btn">
@@ -260,10 +282,11 @@ class PlayerBar extends Component {
 
                 <div className="player-controls-rhs">
                     <div title="Loop On / Off" className="loop-track player-btn">
-                        <div className="ion-loop icon absolute"></div>
+                        <div className="refracter-loop icon absolute"></div>
                     </div>
-                    <div title="Shuffle On / Off" className="shuffle-tracks player-btn">
-                        <div className="ion-shuffle icon absolute absolute"></div>
+
+                    <div onClick={this.context.parentState.shuffleToggle} title="Shuffle On / Off" className={`shuffle-tracks player-btn ${this.props.shuffle?'enabled':''}`}>
+                        <div className="refracter-shuffle icon absolute absolute"></div>
                     </div>
                 </div>
 
@@ -272,5 +295,9 @@ class PlayerBar extends Component {
     }
 
 }
+
+PlayerBar.contextTypes = {
+    parentState: React.PropTypes.object
+};
 
 export default PlayerBar;

@@ -72,23 +72,40 @@
                     display: inline-block;
                     max-width: 100%;
                 }
-            }
 
-            .play-icon {
-                position: absolute;
-                cursor: pointer;
+                &.play-btn-col {
+                    position: absolute;
+                    cursor: pointer;
+                    line-height: 1em;
+                    padding: 0.8em;
 
-                &:hover {
+                    .equalizer {
+                        display: inline-block;
+                        transform-origin: 0 0;
+                        transform:  rotate(180deg);
+                        margin: 1.2em;
+                    }
 
-                    &:before {
-                        transform: scale(1.3);
+                    .refracter-pause {
+                        display: none;
+                        margin-top: 0.1em;
+                    }
+
+                    &:hover {
+                        .refracter-play {
+                            transform: scale(1.3);
+                        }
+                        .equalizer {
+                            display: none;
+                        }
+                        .refracter-pause {
+                            display: block;
+                            transform: scale(1.3);
+                        }
                     }
                 }
-
-                &:before {
-                    content: "\f215";
-                }
             }
+
 
             &:hover{
                 background: $darkBackground;
@@ -109,21 +126,6 @@
 
                 a, a:visited {
                     color: $darkBackground;
-                }
-
-                @import '../scss/animEqualizer';
-
-                .play-icon.equalizer {
-                    transform-origin: 0 0;
-                    transform: scale(0.11) rotate(180deg);
-                    margin: 1.8em 1.7em;
-
-                    &:hover {
-
-                        &:before {
-                            transform: none;
-                        }
-                    }
                 }
 
             }

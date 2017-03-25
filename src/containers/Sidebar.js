@@ -1,17 +1,24 @@
 //import * as refracter from '../refracter';
 import React, {Component} from 'react';
-import {Link} from 'react-router';
+import {Link, browserHistory} from 'react-router';
 import {Row, Col,Button} from 'react-bootstrap';
 import ScrollArea from 'react-scrollbar';
 import UserPlaylists from '../components/UserPlaylists';
 
 class Sidebar extends Component {
 
-    // constructor(props) {
-    //     super(props);
-    // }
+    constructor(props) {
+        super(props);
 
-    componentDidUpdate(){
+        this.linkToActiveQueue = this.linkToActiveQueue.bind(this);
+    }
+
+    linkToActiveQueue(){
+
+        if ( this.props.queueLocation ) {
+             browserHistory.push(this.props.queueLocation);
+        }
+
     }
 
     render() {
@@ -25,7 +32,7 @@ class Sidebar extends Component {
                         <div className="logged-in wrapper">
 
                             <Link to={'/library'} data-drag-ndrop-add-tracks={true} className="link library-link dragNdrop-droppable">
-                                <span className="text"><span className="library refracter-repo"></span>Library</span>
+                                <span className="text"><span className="library refracter-book icon"></span>Library</span>
                             </Link>
 
                             <ScrollArea className="scrollable" smoothScrolling={true} speed={0.8} >
@@ -59,7 +66,7 @@ class Sidebar extends Component {
                     }
 
                     {/* TODO add link on art to the correct queue/source of active track */}
-                    <div className="album-art">
+                    <div onClick={this.linkToActiveQueue} className="album-art">
                         {this.props.activeTrack
                             ? <img src={this.props.activeTrack.art} alt="Artwork"/>
                             : <div className="icon absolute refracter-refracter-logo"></div>}

@@ -265,9 +265,9 @@ class UserPlaylists extends Component {
                                     }
                                 }}>
                                 <span className="text">
-                                    <span className="playlist-icon">
-                                        <span className="list ion-ios-list-outline"></span>
-                                        <span className="notes ion-ios-musical-notes"></span>
+                                    <span className="playlist-icon refracter-book-audio">
+                                        {/* <span className="list ion-ios-list-outline"></span>
+                                        <span className="notes ion-ios-musical-notes"></span> */}
                                     </span>
                                     {playlist.name}
                                 </span>

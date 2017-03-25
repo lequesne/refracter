@@ -88,6 +88,11 @@ export const revertSortFunc = (a, b, order) => { // order is desc or asc
     }
 }
 
+export const shuffleArray = (array) => {
+    for(var j, x, i = array.length; i; j = parseInt(Math.random() * i), x = array[--i], array[i] = array[j], array[j] = x);
+    return array;
+}
+
 export const getLastFMTrackLink = (trackName, trackArtist) => {
 
     //first get album info from lastFM

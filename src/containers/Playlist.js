@@ -80,24 +80,24 @@ class Playlist extends Component {
                     <div className="card">
 
                         <h1>
-                            <span className="playlist-icon">
-                                <span className="list ion-ios-list-outline"></span>
-                                <span className="notes ion-ios-musical-notes"></span>
-                            </span>
+                            <span className="playlist-icon refracter-book-audio"></span>
                             {this.state.playlistName}
                         </h1>
 
                         { this.state.tracks.length > 0 ?
                             <TrackList
+                                queueLocation={this.props.queueLocation}
                                 isPlaylist={true}
                                 playlistID={this.state.playlistID}
                                 playlistName={this.state.playlistName}
                                 user={this.props.user}
+                                playPauseTrack={this.context.parentState.playPauseTrack}
                                 playing={this.props.playing}
                                 tracks={this.state.tracks}
                                 queueId={this.props.queueId}
                                 activeTrack={this.props.activeTrack}
                                 updateQueue={this.context.parentState.updateQueue}
+                                shuffle={this.props.shuffle}
                             />
                             : <p>It looks like no tracks have been added to this playlist yet. If you are the playlist owner get adding!</p>
                         }

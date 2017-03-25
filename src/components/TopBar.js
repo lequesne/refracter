@@ -30,7 +30,7 @@ class TopBar extends Component {
                     <Link to="/" className="refracter-refracter-logo-full refracter-logo icon"><span className="alpha-label">Alpha</span></Link>
                     <label className="seach-input-container">
                         <input id="search-input" type="text" placeholder="Search" defaultValue={this.state.searchValue} onKeyPress={ this.performNewSearch }/>
-                        <div className="ion-android-search icon absolute"></div>
+                        <div className="refracter-search icon absolute"></div>
                     </label>
                     { this.props.user
                         ? <div className="logged-in">

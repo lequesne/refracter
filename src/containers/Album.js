@@ -130,14 +130,17 @@ class Album extends Component {
 
                         { this.state.tracks.length > 0 ?
                             <TrackList
+                                queueLocation={this.props.queueLocation}
                                 isAlbum={this.state.album.name}
                                 existsInLibrary={this.state.albumInLibrary}
                                 user={this.props.user}
+                                playPauseTrack={this.context.parentState.playPauseTrack}
                                 playing={this.props.playing}
                                 tracks={this.state.tracks}
                                 queueId={this.props.queueId}
                                 activeTrack={this.props.activeTrack}
                                 updateQueue={this.context.parentState.updateQueue}
+                                shuffle={this.props.shuffle}
                             />
                             : <p>Loading or no tracks in state</p>
                         }

@@ -1,0 +1,41 @@
+.icon:hover {
+  text-decoration: none !important; }
+
+.refracter-refracter-logo-full {
+  overflow: hidden; }
+  .refracter-refracter-logo-full:before {
+    line-height: 0.43em; }
+
+.refracter-repo {
+  position: relative;
+  top: 0.2em; }
+
+.icon.absolute {
+  text-align: center;
+  user-select: none; }
+  .icon.absolute:before {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    margin-top: -0.5em; }
+
+.library.icon {
+  position: relative;
+  top: 0.15em;
+  left: -0.1em;
+  margin-right: 10px; }
+
+.playlist-icon {
+  position: relative;
+  margin-right: 15px;
+  top: 0.2em; }
+  .playlist-icon .notes {
+    position: relative;
+    top: 0.2em;
+    left: -0.2em;
+    text-shadow: -1px -1px 2px rgba(0, 0, 0, 0.3); }
+  .playlist-icon .list {
+    position: relative;
+    top: -0.05em;
+    left: 0.2em; }
