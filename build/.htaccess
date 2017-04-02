@@ -6,8 +6,4 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule (.*) index.html
-<<<<<<< HEAD
-
-=======
->>>>>>> 12352e10b689ddcd61c60e54c8d49e1f407fc0f7
 </IfModule>
