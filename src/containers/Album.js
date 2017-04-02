@@ -5,6 +5,7 @@ import {Row, Col, Button} from 'react-bootstrap';
 import {toast} from 'react-toastify';
 import TrackList from '../components/TrackList';
 import Dropdown from '../components/Dropdown';
+import BackgroundArt from '../components/BackgroundArt';
 
 class Album extends Component {
 
@@ -37,7 +38,7 @@ class Album extends Component {
                 for (let track of albumData.tracks ) {
                     if (track.title === this.props.params.track) {
                         //play track from url
-                        this.context.parentState.updateQueue(track, albumData.tracks);
+                        this.context.parentState.updateQueue(track, albumData.tracks, location.pathname);
                         //scroll to active track on load
                         //document.querySelectorAll(`[data-track-id~="${track.trackID}"]`)[0].scrollIntoView();
                         break;
@@ -98,9 +99,7 @@ class Album extends Component {
         return (
             <div className="album page">
 
-                <div className="background-art-container">
-                    <div className="background-art" style={{backgroundImage: `url(${this.state.albumArt})`}}></div>
-                </div>
+                <BackgroundArt art={this.state.albumArt}/>
 
                 <div className="container">
 
@@ -134,8 +133,9 @@ class Album extends Component {
                                 isAlbum={this.state.album.name}
                                 existsInLibrary={this.state.albumInLibrary}
                                 user={this.props.user}
-                                playPauseTrack={this.context.parentState.playPauseTrack}
+                                playTrack={this.props.playTrack}
                                 playing={this.props.playing}
+                                buffering={this.props.buffering}
                                 tracks={this.state.tracks}
                                 queueId={this.props.queueId}
                                 activeTrack={this.props.activeTrack}

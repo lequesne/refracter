@@ -46,7 +46,7 @@ class LogInForm extends Component {
                 //hide form modal
                 setTimeout(()=>{
                     this.props.onHide();
-                    toast(`You are now logged in as ''${response.user.username}'.`, {type: toast.TYPE.SUCCESS});
+                    toast(`You are now signed in as ${response.user.username}.`, {type: toast.TYPE.SUCCESS});
                 },1000);
 
 

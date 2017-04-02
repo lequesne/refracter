@@ -69,6 +69,14 @@
             margin: 0 $borderPadding;
         }
 
+        .loop-track {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 0.75em;
+            padding: 0.25em;
+        }
+
         .icon {
             position: absolute;
             top: 0;

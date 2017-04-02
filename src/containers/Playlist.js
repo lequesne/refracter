@@ -91,8 +91,9 @@ class Playlist extends Component {
                                 playlistID={this.state.playlistID}
                                 playlistName={this.state.playlistName}
                                 user={this.props.user}
-                                playPauseTrack={this.context.parentState.playPauseTrack}
+                                playTrack={this.props.playTrack}
                                 playing={this.props.playing}
+                                buffering={this.props.buffering}
                                 tracks={this.state.tracks}
                                 queueId={this.props.queueId}
                                 activeTrack={this.props.activeTrack}

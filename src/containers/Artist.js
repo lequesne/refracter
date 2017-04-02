@@ -4,6 +4,7 @@ import {Col, Button} from 'react-bootstrap';
 import {toast} from 'react-toastify';
 import TrackList from '../components/TrackList';
 import TileList from '../components/TileList';
+import BackgroundArt from '../components/BackgroundArt';
 
 class Artist extends Component {
 
@@ -70,9 +71,7 @@ class Artist extends Component {
         return (
             <div className="artist page">
 
-                <div className="background-art-container">
-                    <div className="background-art" style={{backgroundImage: `url(${this.state.info.image?this.state.info.image[3]["#text"]:null})`}}></div>
-                </div>
+                <BackgroundArt art={this.state.info.image?this.state.info.image[3]["#text"]:null}/>
 
                 <div className="container">
 

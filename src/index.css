@@ -8,7 +8,7 @@
   position: absolute;
   display: block;
   width: 7.0px;
-  background-color: #222;
+  background-color: #121212;
   height: 3.5px;
   overflow: visible; }
 
@@ -25,7 +25,7 @@
   left: 8.75px;
   height: 24.5px;
   width: 7.0px;
-  background-color: #222; }
+  background-color: #121212; }
 
 .equalizer::before {
   animation-name: equalize2; }
@@ -212,7 +212,7 @@ body, html {
   overflow: hidden;
   padding: 0;
   margin: 0;
-  background: #222; }
+  background: #121212; }
 
 .Refracter-app {
   position: fixed;
@@ -246,7 +246,7 @@ body, html {
   width: 100%;
   height: 100%;
   font-size: 130vh;
-  color: #252525; }
+  color: #151515; }
 
 hr {
   opacity: 0.25; }
@@ -354,7 +354,7 @@ html.dragNdrop-isDragging .content-window {
   width: 200px;
   padding: 1em;
   background: #efefef;
-  color: #222;
+  color: #121212;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   transform: rotate3d(0, 0, 0); }
 
@@ -387,9 +387,9 @@ html.dragNdrop-isDragging .content-window {
 
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item:hover {
-  color: #222;
+  color: #121212;
   background-color: #EDA564;
-  border-color: #222;
+  border-color: #121212;
   text-decoration: none; }
 
 .react-contextmenu-item.react-contextmenu-item--disabled,
@@ -850,7 +850,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
       font-size: 14px;
       line-height: 0.9em;
       background: #efefef;
-      color: #222;
+      color: #121212;
       font-weight: bold; }
   .topbar .seach-input-container {
     position: relative;
@@ -909,7 +909,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
   left: 0;
   height: 70px;
   width: 100%;
-  background: #222;
+  background: #121212;
   border: solid transparent 5px;
   color: gree;
   padding: 0 130px 0 345px; }
@@ -955,6 +955,12 @@ Pass any number of seconds referring to the duration of one full rotation for an
     .PlayerBar .player-btn.player-play-pause {
       font-size: 2em;
       margin: 0 5px; }
+    .PlayerBar .player-btn .loop-track {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 0.75em;
+      padding: 0.25em; }
     .PlayerBar .player-btn .icon {
       position: absolute;
       top: 0;
@@ -988,7 +994,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
     text-align: left;
     pointer-events: none;
     font-size: 1em;
-    color: #222;
+    color: #121212;
     line-height: 1.5em;
     padding: .35em .75em; }
     .PlayerBar .track-details .track-title {
@@ -1047,6 +1053,8 @@ Pass any number of seconds referring to the duration of one full rotation for an
       font-size: 1.2em;
       padding: 10px 15px 8px;
       max-width: 177px; }
+      .track-list table tr td a {
+        cursor: pointer; }
       .track-list table tr td span {
         white-space: nowrap;
         overflow: hidden;
@@ -1063,6 +1071,10 @@ Pass any number of seconds referring to the duration of one full rotation for an
           transform-origin: 0 0;
           transform: rotate(180deg);
           margin: 1.2em; }
+        .track-list table tr td.play-btn-col .spinner-container {
+          margin: 0.45em; }
+          .track-list table tr td.play-btn-col .spinner-container .refracter-spinner {
+            color: #121212; }
         .track-list table tr td.play-btn-col .refracter-pause {
           display: none;
           margin-top: 0.1em; }
@@ -1074,17 +1086,17 @@ Pass any number of seconds referring to the duration of one full rotation for an
           display: block;
           transform: scale(1.3); }
     .track-list table tr:hover {
-      background: #222; }
+      background: #121212; }
     .track-list table tr.selected-track {
       background: #dcdcdc;
-      color: #222; }
+      color: #121212; }
       .track-list table tr.selected-track a, .track-list table tr.selected-track a:visited {
-        color: #222; }
+        color: #121212; }
     .track-list table tr.active-track {
       background: #EDA564;
-      color: #222; }
+      color: #121212; }
       .track-list table tr.active-track a, .track-list table tr.active-track a:visited {
-        color: #222; }
+        color: #121212; }
 
 .Tile {
   cursor: pointer;
@@ -1121,6 +1133,43 @@ Pass any number of seconds referring to the duration of one full rotation for an
 .slick-slider .Tile {
   margin: 15px 0; }
 
+.background-art-container {
+  display: block;
+  user-select: none;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #121212;
+  opacity: 0;
+  transition: opacity 1s; }
+  .background-art-container.loaded {
+    opacity: 1; }
+
+.background-art {
+  display: block;
+  user-select: none;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100vh;
+  background-position: center center;
+  background-size: cover;
+  opacity: 0.3; }
+  .background-art:after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    background: linear-gradient(rgba(18, 18, 18, 0), #121212); }
+
 .home {
   min-height: calc(100vh - 70px - 70px - 5px);
   text-align: center; }
@@ -1135,7 +1184,12 @@ Pass any number of seconds referring to the duration of one full rotation for an
 
 .album h1 {
   position: relative;
-  margin: 0; }
+  margin: 0;
+  font-size: 2em;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
 
 .album h2 {
   font-size: 1.2em;
@@ -1143,38 +1197,6 @@ Pass any number of seconds referring to the duration of one full rotation for an
 
 .album .container {
   z-index: 5; }
-
-.album .background-art-container {
-  display: block;
-  user-select: none;
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background: #222; }
-
-.album .background-art {
-  user-select: none;
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100vh;
-  background-position: center center;
-  background-size: cover;
-  opacity: 0.1; }
-  .album .background-art:after {
-    content: '';
-    position: absolute;
-    z-index: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50%;
-    background: linear-gradient(rgba(34, 34, 34, 0), #222); }
 
 .album .tags {
   margin: 0.4em 0; }
@@ -1185,8 +1207,6 @@ Pass any number of seconds referring to the duration of one full rotation for an
   padding-left: 210px;
   height: 185px;
   overflow: visible; }
-  .album .album-info .dropdown {
-    margin-top: 3.5em; }
 
 .album .album-art {
   position: absolute;
@@ -1200,39 +1220,6 @@ Pass any number of seconds referring to the duration of one full rotation for an
 
 .artist .artist-intro {
   text-align: center; }
-
-.artist .background-art-container {
-  display: block;
-  user-select: none;
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background: #222; }
-
-.artist .background-art {
-  display: block;
-  user-select: none;
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100vh;
-  background-position: center center;
-  background-size: cover;
-  opacity: 0.3; }
-  .artist .background-art:after {
-    content: '';
-    position: absolute;
-    z-index: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 20%;
-    background: linear-gradient(rgba(34, 34, 34, 0), #222); }
 
 .artist .add-album-btn {
   margin: 1em 0; }
@@ -1280,8 +1267,9 @@ Pass any number of seconds referring to the duration of one full rotation for an
     position: relative;
     display: block;
     width: 100%;
+    height: 46px;
     border: none;
-    padding: 8px 15px 14px;
+    padding: 10px 15px 10px 55px;
     color: #efefef;
     background: transparent;
     transition: all 0.2s;
@@ -1291,17 +1279,23 @@ Pass any number of seconds referring to the duration of one full rotation for an
     .sidebar .link:hover, .sidebar .link:focus {
       background: #555; }
     .sidebar .link.dragNdrop-hover {
-      background: #222;
+      background: #121212;
       padding-left: 30px; }
     .sidebar .link:hover, .sidebar .link:visited {
       text-decoration: none; }
       .sidebar .link:hover .text, .sidebar .link:visited .text {
         text-decoration: none; }
+    .sidebar .link .text {
+      pointer-events: none; }
   .sidebar input.link {
-    color: #222;
-    font-size: 1em; }
+    color: #efefef;
+    font-size: 1em;
+    padding-left: 15px; }
   .sidebar .playlist-icon {
-    font-size: 1.4em; }
+    position: absolute;
+    left: 15px;
+    top: 12px;
+    font-size: 1.3em; }
   .sidebar .library-link {
     position: absolute;
     top: 0;
@@ -1309,7 +1303,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
     height: 70px;
     font-size: 1.5em;
     padding: 15px;
-    border-bottom: 5px solid #222; }
+    border-bottom: 5px solid #121212; }
 
 .alpha-label {
   font-size: 14px; }

@@ -38,7 +38,7 @@ class SignUpForm extends Component {
                     this.props.onHide();
                     toast(`An account activation email has been sent to your email. Please check your inbox to complete registration.`, {
                         type: toast.TYPE.INFO,
-                        autoClose: 10000
+                        autoClose: 15000
                     });
                 },1000);
 

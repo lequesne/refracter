@@ -185,9 +185,6 @@ class UserPlaylists extends Component {
 
         refracter.removeUserPlaylist(refracter.userKey, playlist.id).then(response => {
 
-            //show toast
-            console.log('Playlist removed: ', response);
-
             //remove playlist in state
             for ( let i = this.state.playlists.length -1; i >= 0 ; i-- ){
                 if ( this.state.playlists[i].id === playlist.id ) {
@@ -201,7 +198,20 @@ class UserPlaylists extends Component {
             //update the app user playlists state
             this.props.updateUserPlaylists(this.state.playlists);
 
+            //show toast
+            toast(`${playlist.name} was deleted.`, {
+              type: toast.TYPE.INFO
+            });
+
+            console.log('Playlist removed: ', response);
+
         }).catch(error => {
+
+            //show toast
+            toast(`${playlist.name} was unable to be deleted.`, {
+              type: toast.TYPE.ERROR
+            });
+
             console.log('removeUserPlaylist: ', error);
         });
 
@@ -220,9 +230,9 @@ class UserPlaylists extends Component {
                     <MenuItem onClick={this.existingPlaylistEdit}>
                         Rename playlist
                     </MenuItem>
-                    <MenuItem onClick={this.sharePlaylist}>
+                    {/* <MenuItem onClick={this.sharePlaylist}>
                         Share
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem onClick={this.deletePlaylist}>
                         Delete playlist
                     </MenuItem>

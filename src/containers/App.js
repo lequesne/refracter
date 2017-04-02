@@ -24,8 +24,10 @@ class App extends Component {
             user: props.route.user ? props.route.user : null, //if user props passed on load set in state
             searchValue: '',
             activeTrack: null,
+            playTrack: false,
             playing: false,
             shuffle: false,
+            playerLoop: 0, //default mode is 0 for not loop
             alreadyShuffledTracks: [],
             queueLocation: null,
             queue: [],
@@ -38,8 +40,12 @@ class App extends Component {
         this.logOutUser = this.logOutUser.bind(this);
         this.updateUserPlaylists = this.updateUserPlaylists.bind(this);
         this.updateQueue = this.updateQueue.bind(this);
-        this.playPauseTrack = this.playPauseTrack.bind(this);
-        this.shuffleToggle = this.shuffleToggle.bind(this);
+        //this.playPauseTrack = this.playPauseTrack.bind(this);
+        this.playTrack = this.playTrack.bind(this);
+        this.pauseTrack = this.pauseTrack.bind(this);
+        this.shuffleTracksOn = this.shuffleTracksOn.bind(this);
+        this.shuffleTracksOff = this.shuffleTracksOff.bind(this);
+        this.togglePlayerLoop = this.togglePlayerLoop.bind(this);
         this.playNextTrackInQueue = this.playNextTrackInQueue.bind(this);
         this.playPreviousTrackInQueue = this.playPreviousTrackInQueue.bind(this);
         this.updateAppPlayState = this.updateAppPlayState.bind(this);
@@ -109,16 +115,20 @@ class App extends Component {
 
                 if ( response.success ) {
                     //account activated and show login pane and message telling user to sign in
-                    this.showModal('showLogInForm');
-                    toast(`Your account was activated! Please sign in.`, {
-                      type: toast.TYPE.SUCCESS
+                    //this.showModal('showLogInForm');
+                    toast(`Your account was activated! Please sign in with your username or email.`, {
+                      type: toast.TYPE.SUCCESS,
+                      autoClose: 15000
                     });
                 } else {
                     //possibly show activation error here
-                    toast(`Activation error: ${response}`, {
-                      type: toast.TYPE.SUCCESS
+                    toast(`Activation error: ${response.errors}`, {
+                      type: toast.TYPE.SUCCESS,
+                      autoClose: 15000
                     });
                 }
+
+                browserHistory.push('/');
 
             }).catch(error => {
                 console.log(error);
@@ -207,48 +217,105 @@ class App extends Component {
 
     }
 
-    playPauseTrack(){
-
-        if ( !this.state.playing ) {
-            this.setState({
-                playTrack: false
-            });
-        } else {
-            this.setState({
-                playTrack: true
-            });
-        }
-
+    playTrack(){
+        this.setState({
+            playTrack: true
+        });
     }
 
-    shuffleToggle(){
+    pauseTrack(){
+        this.setState({
+            playTrack: false
+        });
+    }
 
-        if ( this.state.shuffle ) {
+    // playPauseTrack(){
+    //
+    //     if ( !this.state.playTrack ) {
+    //         this.setState({
+    //             playTrack: true
+    //         });
+    //     } else {
+    //         this.setState({
+    //             playTrack: false
+    //         });
+    //     }
+    //
+    // }
+
+    shuffleTracksOn(){
+        this.setState({
+            shuffle: true
+        });
+    }
+
+    shuffleTracksOff(){
+        this.setState({
+            shuffle: false
+        });
+    }
+
+    togglePlayerLoop(){
+
+        if ( this.state.playerLoop === 0 ) {
+            //no loop, set to loop queue
             this.setState({
-                shuffle: false
+                playerLoop: 1
             });
-        } else {
+        } else if ( this.state.playerLoop === 1 ) {
+            //loop queue, set to loop single track
             this.setState({
-                shuffle: true
+                playerLoop: 2
+            });
+        } else if ( this.state.playerLoop === 2 ) {
+            //loop single track, reset and turn loop off
+            this.setState({
+                playerLoop: 0
             });
         }
 
     }
 
     playNextTrackInQueue(){
+
+        let activeTrackIndex;
         for (let [i,track] of this.state.queue.entries()) {
-            if ( track.trackID === this.state.activeTrack.trackID ) {
-                this.setState({
-                    activeTrack: this.state.queue[i+1]
-                });
-                return;
+            if ( track.index === this.state.activeTrack.index ) {
+                activeTrackIndex = i;
+                break;
             }
         }
+
+        if ( this.state.playerLoop === 2 ) {
+            //loop single track
+            this.setState({
+                activeTrack: null
+            });
+            this.setState({
+                activeTrack: this.state.queue[activeTrackIndex]
+            });
+        } else if ( this.state.playerLoop === 1 && activeTrackIndex === (this.state.queue.length-1) ) {
+            //loop is enabled and end of queue
+            this.setState({
+                activeTrack: this.state.queue[0]
+            });
+        } else if ( activeTrackIndex === (this.state.queue.length-1) ) {
+            //no loop and end of queue, remove active track
+            this.setState({
+                activeTrack: null
+            });
+        } else {
+            //no loop, play next in queue
+            this.setState({
+                activeTrack: this.state.queue[activeTrackIndex+1]
+            });
+        }
+
     }
 
     playPreviousTrackInQueue(){
         for (let [i,track] of this.state.queue.entries()) {
-            if ( track.trackID === this.state.activeTrack.trackID ) {
+            if ( track.index === this.state.activeTrack.index ) {
                 this.setState({
                     activeTrack: this.state.queue[i-1]
                 });
@@ -257,9 +324,10 @@ class App extends Component {
         }
     }
 
-    updateAppPlayState(playState){
+    updateAppPlayState(playState, bufferingState){
         this.setState({
-            playing: playState
+            playing: playState,
+            buffering: bufferingState
         });
     }
 
@@ -305,10 +373,7 @@ class App extends Component {
 
     hidePageSpinner(){
         this.refs.pageScrollArea.scrollTop();
-
-        setTimeout(()=>{
-            this.setState({showPageSpinner:false});
-        },500);
+        this.setState({showPageSpinner:false});
     }
 
     render() {
@@ -331,14 +396,15 @@ class App extends Component {
                 />
 
                 <PlayerBar
+                    playing={this.state.playing}
                     playTrack={this.state.playTrack}
-                    playPauseTrack={this.playPauseTrack}
                     updateAppPlayState={this.updateAppPlayState}
-                    //queueId={this.state.queueId}
                     track={this.state.activeTrack}
+                    queueLocation={this.state.queueLocation}
                     onNextTrack={this.playNextTrackInQueue}
                     onPrevTrack={this.playPreviousTrackInQueue}
                     shuffle={this.state.shuffle}
+                    playerLoop={this.state.playerLoop}
                 />
 
                 <div className="content-window">
@@ -346,7 +412,9 @@ class App extends Component {
                         {React.cloneElement( this.props.children, {
                             //appState: this.state
                             user: this.state.user,
+                            playTrack: this.state.playTrack,
                             playing: this.state.playing,
+                            buffering: this.state.buffering,
                             activeTrack: this.state.activeTrack,
                             queueLocation: this.state.queueLocation,
                             shuffle: this.state.shuffle

@@ -28,6 +28,7 @@ if ($playlistID) {
 
 } else {
     $error[] = 'getPlaylist requires a playlist id paramater.';
+    $responseObject['errors'] = $error;
 }
 
 echo json_encode($responseObject);

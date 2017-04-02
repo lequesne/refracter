@@ -40,13 +40,13 @@ class PasswordResetForm extends Component {
                 if (response.success) {
                     //new password has been set
 
-                    //browserHistory.push('/');
+                    browserHistory.push('/');
 
                     setTimeout(()=>{
                         this.props.onHide();
                         toast(`Your password has been successfully reset. Please login with your new password.`, {
                             type: toast.TYPE.SUCCESS,
-                            autoClose: 10000
+                            autoClose: 15000
                         });
                     },1000);
 

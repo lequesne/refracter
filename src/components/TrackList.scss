@@ -65,6 +65,10 @@
                 padding: 10px 15px 8px;
                 max-width: 177px;
 
+                a {
+                    cursor: pointer;
+                }
+
                 span {
                     white-space: nowrap;
                     overflow: hidden;
@@ -84,6 +88,14 @@
                         transform-origin: 0 0;
                         transform:  rotate(180deg);
                         margin: 1.2em;
+                    }
+
+                    .spinner-container {
+                        margin: 0.45em;
+
+                        .refracter-spinner {
+                            color: $darkBackground;
+                        }
                     }
 
                     .refracter-pause {

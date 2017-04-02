@@ -35,13 +35,21 @@ if(!isset($error)){
 		//send email
 		$to = $row['email'];
 		$subject = "Password Reset";
-		$body = "<p>Someone requested that the password be reset.</p>
-		<p>If this was a mistake, just ignore this email and nothing will happen.</p>
+		$body = "
+        <table width='100%' align='center'>
+            <tr style='background-color: #333333;'>
+                <td align='center' style='text-align:center;'>
+                    <img align='center' width='100%' style='max-width: 600px; width:100%;' src='http://i.imgur.com/R7HPn2q.jpg' alt='Refracter'/>
+                </td>
+            </tr>
+        </table>
+        <p>Someone has requested that your password be reset.</p>
+		<p>If this was a mistake or was not you, just ignore this email and nothing will happen.</p>
 		<p>To reset your password, visit the following address: <a href='".DIR."?pwReset=$token'>".DIR."?pwReset=$token</a></p>";
 
 		$mail = new Mail();
 		$mail->isSMTP();
-		$mail->setFrom(SITEEMAIL);
+		//$mail->setFrom('Refracter');
 		$mail->addAddress($to);
 		$mail->subject($subject);
 		$mail->body($body);

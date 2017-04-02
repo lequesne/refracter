@@ -12,20 +12,36 @@ class RefracterSpinner extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps){
-
-        if ( nextProps.show ) {
-            //spinner was just shown
+    componentWillMount(){
+        if ( this.props.show ) {
+            //spinner was shown from the start
             this.setState({
                 showing: true,
                 hiding: false
             });
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+
+        if ( nextProps.show ) {
+            //spinner was just shown
+
+            this.setState({
+                showing: true,
+                hiding: false
+            });
+
         } else if ( !nextProps.show && this.state.showing  ) {
             //spinner was hidden and was already showing
-            this.setState({
-                showing: false,
-                hiding: true
-            });
+
+            setTimeout(()=>{
+                this.setState({
+                    showing: false,
+                    hiding: true
+                });
+            },500);
+
         }
 
     }

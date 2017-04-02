@@ -225,7 +225,7 @@ export const findTracksByAlbum = (artist, album, key) => {
         let albumData = {};
 
         //first get album info from lastFM
-        fetch(`${lastFmEndpoint}?method=album.getinfo&artist=${artist}&album=${album}&api_key=${lastFmApiKey()}&format=json`).then(response => {
+        fetch(`${lastFmEndpoint}?method=album.getinfo&artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}&api_key=${lastFmApiKey()}&format=json`).then(response => {
             return response.json();
         }).then(response => {
 
@@ -323,21 +323,41 @@ export const getTrackSource = (track, key) => {
                 let query = `${track.artist} ${track.title}`;
 
                 //youtube search
-                fetch(`https://www.googleapis.com/youtube/v3/search/?part=snippet&key=AIzaSyBqJN5ztzfbty3nZaosCYkJB3TcsETL344&type=video&q=${query}`).then(response => {
+                fetch(`${refracterEndpoint}youtubeSearch.php?query=${query}`).then(response => {
                     return response.json();
                 }).then(response => {
 
-                    if (response) {
-                        resolve(response.items[0].id.videoId);
+                    if ( response.success ) {
+                        resolve(response.videos[0]);
+                    } else {
+                        reject('A YouTube source for this track could not be found.');
                     }
 
                 }).catch(err => {
+                    reject(err);
                     console.log('YouTube search: ', err);
                 });
+
+                // OLD  API youtube search
+                // fetch(`https://www.googleapis.com/youtube/v3/search/?part=id,snippet&safeSearch=none&key=AIzaSyBqJN5ztzfbty3nZaosCYkJB3TcsETL344&type=video&q=${query}`).then(response => {
+                //     return response.json();
+                // }).then(response => {
+                //
+                //     if (response && response.items.length > 0) {
+                //         resolve(response.items[0].id.videoId);
+                //     } else {
+                //         reject('A YouTube source for this track could not be found.');
+                //     }
+                //
+                // }).catch(err => {
+                //     reject(err);
+                //     console.log('YouTube search: ', err);
+                // });
 
             }
 
         }).catch(err => {
+            reject(err);
             console.log('Refracter getTrackSource: ', err);
         });
 

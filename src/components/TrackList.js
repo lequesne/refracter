@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import {Table} from 'react-bootstrap';
 import {ContextMenu, MenuItem, ContextMenuTrigger, SubMenu} from "react-contextmenu";
 import {toast} from 'react-toastify';
+import RefracterSpinner from '../components/RefracterSpinner';
 
 class TrackList extends Component {
 
@@ -158,13 +159,21 @@ class TrackList extends Component {
     }
 
     playTrack(track) {
-        if ( this.props.activeTrack && track.trackID === this.props.activeTrack.trackID ) {
+
+        if ( this.props.activeTrack && track.trackID === this.props.activeTrack.trackID && track.index === this.props.activeTrack.index && this.props.queueLocation === location.pathname ) {
             //toggle play/pause
-            this.props.playPauseTrack();
+
+            if (this.props.playTrack) {
+                this.context.parentState.pauseTrack();
+            } else {
+                this.context.parentState.playTrack();
+            }
+
         } else {
             //newly clicked track, update active track and queue
             this.props.updateQueue(track, this.state.tracks, location.pathname);
         }
+
     }
 
     shuffleTracks(){
@@ -464,6 +473,10 @@ class TrackList extends Component {
         if ( !isInitialSort ) {
             this.props.updateQueue(null, sortedTrackList);
         }
+
+        //turn shuffle off after user sorted
+        this.context.parentState.shuffleTracksOff();
+
     }
 
     handleContextPlayTrack(event, track, element) {
@@ -631,9 +644,13 @@ class TrackList extends Component {
                     <tbody>
                         {this.state.tracks.map((track, trackIndex) => {
 
+                            //add track list index to track object (used for active track class in case of multiple same trackIDs)
+                            track.index = trackIndex;
+                            //track.location = location.pathname;
+
                             let activeClass = '';
                             if ( this.props.queueLocation && this.props.queueLocation === location.pathname ) {
-                                if ( this.props.activeTrack && track.trackID === this.props.activeTrack.trackID ) {
+                                if ( this.props.activeTrack && track.trackID === this.props.activeTrack.trackID && track.index === this.props.activeTrack.index ) {
                                     activeClass = 'active-track';
                                 }
                             }
@@ -643,6 +660,16 @@ class TrackList extends Component {
                                 : '';
 
                             let trackClasses = `track-row ${activeClass} ${selectedClass}`;
+
+                            //playing/buffering icons
+                            let playingBufferingIcons;
+                            if ( this.props.buffering ) {
+                                playingBufferingIcons = <RefracterSpinner show={true} size={30} backgroundColor={'none'}/>;
+                            } else if ( this.props.playing ) {
+                                playingBufferingIcons = <div><div className="equalizer"></div><span className="refracter-pause icon"></span></div>;
+                            } else {
+                                playingBufferingIcons = <span className="refracter-play icon"></span>;
+                            }
 
                             return (
                                 <ContextMenuTrigger renderTag={'tr'} id="track-context" key={trackIndex} attributes={{
@@ -658,8 +685,8 @@ class TrackList extends Component {
                                         onClick={() => this.playTrack(track)}
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
                                         >
-                                        {this.props.playing && this.props.activeTrack.trackID === track.trackID && this.props.queueLocation && this.props.queueLocation === location.pathname
-                                        ? <div><div className="equalizer"></div><span className="refracter-pause icon"></span></div>
+                                        { this.props.activeTrack && this.props.activeTrack.trackID === track.trackID && track.index === this.props.activeTrack.index && this.props.queueLocation && this.props.queueLocation === location.pathname
+                                        ? playingBufferingIcons
                                         : <span className="refracter-play icon"></span>
                                         }
                                     </td>

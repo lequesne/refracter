@@ -73,15 +73,16 @@ class Library extends Component {
                                 defaultSortName="artist"
                                 defaultSortOrder="desc"
                                 user={this.props.user}
-                                playPauseTrack={this.context.parentState.playPauseTrack}
+                                playTrack={this.props.playTrack}
                                 playing={this.props.playing}
+                                buffering={this.props.buffering}
                                 tracks={this.state.tracks}
                                 queueId={this.props.queueId}
                                 activeTrack={this.props.activeTrack}
                                 updateQueue={this.context.parentState.updateQueue}
                                 shuffle={this.props.shuffle}
                             />
-                            : <p>Loading or no tracks in state</p>
+                            : <p>Get searching your favourite artists, albums and tracks above to begin adding some tracks to your library.</p>
                         }
 
                     </div>

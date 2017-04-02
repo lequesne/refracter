@@ -3,6 +3,7 @@ import * as refracter from '../refracter';
 import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css';
 import YouTube from 'react-youtube';
+import {toast} from 'react-toastify';
 
 // NOTE Update progress bar and volume with simple from scratch percent/width functionality
 
@@ -24,6 +25,7 @@ class PlayerBar extends Component {
         this.pauseTrack = this.pauseTrack.bind(this);
         this.togglePlayPause = this.togglePlayPause.bind(this);
         this.toggleMuteBtn = this.toggleMuteBtn.bind(this);
+        this.toggleShuffle = this.toggleShuffle.bind(this)
         this.setProgress = this.setProgress.bind(this);
         this.updateProgress = this.updateProgress.bind(this);
         this.setVolume = this.setVolume.bind(this);
@@ -40,33 +42,59 @@ class PlayerBar extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.youTubePlayer) {
-            if ( !this.props.track || nextProps.track.trackID !== this.props.track.trackID )
-                this.loadTrack(nextProps.track);
-        }
 
-        if ( this.props.track ) {
-            if ( nextProps.playTrack ) {
-                this.pauseTrack();
-            } else {
+        //play pause controls
+        if ( this.props.track && this.props.playTrack !== nextProps.playTrack ) {
+
+            if ( nextProps.playTrack) {
                 this.playTrack();
+            } else {
+                this.pauseTrack();
             }
         }
+
+        //load new track
+        if (this.youTubePlayer && nextProps.track ) {
+
+            if ( !this.props.track || nextProps.track.trackID !== this.props.track.trackID || nextProps.track.index !== this.props.track.index || nextProps.queueLocation !== this.props.queueLocation ) {
+                this.context.parentState.pauseTrack();
+                this.setProgress(0);
+                this.loadTrack(nextProps.track, nextProps.playTrack);
+            }
+
+        }
+
     }
 
-    loadTrack(track) {
+    loadTrack(track, playTrack) {
         if (track) {
             refracter.getTrackSource(track, refracter.userKey).then(youTubeId => {
                 this.youTubePlayer.loadVideoById(youTubeId);
+                this.context.parentState.playTrack();
             }).catch(err => {
-                console.log('ERROR RETURNED: ', err);
+
+                //go to next track
+                this.props.onNextTrack();
+
+                //show toast
+                toast(`A YouTube source for ${track.title} by ${track.artist} could not be found.`, {
+                  type: toast.TYPE.ERROR,
+                  autoClose: 10000
+                });
+
             });
         }
     }
 
     playTrack() {
         //play youtube
-        this.youTubePlayer.playVideo();
+        if (this.youTubePlayer) {
+            this.youTubePlayer.playVideo();
+        } else {
+            setTimeout(()=>{
+                this.youTubePlayer.playVideo();
+            },1000);
+        }
     }
 
     pauseTrack() {
@@ -75,15 +103,14 @@ class PlayerBar extends Component {
     }
 
     togglePlayPause() {
-        if (this.state.playing) {
-            this.pauseTrack();
+        if (this.props.playTrack) {
+            this.context.parentState.pauseTrack();
         } else {
-            this.playTrack();
+            this.context.parentState.playTrack();
         }
     }
 
     setProgress(value) {
-        //console.log(this.youTubePlayer.getVideoData());
         let progressInSeconds = this.youTubePlayer.getDuration() / 100 * value;
         this.youTubePlayer.seekTo(progressInSeconds);
     }
@@ -103,6 +130,12 @@ class PlayerBar extends Component {
                     : 100, //in percent
                 trackDuration: this.youTubePlayer.getDuration(),
                 trackProgress: this.youTubePlayer.getCurrentTime()
+            });
+        } else {
+            this.setState({
+                setProgress: 0,
+                trackDuration: 0,
+                trackProgress: 0
             });
         }
 
@@ -126,6 +159,14 @@ class PlayerBar extends Component {
         }
     }
 
+    toggleShuffle(){
+        if ( this.props.shuffle ) {
+            this.context.parentState.shuffleTracksOff();
+        } else {
+            this.context.parentState.shuffleTracksOn();
+        }
+    }
+
     setVolume(value) {
 
         value = value > 90
@@ -142,7 +183,7 @@ class PlayerBar extends Component {
         //setup progress tracker function
         setInterval(this.updateProgress, 100);
         //load active track on first load
-        this.loadTrack(this.props.track);
+        //this.loadTrack(this.props.track, this.props.playTrack);
     }
 
     youTubeStateChange(event) {
@@ -150,10 +191,10 @@ class PlayerBar extends Component {
 
         if ( event.data === 1 ) {
             this.setState({playing: true});
-            this.props.updateAppPlayState(true);
+            this.props.updateAppPlayState(true, false);
         } else {
             this.setState({playing: false});
-            this.props.updateAppPlayState(false);
+            this.props.updateAppPlayState(false, false);
         }
 
         switch (event.data) {
@@ -167,7 +208,7 @@ class PlayerBar extends Component {
                 //
                 break;
             case 3: //buffering
-                //
+                this.props.updateAppPlayState(false, true);
                 break;
             case 5: //cued
                 //
@@ -192,11 +233,10 @@ class PlayerBar extends Component {
     // }
 
     youTubeError(event) {
-        console.log(event);
-        toast(`There was an error with the Youtube player: ${event}`, {
-            type: toast.TYPE.ERROR,
-            autoClose: 10000
-        });
+        // toast(`There was an error with the Youtube player: ${event}`, {
+        //     type: toast.TYPE.ERROR,
+        //     autoClose: 10000
+        // });
     }
 
     onPrevious(){
@@ -240,7 +280,7 @@ class PlayerBar extends Component {
                     <div onClick={this.onPrevious} title="Previous track" className="prev-track player-btn">
                         <div className="refracter-ios-skipbackward icon absolute"></div>
                     </div>
-                    <div onClick={this.props.playPauseTrack} title="Play / Pause" className="player-play-pause player-btn">
+                    <div onClick={this.togglePlayPause} title="Play / Pause" className="player-play-pause player-btn">
                         {this.state.playing
                             ? <div className="refracter-pause icon absolute"></div>
                             : <div className="refracter-play icon absolute"></div>
@@ -281,11 +321,12 @@ class PlayerBar extends Component {
                 </div>
 
                 <div className="player-controls-rhs">
-                    <div title="Loop On / Off" className="loop-track player-btn">
+                    <div onClick={this.context.parentState.togglePlayerLoop} title="Loop On / Off" className={`loop-track player-btn ${this.props.playerLoop?'enabled':''}`}>
                         <div className="refracter-loop icon absolute"></div>
+                        {this.props.playerLoop === 2 ? <span className="loop-track">1</span> :null}
                     </div>
 
-                    <div onClick={this.context.parentState.shuffleToggle} title="Shuffle On / Off" className={`shuffle-tracks player-btn ${this.props.shuffle?'enabled':''}`}>
+                    <div onClick={this.toggleShuffle} title="Shuffle On / Off" className={`shuffle-tracks player-btn ${this.props.shuffle?'enabled':''}`}>
                         <div className="refracter-shuffle icon absolute absolute"></div>
                     </div>
                 </div>

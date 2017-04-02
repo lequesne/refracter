@@ -68,13 +68,20 @@ if(!isset($error)){
 		//send email
 		$to = $_GET['email'];
 		$subject = "Registration Confirmation";
-		$body = "<p>Thank you for registering at demo site.</p>
-		<p>To activate your account, please click on this link: <a href='".DIR."?userID=$id&active=$activation'>".DIR."?userID=$id&active=$activation</a></p>
-		<p>Regards Site Admin</p>";
+		$body = "
+		<table width='100%' align='center'>
+            <tr style='background-color: #333333;'>
+                <td align='center' style='text-align:center;'>
+                    <img align='center' width='100%' style='max-width: 600px; width:100%;' src='http://i.imgur.com/R7HPn2q.jpg' alt='Refracter'/>
+                </td>
+            </tr>
+        </table>
+		<p>Welcome to Refracter, a music aggregator and YouTube player in one.</p>
+		<p>To activate your account, please visit the following link: <a href='".DIR."?userID=$id&active=$activation'>".DIR."?userID=$id&active=$activation</a></p>";
 
 		$mail = new Mail();
 		$mail->isSMTP();
-		$mail->setFrom(SITEEMAIL);
+		//$mail->setFrom(SITEEMAIL);
 		$mail->addAddress($to);
 		$mail->subject($subject);
 		$mail->body($body);

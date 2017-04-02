@@ -41,7 +41,7 @@ class ForgotPasswordForm extends Component {
                     this.props.onHide();
                     toast(`A password reset link has been sent to your email. Please check your inbox and follow the directions.`, {
                         type: toast.TYPE.INFO,
-                        autoClose: 10000
+                        autoClose: 15000
                     });
                 }, 1000);
 
