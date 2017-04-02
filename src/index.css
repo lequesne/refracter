@@ -1280,7 +1280,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
       background: #555; }
     .sidebar .link.dragNdrop-hover {
       background: #121212;
-      padding-left: 30px; }
+      padding-left: 70px; }
     .sidebar .link:hover, .sidebar .link:visited {
       text-decoration: none; }
       .sidebar .link:hover .text, .sidebar .link:visited .text {
@@ -1304,6 +1304,8 @@ Pass any number of seconds referring to the duration of one full rotation for an
     font-size: 1.5em;
     padding: 15px;
     border-bottom: 5px solid #121212; }
+    .sidebar .library-link.dragNdrop-hover {
+      padding-left: 30px; }
 
 .alpha-label {
   font-size: 14px; }

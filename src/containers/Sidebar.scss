@@ -82,7 +82,8 @@
 
         &.dragNdrop-hover {
             background: $darkBackground;
-            padding-left: 30px;
+            //box-shadow: inset $dropShadowDepth3;
+            padding-left: 70px;
         }
 
         &:hover, &:visited {
@@ -119,6 +120,10 @@
         font-size: 1.5em;
         padding: 15px;
         border-bottom: $borderPadding solid $darkBackground;
+
+        &.dragNdrop-hover {
+            padding-left: 30px;
+        }
     }
 
     button.btn, button.btn-default {
