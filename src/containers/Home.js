@@ -7,7 +7,7 @@ class Home extends Component {
     componentWillMount(){
         //redirect to library if user signed in
         if ( this.props.user ) {
-            browserHistory.push('/library');
+            //browserHistory.push('/library');
         }
     }
 

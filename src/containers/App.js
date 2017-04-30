@@ -12,6 +12,7 @@ import SignUpForm from './SignUpForm';
 import LogInForm from './LogInForm';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import PasswordResetForm from './PasswordResetForm';
+import ChangeSource from './ChangeSource';
 
 class App extends Component {
 
@@ -49,6 +50,7 @@ class App extends Component {
         this.playNextTrackInQueue = this.playNextTrackInQueue.bind(this);
         this.playPreviousTrackInQueue = this.playPreviousTrackInQueue.bind(this);
         this.updateAppPlayState = this.updateAppPlayState.bind(this);
+        this.changeTrackSource = this.changeTrackSource.bind(this);
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
         this.showPageSpinner = this.showPageSpinner.bind(this);
@@ -206,10 +208,13 @@ class App extends Component {
         } else if ( track && queueLocation ) {
             //new track and queue
 
-            //new track is played, set queue id
             this.setState({
                 queueLocation: queueLocation,
                 queue: trackList,
+                activeTrack: null
+            });
+
+            this.setState({
                 activeTrack: track
             });
 
@@ -331,6 +336,13 @@ class App extends Component {
         });
     }
 
+    changeTrackSource(track) {
+        this.setState({
+            changeSourceTrack: track,
+            showChangeSource: true
+        })
+    }
+
     showForgotPasswordForm(){
         this.setState({
             showForgotPasswordForm: true
@@ -444,6 +456,13 @@ class App extends Component {
                     onHide={()=>this.hideModal('showPasswordResetForm')}
                     show={this.state.showPasswordResetForm}
                 />
+
+                <ChangeSource
+                    onHide={()=>this.hideModal('showChangeSource')}
+                    show={this.state.showChangeSource}
+                    changeSourceTrack={this.state.changeSourceTrack}
+                />
+
             </div>
         );
     }

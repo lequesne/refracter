@@ -2,7 +2,7 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
     height: $defaultButtonHeight;
     border-radius: 0;
     border: none;
-    color: $white;
+    color: $primaryColor;
     background: $medLightBackground;
     padding: 0.2em 1em;
     font-size: 20px;
@@ -11,7 +11,7 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
     &:hover {
         box-shadow: $dropShadowDepth1;
         background: $primaryColor;
-        color: white;
+        color: $white;
     }
 
 }

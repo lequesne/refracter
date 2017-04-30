@@ -29,7 +29,7 @@ switch (SITE_TYPE) {
     case LIVE_SITE:
         define('DBHOST','localhost');
         define('DBUSER','root');
-        define('DBPASS','Mickeymouse#1');
+        define('DBPASS','mysql');
         define('DBNAME','refracter');
         break;
 }

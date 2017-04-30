@@ -10,7 +10,7 @@ import 'whatwg-fetch';
 //define some global variables
 export const loginCookieName = 'refracter_login';
 export const lastFmEndpoint = 'http://ws.audioscrobbler.com/2.0/';
-export const refracterEndpoint = document.location.hostname === 'localhost' ? 'http://localhost/_code/refracter/src/api/' : '/api/';
+export const refracterEndpoint = document.location.hostname === 'localhost' || document.location.hostname === '192.168.137.1' ? `http://${document.location.hostname}/_code/refracter/src/api/` : '/api/';
 export let userLoggedIn; //not used at the moment
 export let userKey = ''; //only set after user logins, then used to authenticate with api
 
@@ -328,7 +328,7 @@ export const getTrackSource = (track, key) => {
                 }).then(response => {
 
                     if ( response.success ) {
-                        resolve(response.videos[0]);
+                        resolve(response.results[0].youTubeID);
                     } else {
                         reject('A YouTube source for this track could not be found.');
                     }

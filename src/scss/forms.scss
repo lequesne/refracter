@@ -1,3 +1,9 @@
+form {
+    max-width: 400px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 .input-container {
     text-align: left;
@@ -52,7 +58,7 @@ button[type="submit"] {
 .input-errors, .server-errors {
     font-size: 0.8em;
     padding: 0.5em 1em;
-    background: lighten(red, 20%);
+    background: $errorRed;
     text-align: left;
 }
 

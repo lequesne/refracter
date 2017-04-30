@@ -36,9 +36,12 @@ $defaultButtonHeight: 46px;
 $primaryColor: #EDA564;
 $white: #efefef;
 $lightBackground: #dcdcdc;
-$medLightBackground: #555;
+$medLightBackground: #444;
 $medBackground: #333;
 $darkBackground: #121212;
+
+$errorRed: lighten(red, 20%);
+$successGreen: lighten(green, 50%);
 
 //timings
 $standardHoverTime: 0.2s;
@@ -71,6 +74,7 @@ $dropShadowDepth3: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 @import 'containers/Album';
 @import 'containers/Artist';
 @import 'containers/Sidebar';
+@import 'containers/ChangeSource';
 
 //alpha label
 .alpha-label {

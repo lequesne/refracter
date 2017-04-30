@@ -321,6 +321,10 @@ hr {
     top: calc( 70px + 5px); }
   .Refracter-app .toastify .toastify-content--info {
     border-color: #EDA564; }
+  .Refracter-app .toastify .toastify-content--error {
+    border-color: #ff6666; }
+  .Refracter-app .toastify .toastify-content--success {
+    border-color: #80ff80; }
   .Refracter-app .toastify .toastify__close {
     font-size: 1.2em;
     line-height: 0;
@@ -367,7 +371,7 @@ html.dragNdrop-isDragging .content-window {
   background-color: #333;
   opacity: 0;
   pointer-events: none;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }
 
 .react-contextmenu.react-contextmenu--visible {
   opacity: 1;
@@ -380,8 +384,7 @@ html.dragNdrop-isDragging .content-window {
   line-height: 1.5;
   text-align: inherit;
   background: 0 0;
-  cursor: pointer;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
+  cursor: pointer; }
   .react-contextmenu-item .react-contextmenu {
     border-left: 1px solid #333; }
 
@@ -562,15 +565,15 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
   height: 46px;
   border-radius: 0;
   border: none;
-  color: #efefef;
-  background: #555;
+  color: #EDA564;
+  background: #444;
   padding: 0.2em 1em;
   font-size: 20px;
   transition: all 0.2s; }
   button.btn:hover, button.btn-default:hover, .dropdown .dropdown-label:hover, .dropdown-contents div:hover {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     background: #EDA564;
-    color: white; }
+    color: #efefef; }
 
 .dropdown {
   position: relative;
@@ -598,6 +601,12 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
   .dropdown .dropdown-label, .dropdown .dropdown-contents div {
     padding-top: 0.5em; }
 
+form {
+  max-width: 400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto; }
+
 .input-container {
   text-align: left;
   margin: -6px -6px 0.5em -6px;
@@ -610,12 +619,12 @@ label {
 
 input:-webkit-autofill, input:focus:-webkit-autofill {
   -webkit-text-fill-color: #efefef !important;
-  -webkit-box-shadow: 0 0 0px 1000px #3c3c3c inset; }
+  -webkit-box-shadow: 0 0 0px 1000px #2b2b2b inset; }
 
 input {
   display: block;
   width: 100%;
-  background: #3c3c3c;
+  background: #2b2b2b;
   color: #efefef;
   border: none;
   font-size: 1.2em;
@@ -623,7 +632,7 @@ input {
   transition: all .3s; }
   input:focus {
     padding-left: 0.5em;
-    background: #555;
+    background: #444;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
 
 input:focus, textarea:focus {
@@ -835,23 +844,23 @@ Pass any number of seconds referring to the duration of one full rotation for an
     padding: 7px 245px; }
   .topbar .refracter-logo {
     position: absolute;
-    left: 0;
+    left: 20px;
     top: 0;
     height: 100%;
-    padding: 0 20px;
-    color: #efefef;
+    color: #EDA564;
     font-size: 150px;
     overflow: visible; }
     .topbar .refracter-logo .alpha-label {
       position: absolute;
-      top: 22px;
-      right: -30px;
-      padding: 5px;
-      font-size: 14px;
+      top: 0;
+      right: 0;
+      padding: .3em;
+      font-size: 10px;
       line-height: 0.9em;
-      background: #efefef;
-      color: #121212;
-      font-weight: bold; }
+      background: #EDA564;
+      color: #333;
+      font-weight: bold;
+      text-transform: uppercase; }
   .topbar .seach-input-container {
     position: relative;
     display: block;
@@ -865,7 +874,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
       height: 100%;
       width: 100%;
       font-size: 1.5em;
-      padding: 20px 20px 20px 60px;
+      padding: 0 20px 0 60px;
       margin: 0; }
       .topbar .seach-input-container input:focus {
         padding-left: 20px; }
@@ -1256,7 +1265,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
     position: relative;
     height: 100%; }
     .sidebar .wrapper.logged-in {
-      padding-top: 70px; }
+      padding-top: 55px; }
   .sidebar .login-signup {
     text-align: center;
     padding: 30px; }
@@ -1277,7 +1286,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
     overflow: hidden;
     text-overflow: ellipsis; }
     .sidebar .link:hover, .sidebar .link:focus {
-      background: #555; }
+      background: #444; }
     .sidebar .link.dragNdrop-hover {
       background: #121212;
       padding-left: 70px; }
@@ -1300,12 +1309,31 @@ Pass any number of seconds referring to the duration of one full rotation for an
     position: absolute;
     top: 0;
     left: 0;
-    height: 70px;
-    font-size: 1.5em;
-    padding: 15px;
+    height: 55px;
+    font-size: 1.3em;
+    padding: 10px 15px;
     border-bottom: 5px solid #121212; }
     .sidebar .library-link.dragNdrop-hover {
       padding-left: 30px; }
+
+.change-source {
+  max-width: 550px;
+  padding: 30px; }
+  .change-source h1 {
+    margin: 25px 0;
+    color: #EDA564; }
+  .change-source .source-list {
+    padding: 0;
+    margin: 0;
+    list-style: none; }
+    .change-source .source-list li {
+      padding: 15px;
+      margin: 15px 0;
+      background: #383838; }
+      .change-source .source-list li:first-child {
+        margin-top: 0; }
+    .change-source .source-list .source-iframe {
+      width: 100%; }
 
 .alpha-label {
   font-size: 14px; }

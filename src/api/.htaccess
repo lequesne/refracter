@@ -1,17 +1,5 @@
-<IfModule mod_rewrite.c>
-
-    # BEGIN WordPress
-    #RewriteEngine On
-    #RewriteBase /_code/refracter/src/server/
-    #RewriteRule ^index\.php$ - [L]
-    #RewriteCond %{REQUEST_FILENAME} !-f
-    #RewriteCond %{REQUEST_FILENAME} !-d
-    #RewriteRule . /_code/refracter/src/server/index.php [L]
-    # END WordPress
-
-</IfModule>
-
 <IfModule mod_headers.c>
+    # Header set Access-Control-Allow-Origin "http://localhost:3000"
     Header set Access-Control-Allow-Origin "*"
     Header set Access-Control-Allow-Credentials "true"
     Header set Access-Control-Allow-Methods "GET,HEAD,OPTIONS,POST,PUT"

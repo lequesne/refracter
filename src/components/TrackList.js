@@ -1,6 +1,6 @@
 import * as refracter from '../refracter';
 import React, {Component} from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import {Table} from 'react-bootstrap';
 import {ContextMenu, MenuItem, ContextMenuTrigger, SubMenu} from "react-contextmenu";
 import {toast} from 'react-toastify';
@@ -32,6 +32,7 @@ class TrackList extends Component {
         this.updateTrackListStateAfterDelete = this.updateTrackListStateAfterDelete.bind(this);
         this.trackContextOpen = this.trackContextOpen.bind(this);
         this.handleContextPlayTrack = this.handleContextPlayTrack.bind(this);
+        this.handleContextChangeSource = this.handleContextChangeSource.bind(this);
 
         this.dragNdropInit = this.dragNdropInit.bind(this);
         this.dragNdropStart = this.dragNdropStart.bind(this);
@@ -63,6 +64,41 @@ class TrackList extends Component {
         } else {
             this.onSortChange(this.state.sortName, this.state.sortOrder, true);
         }
+
+        //keyboard controls for track navigation
+        window.onkeydown = (event) => {
+            if (this.state.selectedTracks && this.state.selectedTracks.length > 0) {
+                let lastSelectedTrackIndex = this.state.selectedTracks[this.state.selectedTracks.length-1].index;
+
+                switch (event.keyCode) {
+                    case 38: //up
+                        //select prev track
+                        this.selectTrack(event, this.state.tracks[lastSelectedTrackIndex-1], lastSelectedTrackIndex-1, false);
+                        break;
+                    case 40: //down
+                        //select next track
+                        this.selectTrack(event, this.state.tracks[lastSelectedTrackIndex+1], lastSelectedTrackIndex+1, false);
+                        break;
+                    case 13: //enter
+                        //play last selected track
+                        this.playTrack(this.state.tracks[lastSelectedTrackIndex], true);
+                        break;
+                    case 32: //spacebar
+                        //play/pause current track
+                        this.playTrack(this.props.activeTrack);
+                        break;
+                    case 46: //del
+
+                        break;
+                    case 8: //backspace
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
     }
 
     componentDidUpdate(){
@@ -158,9 +194,9 @@ class TrackList extends Component {
         }
     }
 
-    playTrack(track) {
+    playTrack(track, playFromStart) {
 
-        if ( this.props.activeTrack && track.trackID === this.props.activeTrack.trackID && track.index === this.props.activeTrack.index && this.props.queueLocation === location.pathname ) {
+        if ( !playFromStart && this.props.activeTrack && track.trackID === this.props.activeTrack.trackID && track.index === this.props.activeTrack.index && this.props.queueLocation === location.pathname ) {
             //toggle play/pause
 
             if (this.props.playTrack) {
@@ -196,47 +232,35 @@ class TrackList extends Component {
 
         let stateTracks = this.state.tracks;
 
-        //select tracks based off click, ctrl click, and shift click
-        if (event.ctrlKey) {
-            //ctrl multiple select
-            stateTracks[clickedIndex].selected = true;
+        if ( clickedIndex >= 0 && clickedIndex < this.state.tracks.length ) {
 
-        } else if (!event.ctrlKey && !event.shiftKey) {
+            //select tracks based off click, ctrl click, and shift click
+            if (event.ctrlKey) {
+                //ctrl multiple select
+                stateTracks[clickedIndex].selected = true;
 
-            if ( event.button === 2 ) {
-                //track was right clicked
+            } else if (!event.ctrlKey && !event.shiftKey) {
 
-                if (!stateTracks[clickedIndex].selected) {
-                    //clicked track is not already already selected
-                    for (let [i,track]of stateTracks.entries()) {
-                        if (i === clickedIndex) {
-                            track.selected = true;
-                        } else {
-                            track.selected = false;
-                        }
-                    }
-                }
-
-            } else {
-                //track was left clicked
-
-                if ( mouseUp && !this.context.isDragging ) {
-
-                    //every track is already selected
-                    for (let [i,track]of stateTracks.entries()) {
-
-                        if (i === clickedIndex ) {
-                            track.selected = true;
-                        } else {
-                            track.selected = false;
-                        }
-
-                    }
-
-                } else{
-                    //normal track select
+                if ( event.button === 2 ) {
+                    //track was right clicked
 
                     if (!stateTracks[clickedIndex].selected) {
+                        //clicked track is not already already selected
+                        for (let [i,track]of stateTracks.entries()) {
+                            if (i === clickedIndex) {
+                                track.selected = true;
+                            } else {
+                                track.selected = false;
+                            }
+                        }
+                    }
+
+                } else {
+                    //track was left clicked
+
+                    if ( mouseUp && !this.context.isDragging ) {
+
+                        //every track is already selected
                         for (let [i,track]of stateTracks.entries()) {
 
                             if (i === clickedIndex ) {
@@ -246,46 +270,62 @@ class TrackList extends Component {
                             }
 
                         }
+
+                    } else{
+                        //normal track select
+
+                        if (!stateTracks[clickedIndex].selected) {
+                            for (let [i,track]of stateTracks.entries()) {
+
+                                if (i === clickedIndex ) {
+                                    track.selected = true;
+                                } else {
+                                    track.selected = false;
+                                }
+
+                            }
+                        }
+
                     }
 
                 }
 
+            } else if (event.shiftKey && !event.ctrlKey) {
+                //shift click
+                if (clickedIndex > this.state.lastClickedTrackIndex) {
+                    for (let [i,track]of stateTracks.entries()) {
+                        if (i >= this.state.lastClickedTrackIndex && i <= clickedIndex) {
+                            track.selected = true;
+                        } else {
+                            track.selected = false;
+                        }
+                    }
+                } else if (clickedIndex < this.state.lastClickedTrackIndex) {
+                    for (let [i,track]of stateTracks.entries()) {
+                        if (i >= clickedIndex && i <= this.state.lastClickedTrackIndex) {
+                            track.selected = true;
+                        } else {
+                            track.selected = false;
+                        }
+                    }
+                }
             }
 
-        } else if (event.shiftKey && !event.ctrlKey) {
-            //shift click
-            if (clickedIndex > this.state.lastClickedTrackIndex) {
-                for (let [i,track]of stateTracks.entries()) {
-                    if (i >= this.state.lastClickedTrackIndex && i <= clickedIndex) {
-                        track.selected = true;
-                    } else {
-                        track.selected = false;
-                    }
+            //push selected tracks to a selected tracks array in state
+            let selectedTracks = [];
+            for (let track of stateTracks) {
+                if (track.selected)
+                    selectedTracks.push(track);
                 }
-            } else if (clickedIndex < this.state.lastClickedTrackIndex) {
-                for (let [i,track]of stateTracks.entries()) {
-                    if (i >= clickedIndex && i <= this.state.lastClickedTrackIndex) {
-                        track.selected = true;
-                    } else {
-                        track.selected = false;
-                    }
-                }
-            }
+
+            //update selected tracks in state
+            this.setState({
+                lastClickedTrackIndex: clickedIndex,
+                tracks: stateTracks,
+                selectedTracks: selectedTracks
+            });
+
         }
-
-        //push selected tracks to a selected tracks array in state
-        let selectedTracks = [];
-        for (let track of stateTracks) {
-            if (track.selected)
-                selectedTracks.push(track);
-            }
-
-        //update selected tracks in state
-        this.setState({
-            lastClickedTrackIndex: clickedIndex,
-            tracks: stateTracks,
-            selectedTracks: selectedTracks
-        });
 
     }
 
@@ -484,6 +524,12 @@ class TrackList extends Component {
             this.playTrack(track);
     }
 
+    handleContextChangeSource(event, track, element){
+
+        this.context.parentState.changeTrackSource(track);
+
+    }
+
     render() {
 
         // const playIconClass = this.props.playing
@@ -528,9 +574,9 @@ class TrackList extends Component {
                     <MenuItem onClick={this.handleContextPlayTrack}>
                         {playPauseContextMenuLabal}
                     </MenuItem>
-                    {/* <MenuItem onClick={this.handleContextChangeSource}>
+                    <MenuItem onClick={this.handleContextChangeSource}>
                         Change source
-                    </MenuItem> */}
+                    </MenuItem>
                     <MenuItem divider/>
                     {this.props.playlistID
                         ? <MenuItem onClick={() => this.removeSelectedTracksForUser(this.props.playlistID,this.props.playlistName)}>
@@ -683,6 +729,7 @@ class TrackList extends Component {
                                     <td title="Play/Pause"
                                         className={`play-btn-col`}
                                         onClick={() => this.playTrack(track)}
+                                        onTouchEnd={() => this.playTrack(track)}
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
                                         >
                                         { this.props.activeTrack && this.props.activeTrack.trackID === track.trackID && track.index === this.props.activeTrack.index && this.props.queueLocation && this.props.queueLocation === location.pathname
@@ -701,6 +748,8 @@ class TrackList extends Component {
                                         className="name-col"
                                         onMouseDown={(event) => this.selectTrack(event, track, trackIndex)}
                                         onMouseUp={(event) => this.selectTrack(event, track, trackIndex, true)}
+                                        onTouchStart={(event) => this.selectTrack(event, track, trackIndex)}
+                                        onTouchEnd={(event) => this.selectTrack(event, track, trackIndex, true)}
                                         >
                                         <span>{track.title}</span>
                                     </td>

@@ -20,11 +20,10 @@
 
     .refracter-logo {
         position: absolute;
-        left: 0;
+        left: 20px;
         top: 0;
         height: 100%;
-        padding: 0 20px;
-        color: $white;
+        color: $primaryColor;
         font-size: 150px;
         overflow: visible;
         //opacity: 0.7;
@@ -32,14 +31,15 @@
         //alpha label
         .alpha-label {
             position: absolute;
-            top: 22px;
-            right: -30px;
-            padding: 5px;
-            font-size: 14px;
+            top: 0;
+            right: 0;
+            padding: .3em;
+            font-size: 10px;
             line-height: 0.9em;
-            background: $white;
-            color: $darkBackground;
+            background: $primaryColor;
+            color: $medBackground;
             font-weight: bold;
+            text-transform: uppercase;
         }
     }
 
@@ -57,7 +57,7 @@
             height: 100%;
             width: 100%;
             font-size: 1.5em;
-            padding: 20px 20px 20px $topBarHeight - $borderPadding - $borderPadding;
+            padding: 0 20px 0 $topBarHeight - $borderPadding - $borderPadding;
             margin: 0;
 
             &:focus {
