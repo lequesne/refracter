@@ -51,7 +51,6 @@ if ( $videoResults ) {
 echo json_encode($responseObject);
 
 
-
 // $doc = new DOMDocument();
 // @$doc->loadHTMLFile('https://www.youtube.com/results?q='.$query);
 // $links = $doc->getElementsByTagName('a');

@@ -47,7 +47,7 @@ class Sidebar extends Component {
 
                                 <div className="login-signup">
 
-                                    Sign in or register to save tracks and albums to your library and create custom playlists.
+                                    Sign in or register to save tracks and albums to your library, create custom playlists and update track sources.
 
                                     <Row className="sign-in-register-buttons">
                                         <Col xs={6}>

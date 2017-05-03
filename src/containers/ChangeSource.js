@@ -18,6 +18,8 @@ class ChangeSource extends Component {
 
         //bindings
         this.loadSources = this.loadSources.bind(this);
+        this.handleManualLink = this.handleManualLink.bind(this);
+        this.setSource = this.setSource.bind(this);
     }
 
     componentWillMount() {
@@ -53,13 +55,12 @@ class ChangeSource extends Component {
         });
     }
 
-    handleManualLink(formData) {
-
+    setSource(sourceID){
         //set loading status
         this.setState({showSpinner: true, serverError: null});
 
         //forgot password request to api (sends user email with password reset token)
-        fetch(`${refracter.refracterEndpoint}forgotPassword.php?email=${formData.email}`).then(response => {
+        fetch(`${refracter.refracterEndpoint}setSource.php?key=${refracter.userKey}&trackID=${this.props.changeSourceTrack.trackID}&source=${sourceID}`).then(response => {
             return response.json();
         }).then(response => {
 
@@ -70,10 +71,15 @@ class ChangeSource extends Component {
 
                 setTimeout(()=>{
                     this.props.onHide();
-                    toast(`A password reset link has been sent to your email. Please check your inbox and follow the directions.`, {
-                        type: toast.TYPE.INFO,
-                        autoClose: 15000
+                    toast(`Source was successfully updated for ${this.props.changeSourceTrack.title} by ${this.props.changeSourceTrack.artist}.`, {
+                        type: toast.TYPE.SUCCESS
                     });
+                    this.context.parentState.updateQueue(
+                        this.props.activeTrack,
+                        this.props.queue,
+                        this.props.queueLocation
+
+                    );
                 }, 1000);
 
             } else {
@@ -83,9 +89,13 @@ class ChangeSource extends Component {
 
         }).catch(error => {
             this.setState({showSpinner: false, serverError: error});
-            console.log('login: ', error);
+            console.log('Set source: ', error);
         });
+    }
 
+    handleManualLink(formData) {
+        if ( formData.newVideoID )
+            this.setSource( formData.newVideoID.replace('https://www.youtube.com/watch?v=','') );
     }
 
     render() {
@@ -152,7 +162,7 @@ class ChangeSource extends Component {
                                                 {/* <div className="source-author">{source.author}</div> */}
                                                 <div className="source-meta">{source.date} | {source.views}</div>
                                                 <hr/>
-                                                <Button block>Set as source</Button>
+                                                <Button block onClick={()=>this.setSource(source.youTubeID)}>Set as source</Button>
                                                 {/* <div className="source-desc">{source.desc}</div> */}
                                             </Col>
                                         </Row>
@@ -174,5 +184,9 @@ class ChangeSource extends Component {
     }
 
 }
+
+ChangeSource.contextTypes = {
+    parentState: React.PropTypes.object
+};
 
 export default ChangeSource;

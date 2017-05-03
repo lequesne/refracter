@@ -49,8 +49,6 @@ class LogInForm extends Component {
                     toast(`You are now signed in as ${response.user.username}.`, {type: toast.TYPE.SUCCESS});
                 },1000);
 
-
-
             } else {
                 //error
                 this.setState({showSpinner: false, serverError: response.errors});

@@ -574,9 +574,11 @@ class TrackList extends Component {
                     <MenuItem onClick={this.handleContextPlayTrack}>
                         {playPauseContextMenuLabal}
                     </MenuItem>
-                    <MenuItem onClick={this.handleContextChangeSource}>
-                        Change source
-                    </MenuItem>
+                    {this.props.user
+                        ? <MenuItem onClick={this.handleContextChangeSource}>
+                            Change source
+                        </MenuItem>
+                    : null}
                     <MenuItem divider/>
                     {this.props.playlistID
                         ? <MenuItem onClick={() => this.removeSelectedTracksForUser(this.props.playlistID,this.props.playlistName)}>
@@ -587,6 +589,9 @@ class TrackList extends Component {
                             </MenuItem>
                         : null
                     }
+
+                    {this.props.user ?
+                    <div>
                     {this.props.isLibrary || this.props.existsInLibrary
                         ? <MenuItem onClick={() => this.removeSelectedTracksForUser()}>
                                 Remove {this.state.selectedTracks.length > 1
@@ -601,20 +606,26 @@ class TrackList extends Component {
                             to library
                         </MenuItem>
                     }
+                    </div>
+                    : null }
+
+                    {this.props.user ?
                     <SubMenu title='Add to playlist'>
                         {/*
                         TODO add new playlist creation trigger and pass tracks to be added
                         <MenuItem onClick={this.handleContextNewPlaylist}>
                             New playlist
                         </MenuItem> */}
-                        {this.props.user ? this.props.user.playlists.map((playlist, playlistIndex) => {
+                        { this.props.user.playlists.map((playlist, playlistIndex) => {
                             return (
                                 <MenuItem key={playlistIndex} onClick={() => this.addSelectedTracksToUser(playlist.id, playlist.name)}>
                                     {playlist.name}
                                 </MenuItem>
                             )
-                        }):null}
+                        })}
                     </SubMenu>
+                    :null}
+
                 </ContextMenu>
 
                 <Table>

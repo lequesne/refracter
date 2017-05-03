@@ -337,6 +337,7 @@ class App extends Component {
     }
 
     changeTrackSource(track) {
+        this.pauseTrack();
         this.setState({
             changeSourceTrack: track,
             showChangeSource: true
@@ -384,7 +385,7 @@ class App extends Component {
     }
 
     hidePageSpinner(){
-        this.refs.pageScrollArea.scrollTop();
+        // this.refs.pageScrollArea.scrollTop();
         this.setState({showPageSpinner:false});
     }
 
@@ -420,7 +421,7 @@ class App extends Component {
                 />
 
                 <div className="content-window">
-                    <ScrollArea ref="pageScrollArea" className="scrollable" smoothScrolling={true} speed={1.2} >
+                    {/* <ScrollArea ref="pageScrollArea" className="scrollable" smoothScrolling={true} speed={1.2} > */}
                         {React.cloneElement( this.props.children, {
                             //appState: this.state
                             user: this.state.user,
@@ -431,7 +432,7 @@ class App extends Component {
                             queueLocation: this.state.queueLocation,
                             shuffle: this.state.shuffle
                         })}
-                    </ScrollArea>
+                    {/* </ScrollArea> */}
                     <RefracterSpinner show={this.state.showPageSpinner} size={150}/>
                 </div>
 
@@ -461,6 +462,9 @@ class App extends Component {
                     onHide={()=>this.hideModal('showChangeSource')}
                     show={this.state.showChangeSource}
                     changeSourceTrack={this.state.changeSourceTrack}
+                    queue={this.state.queue}
+                    queueLocation={this.state.queueLocation}
+                    activeTrack={this.state.activeTrack}
                 />
 
             </div>

@@ -24,7 +24,7 @@ class Home extends Component {
                     </p>
 
                     <p>
-                        Search for your favourite artist, album or track and sign in or register to save them to your library or a custom playlist.
+                        Search for your favourite artist, album or track and sign in or register to save tracks, playlists and track sources.
                     </p>
 
                     { !this.props.user ?

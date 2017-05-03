@@ -4,6 +4,10 @@
 @import url("https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css");
+html {
+  filter: brightness(0.1) invert(1);
+  opacity: 1; }
+
 .equalizer {
   position: absolute;
   display: block;
@@ -284,7 +288,7 @@ hr {
   border: solid transparent 5px;
   border-left: 0;
   border-bottom: 0;
-  overflow: visible; }
+  overflow: auto; }
 
 .scrollable {
   height: 100%; }
