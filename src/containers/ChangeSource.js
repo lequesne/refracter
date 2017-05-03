@@ -13,7 +13,8 @@ class ChangeSource extends Component {
         //setup state
         this.state = {
             showModal: false,
-            showSpinner: false
+            showSpinner: false,
+            sources: []
         };
 
         //bindings
@@ -36,7 +37,7 @@ class ChangeSource extends Component {
 
     loadSources(query){
 
-        this.setState({showSpinner: true, serverError: null});
+        this.setState({showSpinner: true, serverError: null, sources: []});
 
         //perform youtube search for sources
         fetch(`${refracter.refracterEndpoint}youtubeSearch.php?query=${query}`).then(response => {

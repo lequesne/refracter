@@ -14,6 +14,40 @@ import ForgotPasswordForm from './ForgotPasswordForm';
 import PasswordResetForm from './PasswordResetForm';
 import ChangeSource from './ChangeSource';
 
+
+
+
+// buy album links
+//
+// view youtube button and link
+//
+// last fm and youtube badges
+//
+// images preloader/fade in
+//
+// browser fixes for safari
+//
+// more responsive support for smaller screens (possibly mobile support for mobiles that work with youtube player, otherwise show incompatability screen)
+//
+// share linking for playlists and tracks
+//
+//
+//
+// TEST
+//
+// playlist and library track drop detection not working
+//
+// shuffle on playlist not working on first click
+//
+// change shuffle toggle to shuffle on and shuffle off functions in app.js, have sorting turn shuffle off -TEST
+// clear password query after password reset - TEST
+// add loop toggle - TEST
+// fix track auto play when clicking new track and player is paused - TEST
+// for duplicate track ids in the same playlist, use queue index as well as track id for active track - TEST
+
+
+
+
 class App extends Component {
 
     constructor(props) {
