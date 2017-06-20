@@ -26,8 +26,8 @@ $larger-lg: '(min-width:1200px)';
 
 //dimensions
 $topBarHeight: 70px;
-$sidebarWidth: 350px;
-$playerBarHeight: 70px;
+$sidebarWidth: 310px;
+$playerBarHeight: 60px;
 $borderPadding: 5px;
 $contentWindowHeight: calc(100vh - #{$playerBarHeight} - #{$topBarHeight} - #{$borderPadding});
 $pageComponentMargin: 50px;

@@ -27,6 +27,8 @@ class Home extends Component {
                         Search for your favourite artist, album or track and sign in or register to save tracks, playlists and track sources.
                     </p>
 
+                <br/>
+
                     { !this.props.user ?
                     <Row className="sign-in-register-buttons">
                         <Col xs={6}>
@@ -37,6 +39,12 @@ class Home extends Component {
                         </Col>
                     </Row>
                     : null}
+
+                    <div className="badges">
+                        <span className="refracter-youtube icon"></span>
+                        <span className="refracter-lastfm-square icon"></span>
+                        <h4>Powered by YouTube and LastFM</h4>
+                    </div>
 
                 </div>
 

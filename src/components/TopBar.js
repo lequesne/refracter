@@ -27,7 +27,7 @@ class TopBar extends Component {
         return (
             <div className="topbar">
                 <div className="padded-inner">
-                    <Link to="/" className="refracter-refracter-logo-full refracter-logo icon"><span className="alpha-label">Alpha</span></Link>
+                    <Link to="/" className="refracter-refracter-logo-full refracter-logo icon"><span className="alpha-label">Beta</span></Link>
                     <label className="seach-input-container">
                         <input id="search-input" type="text" placeholder="Search" defaultValue={this.state.searchValue} onKeyPress={ this.performNewSearch }/>
                         <div className="refracter-search icon absolute"></div>

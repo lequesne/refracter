@@ -71,17 +71,10 @@ hr {
 .container {
     width: 100%;
     max-width: 1400px;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding: 50px;
 
     @media #{$smaller-lg} {
-        padding-left: 30px;
-        padding-right: 30px;
-    }
-
-    @media #{$smaller-md} {
-        padding-left: 15px;
-        padding-right: 15px;
+        padding: 15px;
     }
 }
 
@@ -113,7 +106,8 @@ hr {
 //scrollbar
 
 .Refracter-app {
-    .scrollarea .scrollbar-container.vertical .scrollbar {
+    .scrollarea .scrollbar-container.vertical .scrollbar,
+    .scrollarea .scrollbar-container.horizontal .scrollbar {
         background: $white;
     }
 }
@@ -132,6 +126,7 @@ hr {
 .page {
     position: relative;
     min-height: $contentWindowHeight;
+    padding-bottom: 180px;
 }
 
 .col-padding {
@@ -142,6 +137,10 @@ hr {
     margin: 50px 0;
     padding: 50px;
     background: rgba($lightBackground,0.1);
+
+    &:first-child {
+        margin-top: 0;
+    }
 
     h1, h2 {
         &:first-child {

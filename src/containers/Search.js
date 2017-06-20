@@ -64,46 +64,50 @@ class Search extends Component {
 
                 <div className="container">
 
-                    <Col md={12} mdPush={0} lg={10} lgPush={1} >
+                    <Row>
 
-                        <div className="results-artists card">
+                        <Col md={12} mdPush={0} lg={10} lgPush={1} >
 
-                            <h2>Artists</h2>
+                            <div className="results-artists card">
 
-                            <TileList
-                                //isArtist={true}
-                                linkType="artist"
-                                tiles={this.state.artists}
-                                carousel={true}
-                            />
+                                <h2>Artists</h2>
 
-                        </div>
+                                <TileList
+                                    //isArtist={true}
+                                    linkType="artist"
+                                    tiles={this.state.artists}
+                                    carousel={true}
+                                />
 
-                        <div className="results-albums card">
+                            </div>
 
-                            <h2>Albums</h2>
+                            <div className="results-albums card">
 
-                            <TileList
-                                linkType="album"
-                                tiles={this.state.albums}
-                                carousel={true}
-                            />
+                                <h2>Albums</h2>
 
-                        </div>
+                                <TileList
+                                    linkType="album"
+                                    tiles={this.state.albums}
+                                    carousel={true}
+                                />
 
-                        <div className="results-tracks card">
+                            </div>
 
-                            <h2>Tracks</h2>
+                            <div className="results-tracks card">
 
-                            <TileList
-                                linkType="track"
-                                tiles={this.state.tracks}
-                                carousel={true}
-                            />
+                                <h2>Tracks</h2>
 
-                        </div>
+                                <TileList
+                                    linkType="track"
+                                    tiles={this.state.tracks}
+                                    carousel={true}
+                                />
 
-                    </Col>
+                            </div>
+
+                        </Col>
+
+                    </Row>
 
                 </div>
 

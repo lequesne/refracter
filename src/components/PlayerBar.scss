@@ -1,6 +1,6 @@
 .PlayerBar {
     position: fixed;
-    z-index: 100;
+    z-index: 200;
     bottom: 0;
     left: 0;
     height: $playerBarHeight;
@@ -8,7 +8,7 @@
     background: $darkBackground;
     border: solid transparent $borderPadding;
     color: gree;
-    padding: 0 130px 0 #{$sidebarWidth - $borderPadding};
+    padding: 0 110px 0 #{$sidebarWidth - $borderPadding};
 
     .input-range {
         display: inline-block;
@@ -35,18 +35,55 @@
         }
     }
 
-    #yt-container {
+    .youtube-area {
         position: absolute;
-        bottom: calc( 100% + #{$borderPadding} );
-        left: 0;
-        height: $sidebarWidth - $borderPadding - $borderPadding;
-        width: $sidebarWidth - $borderPadding - $borderPadding;
-        transform: translate3d(0,150%,0);
+        z-index: 200;
+        //bottom: calc( 100% + #{$borderPadding} );
+        //left: 0;
+        bottom: $playerBarHeight - $borderPadding;
+        right: 0;
+        //height: $sidebarWidth - $borderPadding - $borderPadding;
+        //width: $sidebarWidth - $borderPadding - $borderPadding;
+        transform: translate3d(150%,0,0);
+        transition: 1s transform;
+        padding: 10px;
+        margin: -10px;
+        overflow: visible;
+
+        .youtube-area-inner {
+            background: $medBackground;
+            padding: 5px;
+            box-shadow: $dropShadowDepth3;
+        }
+
+        span {
+            margin: 0;
+        }
+
+        &.active {
+            transform: translate3d(0,0,0);
+        }
+
+        .yt-viewport {
+            position: relative;
+            padding-bottom: 56.25%;
+            margin-bottom: 5px;
+        }
+
+        iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    #yt-container {
     }
 
     .player-btn {
         display: inline-block;
         position: relative;
+        z-index: 201;
         top: 0;
         left: 0;
         height: 100%;
@@ -74,7 +111,7 @@
             top: 0;
             right: 0;
             font-size: 0.75em;
-            padding: 0.25em;
+            padding: 0.1em;
         }
 
         .icon {
@@ -99,6 +136,7 @@
 
     .player-controls-lhs {
         position: absolute;
+        z-index: 201;
         bottom: 0;
         left: 0;
         height: 100%;
@@ -107,6 +145,7 @@
 
     .progress-bar-container {
         position: relative;
+        z-index: 201;
         display: inline-block;
         height: 100%;
         width: 100%;
@@ -121,12 +160,13 @@
         text-align: left;
         pointer-events: none;
         font-size: 1em;
-        color: $darkBackground;
-        line-height: 1.5em;
-        padding: .35em .75em;
+        color: $medBackground;
+        line-height: 1.45em;
+        padding: .15em .75em;
 
         .track-title {
-            font-size: 1.5em;
+            font-size: 1.2em;
+            font-weight: 600;
         }
 
         .track-progress {
@@ -139,7 +179,7 @@
         bottom: 0;
         right: 0;
         height: 100%;
-        width: 130px;
+        width: 110px;
         text-align: right;
 
         .loop-track {

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import * as refracter from '../refracter';
+import { Button } from 'react-bootstrap';
 import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css';
 import YouTube from 'react-youtube';
@@ -273,7 +274,14 @@ class PlayerBar extends Component {
         return (
             <div className="PlayerBar">
 
-                <YouTube id="yt-container" opts={youTubeOpts} onReady={this.youTubeReady} onStateChange={this.youTubeStateChange} onError={this.youTubeError}/>
+                <div className={this.state.playing ? 'youtube-area active' : 'youtube-area'}>
+                    <div className="youtube-area-inner">
+                        <div className="yt-viewport">
+                            <YouTube id="yt-container"  opts={youTubeOpts} onReady={this.youTubeReady} onStateChange={this.youTubeStateChange} onError={this.youTubeError}/>
+                        </div>
+                        <Button block onClick={()=>this.props.changeTrackSource(this.props.track)}>Not the right track?</Button>
+                    </div>
+                </div>
 
                 <div className="player-controls-lhs">
 

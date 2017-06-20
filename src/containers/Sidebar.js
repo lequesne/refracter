@@ -47,7 +47,7 @@ class Sidebar extends Component {
 
                                 <div className="login-signup">
 
-                                    Sign in or register to save tracks and albums to your library, create custom playlists and update track sources.
+                                    Sign in or register to save tracks and albums to your library, create custom playlists and update track YouTube sources.
 
                                     <Row className="sign-in-register-buttons">
                                         <Col xs={6}>
@@ -65,7 +65,6 @@ class Sidebar extends Component {
                         </div>
                     }
 
-                    {/* TODO add link on art to the correct queue/source of active track */}
                     <div onClick={this.linkToActiveQueue} className="album-art">
                         {this.props.activeTrack
                             ? <img src={this.props.activeTrack.art} alt="Artwork"/>

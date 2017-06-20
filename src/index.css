@@ -257,30 +257,24 @@ hr {
 .container {
   width: 100%;
   max-width: 1400px;
-  padding-left: 50px;
-  padding-right: 50px; }
+  padding: 50px; }
   @media (max-width: 1199px) {
     .container {
-      padding-left: 30px;
-      padding-right: 30px; } }
-  @media (max-width: 991px) {
-    .container {
-      padding-left: 15px;
-      padding-right: 15px; } }
+      padding: 15px; } }
 
 .padded-inner {
   top: 5px;
   left: 5px;
   width: 100%;
-  height: 60px; }
+  height: 50px; }
 
 .content-window {
   position: absolute;
   z-index: 100;
   top: 70px;
   right: 0;
-  width: calc( 100% - 350px);
-  height: calc( 100% - 70px - 70px);
+  width: calc( 100% - 310px);
+  height: calc( 100% - 60px - 70px);
   border: solid transparent 5px;
   border-left: 0;
   border-bottom: 0;
@@ -289,7 +283,8 @@ hr {
 .scrollable {
   height: 100%; }
 
-.Refracter-app .scrollarea .scrollbar-container.vertical .scrollbar {
+.Refracter-app .scrollarea .scrollbar-container.vertical .scrollbar,
+.Refracter-app .scrollarea .scrollbar-container.horizontal .scrollbar {
   background: #efefef; }
 
 .y-center {
@@ -302,7 +297,8 @@ hr {
 
 .page {
   position: relative;
-  min-height: calc(100vh - 70px - 70px - 5px); }
+  min-height: calc(100vh - 60px - 70px - 5px);
+  padding-bottom: 180px; }
 
 .col-padding {
   padding: 30px; }
@@ -311,6 +307,8 @@ hr {
   margin: 50px 0;
   padding: 50px;
   background: rgba(220, 220, 220, 0.1); }
+  .card:first-child {
+    margin-top: 0; }
   .card h1:first-child, .card h2:first-child {
     margin-top: 0; }
 
@@ -841,7 +839,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
     width: 100%;
     height: 100%;
     background: #333;
-    padding: 7px 245px; }
+    padding: 7px 200px; }
   .topbar .refracter-logo {
     position: absolute;
     left: 20px;
@@ -913,15 +911,15 @@ Pass any number of seconds referring to the duration of one full rotation for an
 
 .PlayerBar {
   position: fixed;
-  z-index: 100;
+  z-index: 200;
   bottom: 0;
   left: 0;
-  height: 70px;
+  height: 60px;
   width: 100%;
   background: #121212;
   border: solid transparent 5px;
   color: gree;
-  padding: 0 130px 0 345px; }
+  padding: 0 110px 0 305px; }
   .PlayerBar .input-range {
     display: inline-block;
     position: relative;
@@ -939,20 +937,40 @@ Pass any number of seconds referring to the duration of one full rotation for an
       background: #EDA564; }
     .PlayerBar .input-range .input-range__slider {
       display: none; }
-  .PlayerBar #yt-container {
+  .PlayerBar .youtube-area {
     position: absolute;
-    bottom: calc( 100% + 5px);
-    left: 0;
-    height: 340px;
-    width: 340px;
-    transform: translate3d(0, 150%, 0); }
+    z-index: 200;
+    bottom: 55px;
+    right: 0;
+    transform: translate3d(150%, 0, 0);
+    transition: 1s transform;
+    padding: 10px;
+    margin: -10px;
+    overflow: visible; }
+    .PlayerBar .youtube-area .youtube-area-inner {
+      background: #333;
+      padding: 5px;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }
+    .PlayerBar .youtube-area span {
+      margin: 0; }
+    .PlayerBar .youtube-area.active {
+      transform: translate3d(0, 0, 0); }
+    .PlayerBar .youtube-area .yt-viewport {
+      position: relative;
+      padding-bottom: 56.25%;
+      margin-bottom: 5px; }
+    .PlayerBar .youtube-area iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%; }
   .PlayerBar .player-btn {
     display: inline-block;
     position: relative;
+    z-index: 201;
     top: 0;
     left: 0;
     height: 100%;
-    width: 60px;
+    width: 50px;
     background: #EDA564;
     font-size: 1.5em;
     cursor: pointer;
@@ -969,7 +987,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
       top: 0;
       right: 0;
       font-size: 0.75em;
-      padding: 0.25em; }
+      padding: 0.1em; }
     .PlayerBar .player-btn .icon {
       position: absolute;
       top: 0;
@@ -985,12 +1003,14 @@ Pass any number of seconds referring to the duration of one full rotation for an
       width: 85px; }
   .PlayerBar .player-controls-lhs {
     position: absolute;
+    z-index: 201;
     bottom: 0;
     left: 0;
     height: 100%;
-    width: 340px; }
+    width: 300px; }
   .PlayerBar .progress-bar-container {
     position: relative;
+    z-index: 201;
     display: inline-block;
     height: 100%;
     width: 100%; }
@@ -1003,11 +1023,12 @@ Pass any number of seconds referring to the duration of one full rotation for an
     text-align: left;
     pointer-events: none;
     font-size: 1em;
-    color: #121212;
-    line-height: 1.5em;
-    padding: .35em .75em; }
+    color: #333;
+    line-height: 1.45em;
+    padding: .15em .75em; }
     .PlayerBar .track-details .track-title {
-      font-size: 1.5em; }
+      font-size: 1.2em;
+      font-weight: 600; }
     .PlayerBar .track-details .track-progress {
       float: right; }
   .PlayerBar .player-controls-rhs {
@@ -1015,97 +1036,98 @@ Pass any number of seconds referring to the duration of one full rotation for an
     bottom: 0;
     right: 0;
     height: 100%;
-    width: 130px;
+    width: 110px;
     text-align: right; }
     .PlayerBar .player-controls-rhs .loop-track {
       margin: 0 5px; }
 
-.track-list * {
-  user-select: none; }
-
-.track-list table {
-  margin: 0; }
-  .track-list table thead tr {
-    border: none;
-    background: none !important; }
-    .track-list table thead tr .play-btn-col {
-      width: 40px; }
-    .track-list table thead tr .number-col {
-      width: 50px; }
-    .track-list table thead tr .duration-col {
-      width: 70px; }
-    .track-list table thead tr th {
+.track-list {
+  min-width: 640px; }
+  .track-list * {
+    user-select: none; }
+  .track-list table {
+    margin: 0; }
+    .track-list table thead tr {
       border: none;
-      text-transform: uppercase;
-      padding: 10px 10px 8px;
-      max-width: 177px;
-      font-size: 0.8em;
-      transition: all 0.2s; }
-      .track-list table thead tr th span {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: inline-block;
-        max-width: 100%; }
-      .track-list table thead tr th.pointer:hover {
-        background: rgba(220, 220, 220, 0.2); }
-      .track-list table thead tr th .sort-icon {
-        position: relative;
-        top: 5px;
-        margin-right: 0.5em; }
-  .track-list table tr {
-    position: relative;
-    border: none; }
-    .track-list table tr td {
-      cursor: default;
-      border: none;
-      font-size: 1.2em;
-      padding: 10px 15px 8px;
-      max-width: 177px; }
-      .track-list table tr td a {
-        cursor: pointer; }
-      .track-list table tr td span {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: inline-block;
-        max-width: 100%; }
-      .track-list table tr td.play-btn-col {
-        position: absolute;
-        cursor: pointer;
-        line-height: 1em;
-        padding: 0.8em; }
-        .track-list table tr td.play-btn-col .equalizer {
+      background: none !important; }
+      .track-list table thead tr .play-btn-col {
+        width: 40px; }
+      .track-list table thead tr .number-col {
+        width: 50px; }
+      .track-list table thead tr .duration-col {
+        width: 70px; }
+      .track-list table thead tr th {
+        border: none;
+        text-transform: uppercase;
+        padding: 10px 10px 8px;
+        max-width: 177px;
+        font-size: 0.8em;
+        transition: all 0.2s; }
+        .track-list table thead tr th span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           display: inline-block;
-          transform-origin: 0 0;
-          transform: rotate(180deg);
-          margin: 1.2em; }
-        .track-list table tr td.play-btn-col .spinner-container {
-          margin: 0.45em; }
-          .track-list table tr td.play-btn-col .spinner-container .refracter-spinner {
-            color: #121212; }
-        .track-list table tr td.play-btn-col .refracter-pause {
-          display: none;
-          margin-top: 0.1em; }
-        .track-list table tr td.play-btn-col:hover .refracter-play {
-          transform: scale(1.3); }
-        .track-list table tr td.play-btn-col:hover .equalizer {
-          display: none; }
-        .track-list table tr td.play-btn-col:hover .refracter-pause {
-          display: block;
-          transform: scale(1.3); }
-    .track-list table tr:hover {
-      background: #121212; }
-    .track-list table tr.selected-track {
-      background: #dcdcdc;
-      color: #121212; }
-      .track-list table tr.selected-track a, .track-list table tr.selected-track a:visited {
+          max-width: 100%; }
+        .track-list table thead tr th.pointer:hover {
+          background: rgba(220, 220, 220, 0.2); }
+        .track-list table thead tr th .sort-icon {
+          position: relative;
+          top: 5px;
+          margin-right: 0.5em; }
+    .track-list table tr {
+      position: relative;
+      border: none; }
+      .track-list table tr td {
+        cursor: default;
+        border: none;
+        font-size: 1.2em;
+        padding: 10px 15px 8px;
+        max-width: 177px; }
+        .track-list table tr td a {
+          cursor: pointer; }
+        .track-list table tr td span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: inline-block;
+          max-width: 100%; }
+        .track-list table tr td.play-btn-col {
+          position: absolute;
+          cursor: pointer;
+          line-height: 1em;
+          padding: 0.8em; }
+          .track-list table tr td.play-btn-col .equalizer {
+            display: inline-block;
+            transform-origin: 0 0;
+            transform: rotate(180deg);
+            margin: 1.2em; }
+          .track-list table tr td.play-btn-col .spinner-container {
+            margin: 0.45em; }
+            .track-list table tr td.play-btn-col .spinner-container .refracter-spinner {
+              color: #121212; }
+          .track-list table tr td.play-btn-col .refracter-pause {
+            display: none;
+            margin-top: 0.1em; }
+          .track-list table tr td.play-btn-col:hover .refracter-play {
+            transform: scale(1.3); }
+          .track-list table tr td.play-btn-col:hover .equalizer {
+            display: none; }
+          .track-list table tr td.play-btn-col:hover .refracter-pause {
+            display: block;
+            transform: scale(1.3); }
+      .track-list table tr:hover {
+        background: #121212; }
+      .track-list table tr.selected-track {
+        background: #dcdcdc;
         color: #121212; }
-    .track-list table tr.active-track {
-      background: #EDA564;
-      color: #121212; }
-      .track-list table tr.active-track a, .track-list table tr.active-track a:visited {
+        .track-list table tr.selected-track a, .track-list table tr.selected-track a:visited {
+          color: #121212; }
+      .track-list table tr.active-track {
+        background: #EDA564;
         color: #121212; }
+        .track-list table tr.active-track a, .track-list table tr.active-track a:visited {
+          color: #121212; }
 
 .Tile {
   cursor: pointer;
@@ -1165,8 +1187,8 @@ Pass any number of seconds referring to the duration of one full rotation for an
   top: 0;
   right: 0;
   width: 100%;
-  height: 100vh;
-  background-position: center center;
+  height: 50vh;
+  background-position: center top;
   background-size: cover;
   opacity: 0.3; }
   .background-art:after {
@@ -1176,12 +1198,13 @@ Pass any number of seconds referring to the duration of one full rotation for an
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 20%;
+    height: 75%;
     background: linear-gradient(rgba(18, 18, 18, 0), #121212); }
 
 .home {
-  min-height: calc(100vh - 70px - 70px - 5px);
-  text-align: center; }
+  min-height: calc(100vh - 60px - 70px - 5px);
+  text-align: center;
+  padding-bottom: 0; }
   .home .home-welcome {
     max-width: 500px; }
   .home .refracter-logo {
@@ -1190,6 +1213,13 @@ Pass any number of seconds referring to the duration of one full rotation for an
     margin-bottom: 25px; }
   .home .sign-in-register-buttons {
     margin: 50px 0; }
+  .home .badges {
+    opacity: 0.5;
+    margin: 30px 0; }
+    .home .badges span {
+      font-size: 40px;
+      line-height: 1em;
+      margin: 10px; }
 
 .album h1 {
   position: relative;
@@ -1212,7 +1242,6 @@ Pass any number of seconds referring to the duration of one full rotation for an
 
 .album .album-info {
   position: relative;
-  margin: 50px 0;
   padding-left: 210px;
   height: 185px;
   overflow: visible; }
@@ -1238,12 +1267,12 @@ Pass any number of seconds referring to the duration of one full rotation for an
   z-index: 101;
   top: 70px;
   left: 0;
-  width: 350px;
-  height: calc( 100% - 70px - 70px);
+  width: 310px;
+  height: calc( 100% - 60px - 70px);
   border: solid transparent 5px;
   border-bottom: 0;
   font-size: 1.2em;
-  padding-bottom: 345px; }
+  padding-bottom: 305px; }
   .sidebar .padded-inner {
     width: 100%;
     height: 100%;
@@ -1254,11 +1283,11 @@ Pass any number of seconds referring to the duration of one full rotation for an
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 340px;
+    height: 300px;
     background: #EDA564; }
     .sidebar .album-art .icon {
       color: #efad72;
-      font-size: 291.66667px; }
+      font-size: 258.33333px; }
     .sidebar .album-art img {
       width: 100%; }
   .sidebar .wrapper {

@@ -67,7 +67,8 @@ class TrackList extends Component {
 
         //keyboard controls for track navigation
         window.onkeydown = (event) => {
-            if (this.state.selectedTracks && this.state.selectedTracks.length > 0) {
+
+            if ( document.activeElement.nodeName !== 'INPUT' && document.activeElement.nodeName !== 'BUTTON' && this.state.selectedTracks && this.state.selectedTracks.length > 0) {
                 let lastSelectedTrackIndex = this.state.selectedTracks[this.state.selectedTracks.length-1].index;
 
                 switch (event.keyCode) {
@@ -97,6 +98,7 @@ class TrackList extends Component {
                         break;
                 }
             }
+
         }
 
     }

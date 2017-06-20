@@ -29,7 +29,8 @@ class Album extends Component {
 
             this.setState({
                 albumInLibrary: albumData.albumInLibrary,
-                album: albumData.info, albumArt: albumData.info.image[4]["#text"] ? albumData.info.image[4]["#text"] : null,
+                album: albumData.info,
+                albumArt: albumData.info.image[4]["#text"] ? albumData.info.image[4]["#text"] : null,
                 tracks: albumData.tracks
             });
 
@@ -113,7 +114,7 @@ class Album extends Component {
 
                         { this.props.user ?
                         //add album drop down
-                        <Dropdown label="Add album">
+                        <Dropdown label="Add track list">
                             <div onClick={()=>this.addAlbumToUser()}>
                                 Library
                             </div>
