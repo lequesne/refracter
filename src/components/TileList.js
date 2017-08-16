@@ -18,9 +18,6 @@ class TileList extends Component {
     }
 
     componentDidUpdate(){
-        // var evt = window.document.createEvent('UIEvents');
-        // evt.initUIEvent('resize', true, false, window, 0);
-        // window.dispatchEvent(evt);
     }
 
     render() {
@@ -46,11 +43,6 @@ class TileList extends Component {
             if ( this.props.linkType === 'track' ) {
                 onTileClick = () => refracter.getLastFMTrackLink(tile.name,secondaryTitle);
             }
-
-            // let openingGroupTag;
-            // let closingGroupTag;
-            // if ( this.props.carouselSlideNumber && (index+1) % this.props.carouselSlideNumber === 0 ) {
-            // }
 
             return (
                 <Col xs={12} sm={6} md={4} lg={3} key={index}>
@@ -88,13 +80,6 @@ class TileList extends Component {
                 },
                 {
                     breakpoint: 992,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1
-                    }
-                },
-                {
-                    breakpoint: 1200,
                     settings: {
                         slidesToShow: 2,
                         slidesToScroll: 2

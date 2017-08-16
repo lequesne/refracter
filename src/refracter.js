@@ -1,5 +1,5 @@
 //
-// Refracter constants and functions
+// Refracter constants and module functions
 //
 
 //imports
@@ -7,7 +7,7 @@ import { browserHistory } from 'react-router';
 import { toast } from 'react-toastify';
 import 'whatwg-fetch';
 
-//define some global variables
+//define some global configuration
 export const loginCookieName = 'refracter_login';
 export const lastFmEndpoint = 'http://ws.audioscrobbler.com/2.0/';
 export const refracterEndpoint = document.location.hostname === 'localhost' || document.location.hostname === '192.168.137.1' ? `http://${document.location.hostname}/refracter/src/api/` : '/api/';

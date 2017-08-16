@@ -14,24 +14,6 @@ import ForgotPasswordForm from './ForgotPasswordForm';
 import PasswordResetForm from './PasswordResetForm';
 import ChangeSource from './ChangeSource';
 
-//
-// browser fixes for safari
-//
-// more responsive support for smaller screens (possibly mobile support for mobiles that work with youtube player, otherwise show incompatability screen)
-//
-// share linking for playlists and tracks
-//
-//
-//
-// TEST
-//
-// change shuffle toggle to shuffle on and shuffle off functions in app.js, have sorting turn shuffle off -TEST
-// clear password query after password reset - TEST
-// add loop toggle - TEST
-// fix track auto play when clicking new track and player is paused - TEST
-// for duplicate track ids in the same playlist, use queue index as well as track id for active track - TEST
-
-
 class App extends Component {
 
     constructor(props) {
@@ -177,8 +159,6 @@ class App extends Component {
 
             //set login cookie
             refracter.setCookie( refracter.loginCookieName, user.cookie, 14 );
-
-            console.log('User logged in: ', this.state.user);
 
         } else {
             console.error('User data object and cookie name required for login.');

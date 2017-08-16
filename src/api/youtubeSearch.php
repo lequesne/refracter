@@ -9,6 +9,7 @@ $responseObject = Array();
 $responseObject['success'] = false;
 $query = $_GET['query'];
 
+//create new dom object to load html from request page
 $dom = new Dom;
 $dom->loadFromFile('https://www.youtube.com/results?q='.urlencode($query));
 $resultsList = $dom->find('.item-section > li');
@@ -49,25 +50,5 @@ if ( $videoResults ) {
 }
 
 echo json_encode($responseObject);
-
-
-// $doc = new DOMDocument();
-// @$doc->loadHTMLFile('https://www.youtube.com/results?q='.$query);
-// $links = $doc->getElementsByTagName('a');
-// foreach($links as $link) {
-//     $href = $link->getAttribute('href');
-//     if (strpos($href, '/watch?v=') !== false && strpos($href, 'list=') === false ) {
-//         $result[] = str_replace("/watch?v=","",$href);
-//     }
-// }
-// if ( $result ) {
-//     $responseObject['success'] = true;
-//     $responseObject['videos'] = $result;
-// } else {
-//     $error[] = 'No YouTube Ids were found.';
-//     $responseObject['errors'] = $error;
-// }
-//
-// echo json_encode($responseObject);
 
 ?>

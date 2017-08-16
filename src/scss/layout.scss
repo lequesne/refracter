@@ -49,6 +49,32 @@ body, html {
 
 }
 
+.compatability-screen {
+    position: fixed;
+    z-index: 999999;
+    padding: 20px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background: $medBackground;
+
+    @media #{$smaller-md} {
+        display: flex;
+    }
+
+    .refracter-logo {
+        color: $primaryColor;
+        font-size: 200px;
+    }
+}
+
 .background-logo {
     position: absolute;
     z-index: 0;
@@ -74,7 +100,8 @@ hr {
     padding: 50px;
 
     @media #{$smaller-lg} {
-        padding: 15px;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }
 
@@ -140,6 +167,11 @@ hr {
 
     &:first-child {
         margin-top: 0;
+    }
+
+    @media #{$smaller-lg} {
+        padding-left: 25px;
+        padding-right: 25px;
     }
 
     h1, h2 {

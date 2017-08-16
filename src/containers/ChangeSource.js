@@ -30,7 +30,13 @@ class ChangeSource extends Component {
     }
 
     componentWillReceiveProps(nextProps){
+        //clear old sources First
+        this.setState({
+            sources: null
+        })
+
         if ( nextProps.changeSourceTrack ) {
+            //load new sources
             this.loadSources(encodeURI(nextProps.changeSourceTrack.artist + ' ' + nextProps.changeSourceTrack.title));
         }
     }

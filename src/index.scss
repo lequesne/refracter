@@ -1,18 +1,13 @@
 
-//libraries
+//external style/font libraries
 @import url('https://fonts.googleapis.com/css?family=Titillium+Web');
-//@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 @import url('https://file.myfontastic.com/K9negnKURwanTC49Nc55qc/icons.css');
-//@import url('http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css');
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css');
-//@import '/../node_modules/normaliz.css/normalize'
-
 
 //variables
 $mainFont: 'Titillium Web', sans-serif;
-//$mainFont: 'Source Sans Pro', sans-serif;
 
 //breakpoints
 $smaller-xs: '(max-width:399px)';
@@ -40,7 +35,6 @@ $lightBackground: #dcdcdc;
 $medLightBackground: #444;
 $medBackground: #333;
 $darkBackground: #121212;
-
 $errorRed: lighten(red, 20%);
 $successGreen: lighten(green, 50%);
 
@@ -63,21 +57,16 @@ $dropShadowDepth3: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 @import 'scss/spinners';
 
 //component imports
-@import 'components/TopBar';
-@import 'components/PlayerBar';
-@import 'components/TrackList';
-@import 'components/TileList';
-@import 'components/Tile';
-@import 'components/BackgroundArt';
+@import 'scss/TopBar';
+@import 'scss/PlayerBar';
+@import 'scss/TrackList';
+@import 'scss/TileList';
+@import 'scss/Tile';
+@import 'scss/BackgroundArt';
 
 //container imports
-@import 'containers/Home';
-@import 'containers/Album';
-@import 'containers/Artist';
-@import 'containers/Sidebar';
-@import 'containers/ChangeSource';
-
-//alpha label
-.alpha-label {
-    font-size: 14px;
-}
+@import 'scss/Home';
+@import 'scss/Album';
+@import 'scss/Artist';
+@import 'scss/Sidebar';
+@import 'scss/ChangeSource';

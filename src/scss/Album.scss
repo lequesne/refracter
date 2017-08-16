@@ -1,0 +1,44 @@
+.album {
+
+    h1 {
+        position: relative;
+        margin: 0;
+        font-size: 2em;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    h2 {
+        font-size: 1.2em;
+        margin: 10px 0 25px;
+    }
+
+    .container {
+        z-index: 5;
+    }
+
+    .tags {
+        margin: 0.4em 0;
+    }
+
+    .album-info {
+        position: relative;
+        padding-left: 210px;
+        height: 185px;
+        overflow: visible;
+
+        .dropdown {
+            //margin-top: 3.5em;
+        }
+    }
+
+    .album-art {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 185px;
+        margin-bottom: 0;
+    }
+}

@@ -40,6 +40,10 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
 
         div {
             cursor: pointer;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 

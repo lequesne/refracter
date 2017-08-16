@@ -238,6 +238,28 @@ body, html {
     opacity: 1;
     animation: none; }
 
+.compatability-screen {
+  position: fixed;
+  z-index: 999999;
+  padding: 20px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  background: #333; }
+  @media (max-width: 991px) {
+    .compatability-screen {
+      display: flex; } }
+  .compatability-screen .refracter-logo {
+    color: #EDA564;
+    font-size: 200px; }
+
 .background-logo {
   position: absolute;
   z-index: 0;
@@ -260,7 +282,8 @@ hr {
   padding: 50px; }
   @media (max-width: 1199px) {
     .container {
-      padding: 15px; } }
+      padding-left: 15px;
+      padding-right: 15px; } }
 
 .padded-inner {
   top: 5px;
@@ -309,6 +332,10 @@ hr {
   background: rgba(220, 220, 220, 0.1); }
   .card:first-child {
     margin-top: 0; }
+  @media (max-width: 1199px) {
+    .card {
+      padding-left: 25px;
+      padding-right: 25px; } }
   .card h1:first-child, .card h2:first-child {
     margin-top: 0; }
 
@@ -590,7 +617,11 @@ button.btn, button.btn-default, .dropdown .dropdown-label, .dropdown-contents di
     left: 0;
     width: 100%; }
     .dropdown .dropdown-contents div {
-      cursor: pointer; }
+      cursor: pointer;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
   .dropdown .dropdown-label {
     text-align: center;
     cursor: default; }
@@ -1129,6 +1160,11 @@ Pass any number of seconds referring to the duration of one full rotation for an
         .track-list table tr.active-track a, .track-list table tr.active-track a:visited {
           color: #121212; }
 
+@media (max-width: 1199px) {
+  .tile-list {
+    padding-left: 25px;
+    padding-right: 25px; } }
+
 .Tile {
   cursor: pointer;
   display: block;
@@ -1363,6 +1399,3 @@ Pass any number of seconds referring to the duration of one full rotation for an
         margin-top: 0; }
     .change-source .source-list .source-iframe {
       width: 100%; }
-
-.alpha-label {
-  font-size: 14px; }
