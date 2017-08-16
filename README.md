@@ -1,4 +1,4 @@
-# Refracter [Alpha]
+# Refracter [Beta]
 
 Refracter is a music aggregator and YouTube player in one.
 
