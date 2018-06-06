@@ -9,7 +9,7 @@ import 'whatwg-fetch';
 
 //define some global configuration
 export const loginCookieName = 'refracter_login';
-export const lastFmEndpoint = 'http://ws.audioscrobbler.com/2.0/';
+export const lastFmEndpoint = 'https://ws.audioscrobbler.com/2.0/';
 export const refracterEndpoint = document.location.hostname === 'localhost' || document.location.hostname === '192.168.137.1' ? `http://${document.location.hostname}/refracter/src/api/` : '/api/';
 export let userLoggedIn; //not used at the moment
 export let userKey = ''; //only set after user logins, then used to authenticate with api

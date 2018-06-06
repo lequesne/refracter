@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web");
 @import url("https://file.myfontastic.com/K9negnKURwanTC49Nc55qc/icons.css");
-@import url("https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css");
+@import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css");
 .equalizer {
@@ -556,7 +556,7 @@ body.modal-open .modal .modal-dialog {
 body {
   font-family: "Titillium Web", sans-serif;
   color: #efefef;
-  font-size: 1.6em;
+  font-size: 16px;
   line-height: 1.5em; }
 
 a, a:visited {

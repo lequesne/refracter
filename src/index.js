@@ -11,7 +11,7 @@ import Artist from './containers/Artist';
 import Library from './containers/Library';
 import Playlist from './containers/Playlist';
 
-//set login cookie
+//get login cookie token
 let cookie = refracter.getCookie( refracter.loginCookieName );
 
 //use cookie to see if user is logged in, then init app with or without user data
