@@ -58,6 +58,7 @@
         tr {
             position: relative;
             border: none;
+            height: 50px;
 
             td {
                 cursor: default;
@@ -79,10 +80,14 @@
                 }
 
                 &.play-btn-col {
-                    position: absolute;
+                    //position: absolute;
                     cursor: pointer;
                     line-height: 1em;
                     padding: 0.8em;
+
+                    & > * {
+                        position: absolute;
+                    }
 
                     .equalizer {
                         display: inline-block;

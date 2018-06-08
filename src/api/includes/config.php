@@ -23,7 +23,7 @@ switch (SITE_TYPE) {
     case DEV_SITE:
         define('DBHOST','localhost');
         define('DBUSER','root');
-        define('DBPASS','mysql');
+        define('DBPASS','root');
         define('DBNAME','refracter');
         break;
     case LIVE_SITE:

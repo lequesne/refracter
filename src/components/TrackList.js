@@ -706,11 +706,13 @@ class TrackList extends Component {
                             //add track list index to track object (used for active track class in case of multiple same trackIDs)
                             track.index = trackIndex;
                             //track.location = location.pathname;
+                            track.active = false;
 
                             let activeClass = '';
                             if ( this.props.queueLocation && this.props.queueLocation === location.pathname ) {
                                 if ( this.props.activeTrack && track.trackID === this.props.activeTrack.trackID && track.index === this.props.activeTrack.index ) {
-                                    activeClass = 'active-track';
+                                    //activeClass = 'active-track';
+                                    track.active = true;
                                 }
                             }
 
@@ -718,7 +720,7 @@ class TrackList extends Component {
                                 ? 'selected-track'
                                 : '';
 
-                            let trackClasses = `track-row ${activeClass} ${selectedClass}`;
+                            let trackClasses = `track-row ${track.active ? 'active-track' : '' } ${selectedClass}`;
 
                             //playing/buffering icons
                             let playingBufferingIcons;

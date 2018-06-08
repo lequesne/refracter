@@ -206,15 +206,17 @@ class App extends Component {
         } else if ( track && queueLocation ) {
             //new track and queue
 
+			console.log(track);
+
             this.setState({
                 queueLocation: queueLocation,
                 queue: trackList,
-                activeTrack: null
-            });
-
-            this.setState({
                 activeTrack: track
             });
+
+            // this.setState({
+            //     activeTrack: track
+            // });
 
         }
 

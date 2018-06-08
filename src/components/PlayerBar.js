@@ -201,7 +201,9 @@ class PlayerBar extends Component {
         switch (event.data) {
             case 0: //ended
                 //
-                this.props.onNextTrack();
+				if ( this.state.trackProgress !== 0 ) {
+	                this.props.onNextTrack();
+				}
                 break;
             case 1: //started
                 break;

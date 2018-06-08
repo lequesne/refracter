@@ -4,6 +4,9 @@
 @import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css");
+html {
+  opacity: 0.1; }
+
 .equalizer {
   position: absolute;
   display: block;
@@ -1108,7 +1111,8 @@ Pass any number of seconds referring to the duration of one full rotation for an
           margin-right: 0.5em; }
     .track-list table tr {
       position: relative;
-      border: none; }
+      border: none;
+      height: 50px; }
       .track-list table tr td {
         cursor: default;
         border: none;
@@ -1124,10 +1128,11 @@ Pass any number of seconds referring to the duration of one full rotation for an
           display: inline-block;
           max-width: 100%; }
         .track-list table tr td.play-btn-col {
-          position: absolute;
           cursor: pointer;
           line-height: 1em;
           padding: 0.8em; }
+          .track-list table tr td.play-btn-col > * {
+            position: absolute; }
           .track-list table tr td.play-btn-col .equalizer {
             display: inline-block;
             transform-origin: 0 0;
